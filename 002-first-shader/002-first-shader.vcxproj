@@ -120,12 +120,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="002-first-shader.cpp" />
     <ClCompile Include="main_windows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\shader.h" />
+    <ClInclude Include="..\common_classes\stringUtils.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
