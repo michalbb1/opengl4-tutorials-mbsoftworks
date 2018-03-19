@@ -41,7 +41,7 @@ bool Shader::loadShaderFromFile(const std::string& fileName, GLenum shaderType)
 	return true;
 }
 
-bool Shader::isLoaded()
+bool Shader::isLoaded() const
 {
 	return _isLoaded;
 }
@@ -130,12 +130,12 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 	return true;
 }
 
-GLuint Shader::getShaderID()
+GLuint Shader::getShaderID() const
 {
 	return _shaderID;
 }
 
-GLenum Shader::getShaderType()
+GLenum Shader::getShaderType() const
 {
 	return _shaderType;
 }

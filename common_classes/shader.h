@@ -20,11 +20,11 @@ public:
 	*/
 	bool loadShaderFromFile(const std::string& fileName, GLenum shaderType);
 
-	bool isLoaded();
+	bool isLoaded() const;
 	void deleteShader();
 
-	GLuint getShaderID();
-	GLenum getShaderType();
+	GLuint getShaderID() const;
+	GLenum getShaderType() const;
 
 private:
 
