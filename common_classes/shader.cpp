@@ -90,6 +90,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 
 	while (std::getline(file, line))
 	{
+		line += "\n"; // getline does not keep newline character
 		std::stringstream ss(line);
 		std::string firstToken;
 		ss >> firstToken;
