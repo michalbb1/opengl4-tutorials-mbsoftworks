@@ -48,7 +48,7 @@ private:
 	*/
 	bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false);
 
-	GLuint _shaderID; // ID of shader
-	GLenum _shaderType; // GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...
-	bool _isLoaded = false; // Whether shader was loaded and compiled
+	GLuint _shaderID; ///< OpenGL-assigned shader ID
+	GLenum _shaderType; ///< Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...)
+	bool _isLoaded = false;  ///< Flag teling, whether shader has been loaded and compiled sucessfully
 };
