@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include <vector>
+#include <map>
 #include <string>
 
 #include "shader.h"
@@ -31,11 +31,11 @@ public:
 	void setUniform(const std::string& varName, const glm::vec4& vector4D);
 	void setUniform(const std::string& varName, const glm::vec4* vectors4D, int count = 1);
 
-	// Setting floats
+	// Setting float uniforms
 	void setUniform(const std::string& varName, const float floatValue);
 	void setUniform(const std::string& varName, const float* floatValues, int count = 1);
 
-	// Setting integers
+	// Setting integer uniforms
 	void setUniform(const std::string& varName, const int integerValue);
 	void setUniform(const std::string& varName, const int* integerValues, int count = 1);
 
@@ -51,6 +51,10 @@ public:
 	void setModelAndNormalMatrix(const std::string& modelMatrixName, const std::string& normalMatrixName, const glm::mat4& modelMatrix);
 
 private:
+
+	GLint getUniformLocation(const std::string& varName);
+
 	GLuint _shaderProgramID; // Shader program ID, assigned by OpenGL
 	bool _isLinked = false; // Whether program has been linked and is ready to use
+	std::map<std::string, GLint> _uniformLocations;
 };
