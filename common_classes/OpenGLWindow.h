@@ -78,11 +78,13 @@ public:
 
 	//* \brief Closes application window and releases all resources.
 	void closeWindow();
+
 private:
 	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
 	bool _keyWasPressed[512]; ///< array of bools, used by keyPressedOnce function
 
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.
 	static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);
+
 	static std::map<GLFWwindow*, OpenGLWindow*> _windows; ///< std::map used to map GLFWwindow pointers to OpenGLWindow (our class)
 };
