@@ -57,6 +57,8 @@ GLuint ShaderProgram::getShaderProgramID()
 	return _shaderProgramID;
 }
 
+// Family of functions setting vec2 uniforms
+
 void ShaderProgram::setUniform(const std::string& varName, const glm::vec2& vector2D)
 {
 	glUniform2fv(getUniformLocation(varName), 1, (GLfloat*)&vector2D);
@@ -66,6 +68,8 @@ void ShaderProgram::setUniform(const std::string& varName, const glm::vec2* vect
 {
 	glUniform2fv(getUniformLocation(varName), count, (GLfloat*)vectors2D);
 }
+
+// Family of functions setting vec3 uniforms
 
 void ShaderProgram::setUniform(const std::string& varName, const glm::vec3& vector3D)
 {
@@ -77,6 +81,8 @@ void ShaderProgram::setUniform(const std::string& varName, const glm::vec3* vect
 	glUniform3fv(getUniformLocation(varName), count, (GLfloat*)vectors3D);
 }
 
+// Family of functions setting vec4 uniforms
+
 void ShaderProgram::setUniform(const std::string& varName, const glm::vec4& vector4D)
 {
 	glUniform4fv(getUniformLocation(varName), 1, (GLfloat*)&vector4D);
@@ -86,6 +92,8 @@ void ShaderProgram::setUniform(const std::string& varName, const glm::vec4* vect
 {
 	glUniform4fv(getUniformLocation(varName), count, (GLfloat*)vectors4D);
 }
+
+// Family of functions setting float uniforms
 
 void ShaderProgram::setUniform(const std::string& varName, const float floatValue)
 {
@@ -97,6 +105,8 @@ void ShaderProgram::setUniform(const std::string& varName, const float* floatVal
 	glUniform1fv(getUniformLocation(varName), count, (GLfloat*)floatValues);
 }
 
+// Family of functions setting integer uniforms
+
 void ShaderProgram::setUniform(const std::string& varName, const int integerValue)
 {
 	glUniform1iv(getUniformLocation(varName), 1, (GLint*)integerValue);
@@ -106,6 +116,8 @@ void ShaderProgram::setUniform(const std::string& varName, const int* integerVal
 {
 	glUniform1iv(getUniformLocation(varName), count, (GLint*)integerValues);
 }
+
+// Family of functions setting 3x3 matrices uniforms
 
 void ShaderProgram::setUniform(const std::string& varName, const glm::mat3& matrix)
 {
@@ -117,6 +129,8 @@ void ShaderProgram::setUniform(const std::string& varName, const glm::mat3* matr
 	glUniformMatrix3fv(getUniformLocation(varName), count, false, (GLfloat*)matrices);
 }
 
+// Family of functions setting 4x4 matrices uniforms
+
 void ShaderProgram::setUniform(const std::string& varName, const glm::mat4& matrix)
 {
 	glUniformMatrix4fv(getUniformLocation(varName), 1, false, (GLfloat*)&matrix);
@@ -126,6 +140,8 @@ void ShaderProgram::setUniform(const std::string& varName, const glm::mat4* matr
 {
 	glUniformMatrix4fv(getUniformLocation(varName), 1, false, (GLfloat*)matrices);
 }
+
+// Model and normal matrix setting is pretty common, that's why this convenience function
 
 void ShaderProgram::setModelAndNormalMatrix(const std::string& modelMatrixName, const std::string& normalMatrixName, const glm::mat4& modelMatrix)
 {
