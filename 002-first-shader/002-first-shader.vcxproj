@@ -22,33 +22,34 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5442FAE2-D913-4296-B14B-D156BC1A6C83}</ProjectGuid>
     <RootNamespace>My002firstshader</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -121,6 +122,7 @@
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
     <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="002-first-shader.cpp" />
     <ClCompile Include="main_windows.cpp" />
@@ -130,6 +132,7 @@
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
