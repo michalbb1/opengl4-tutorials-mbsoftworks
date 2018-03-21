@@ -55,7 +55,17 @@ void Shader::deleteShader()
 	glDeleteShader(_shaderID);
 }
 
-bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& vResult, bool isReadingIncludedFile)
+GLuint Shader::getShaderID() const
+{
+	return _shaderID;
+}
+
+GLenum Shader::getShaderType() const
+{
+	return _shaderType;
+}
+
+bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile)
 {
 	std::ifstream file(fileName);
 
@@ -72,7 +82,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 	int slashIndex = -1;
 	for (auto i = fileName.size() - 1; i >= 0; i--)
 	{
-		if(fileName[i] == slashCharacter)
+		if (fileName[i] == slashCharacter)
 		{
 			slashIndex = i;
 			slashCharacter = fileName[i];
@@ -80,7 +90,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 		}
 	}
 
-	startDirectory = fileName.substr(0, slashIndex+1);
+	startDirectory = fileName.substr(0, slashIndex + 1);
 
 	// Get all lines from a file
 
@@ -94,11 +104,11 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 		std::stringstream ss(line);
 		std::string firstToken;
 		ss >> firstToken;
-		if(firstToken == "#include")
+		if (firstToken == "#include")
 		{
 			std::string includeFileName;
 			ss >> includeFileName;
-			if(includeFileName.size() > 0 && includeFileName[0] == '\"' && includeFileName[includeFileName.size()-1] == '\"')
+			if (includeFileName.size() > 0 && includeFileName[0] == '\"' && includeFileName[includeFileName.size() - 1] == '\"')
 			{
 				includeFileName = string_utils::normalizeSlashes(includeFileName.substr(1, includeFileName.size() - 2), slashCharacter);
 				std::string directory = startDirectory;
@@ -115,28 +125,18 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 						sFinalFileName += subPath;
 					}
 				}
-				getLinesFromFile(directory+sFinalFileName, vResult, true);
+				getLinesFromFile(directory + sFinalFileName, result, true);
 			}
 		}
-		else if(firstToken == "#include_part")
+		else if (firstToken == "#include_part")
 			isInsideIncludePart = true;
-		else if(firstToken == "#definition_part")
+		else if (firstToken == "#definition_part")
 			isInsideIncludePart = false;
-		else if(!isReadingIncludedFile || (isReadingIncludedFile && isInsideIncludePart))
-			vResult.push_back(line);
+		else if (!isReadingIncludedFile || (isReadingIncludedFile && isInsideIncludePart))
+			result.push_back(line);
 	}
-	
+
 	file.close();
 
 	return true;
-}
-
-GLuint Shader::getShaderID() const
-{
-	return _shaderID;
-}
-
-GLenum Shader::getShaderType() const
-{
-	return _shaderType;
 }

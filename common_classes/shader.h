@@ -14,21 +14,39 @@ class Shader
 public:
 
 	/** \brief Loads and compiles shader from a specified file.
-	*  \param  fileName   path to a file
-	*  \param  shaderType type of shader (fragment, vertex, geometry...)
-	*  \return True, if the shader has been successfully loaded and compiled, false otherwise.
+	*   \param  fileName   path to a file
+	*   \param  shaderType type of shader (fragment, vertex, geometry...)
+	*   \return True, if the shader has been successfully loaded and compiled, false otherwise.
 	*/
 	bool loadShaderFromFile(const std::string& fileName, GLenum shaderType);
 
+	/** \brief Checks, if shader is loaded successfully.
+	*   \return True, if the shader has been successfully loaded and compiled, false otherwise.
+	*/
 	bool isLoaded() const;
+
+	//* \brief Deletes shader object.
 	void deleteShader();
 
+	/** \brief Gets OpenGL-assigned shader ID.
+	*   \return Shader ID.
+	*/
 	GLuint getShaderID() const;
+
+	/** \brief Gets shader type (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...).
+	*   \return Shader Type.
+	*/
 	GLenum getShaderType() const;
 
 private:
 
-	bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& vResult, bool isReadingIncludedFile = false);
+	/** \brief Gets all lines from specified shader file.
+	*  \param  fileName                Filename to read the line from.
+	*  \param  result                  std::vector to store the lines to
+	*  \param  isReadingIncludedFile   Flag saying, whether we are reading file that's been included, that is only #include_part.
+	*  \return True, if the loading has been successful, or false otherwise.
+	*/
+	bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false);
 
 	GLuint _shaderID; // ID of shader
 	GLenum _shaderType; // GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...
