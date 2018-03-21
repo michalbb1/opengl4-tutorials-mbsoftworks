@@ -5,6 +5,11 @@
 
 namespace string_utils
 {
+	/** \brief Splits the string with the given delimiter and returns the  std::vector of tokens.
+	*   \param s String to split
+	*   \param t Delimiter
+	*   \return std::vector of tokens.
+	*/
 	inline std::vector<std::string> split(std::string s, char t)
 	{
 		std::vector<std::string> res;
@@ -25,10 +30,15 @@ namespace string_utils
 		return res;
 	}
 
-	std::string upOneDirectory(const std::string& input, char slashCharacter)
+	/** \brief Goes one directory up in a path.
+	*   \param originalPath   Original path
+	*   \param slashCharacter Slash character to use (/ or \)
+	*   \return Path with one directory up.
+	*/
+	std::string upOneDirectory(const std::string& originalPath, char slashCharacter)
 	{
-		bool isTrailingSlash = input.back() == slashCharacter;
-		std::vector<std::string> subPaths = split(input, slashCharacter);
+		bool isTrailingSlash = originalPath.back() == slashCharacter;
+		std::vector<std::string> subPaths = split(originalPath, slashCharacter);
 		std::string result = "";
 		for (size_t i = 0; i < subPaths.size() - 1; i++)
 		{
@@ -42,9 +52,14 @@ namespace string_utils
 		return result;
 	}
 
-	std::string normalizeSlashes(const std::string& s, char slashCharacter)
+	/** \brief Normalizes slashes in a path, so that all slashes are consistent
+	*   \param originalPath   Original path
+	*   \param slashCharacter Slash character to use (/ or \)
+	*   \return Original path with same slash character everywhere.
+	*/
+	std::string normalizeSlashes(const std::string& originalPath, char slashCharacter)
 	{
-		std::string result = s;
+		std::string result = originalPath;
 		for (char& c : result)
 		{
 			if (c == '\\' || c == '/')
