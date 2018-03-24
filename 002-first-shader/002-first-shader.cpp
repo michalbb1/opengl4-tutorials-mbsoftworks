@@ -12,23 +12,24 @@ GLuint mainVAO;
 
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
 	vertexShader.loadShaderFromFile("data/shaders/tut002/shader.vert", GL_VERTEX_SHADER);
 	fragmentShader.loadShaderFromFile("data/shaders/tut002/shader.frag", GL_FRAGMENT_SHADER);
 
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
-		closeWindow();
+		closeWindow(true);
 		return;
 	}
 
 	mainProgram.createProgram();
 	mainProgram.addShaderToProgram(vertexShader);
 	mainProgram.addShaderToProgram(fragmentShader);
+
 	if (!mainProgram.linkProgram())
 	{
-		closeWindow();
+		closeWindow(true);
 		return;
 	}
 
@@ -50,7 +51,7 @@ void OpenGLWindow::initializeScene()
 
 void OpenGLWindow::renderScene()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mainProgram.useProgram();
 	glBindVertexArray(mainVAO);
