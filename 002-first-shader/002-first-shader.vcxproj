@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{6202ED4E-AB30-4B4C-945C-D7CE975EA3D6}</ProjectGuid>
-    <RootNamespace>My01creatingopengl4window</RootNamespace>
-    <ProjectName>001-creating-opengl4-window</ProjectName>
+    <ProjectGuid>{5442FAE2-D913-4296-B14B-D156BC1A6C83}</ProjectGuid>
+    <RootNamespace>My002firstshader</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,13 +73,7 @@
     <Import Project="..\properties_release64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\</OutDir>
-    <TargetName>$(ProjectName)_64</TargetName>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -126,12 +120,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\shader.cpp" />
+    <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
-    <ClCompile Include="001-creating-opengl4-window.cpp" />
+    <ClCompile Include="002-first-shader.cpp" />
     <ClCompile Include="main_windows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\shader.h" />
+    <ClInclude Include="..\common_classes\shaderProgram.h" />
+    <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,12 +3,12 @@
 #include "../common_classes/OpenGLWindow.h"
 
 /**
-  Application entry point function. This is Windows version and uses Windows-specific MessageBox call.
+Application entry point function. This is Windows version and uses Windows-specific MessageBox call.
 */
 
 int main()
 {
-	const std::string& windowTitle = "001.) Creating OpenGL4 Window - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
+	const std::string& windowTitle = "002.) First Shader - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
 	int majorVersion = 4;
 	int minorVersion = 4;
 	bool showFullscreen = MessageBox(NULL, "Would you like to run in fullscreen mode?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES;
@@ -21,6 +21,13 @@ int main()
 	}
 
 	window.runApp();
+
+	if (window.hasErrorOccured())
+	{
+		std::cout << std::endl << std::endl << "Program could not start because of the above errors! Press ENTER to quit..." << std::endl;
+		std::cin.get();
+		return 1;
+	}
 
 	return 0;
 }
