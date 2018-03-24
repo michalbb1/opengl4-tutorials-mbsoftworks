@@ -39,7 +39,7 @@ bool ShaderProgram::linkProgram()
 
 void ShaderProgram::useProgram()
 {
-	if (!_isLinked)
+	if (_isLinked)
 		glUseProgram(_shaderProgramID);
 }
 
