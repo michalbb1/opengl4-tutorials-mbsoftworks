@@ -76,12 +76,20 @@ public:
 	*/
 	void onWindowSizeChanged(GLFWwindow* window, int width, int height);
 
-	//* \brief Closes application window and releases all resources.
-	void closeWindow();
+	/** \brief Closes application window and releases all resources. Also sets the error flag, if error has occured.
+	*   \param hasErrorOccured Should be true, if an error has occured (default is false).
+	*/
+	void closeWindow(bool hasErrorOccured = false);
+
+	/** \brief  Gets the error flag.
+	*   \return True, if error has occured, or false otherwise.
+	*/
+	bool hasErrorOccured();
 
 private:
 	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
-	bool _keyWasPressed[512]; ///< array of bools, used by keyPressedOnce function
+	bool _keyWasPressed[512]; ///< Array of bools, used by keyPressedOnce function
+	bool _hasErrorOccured = false; ///< Error flag, indicates, if any kind of error has occured
 
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.
 	static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);

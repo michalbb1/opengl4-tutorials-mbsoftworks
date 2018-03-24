@@ -22,5 +22,12 @@ int main()
 
 	window.runApp();
 
+	if (window.hasErrorOccured())
+	{
+		std::cout << std::endl << std::endl << "Program could not start because of the above errors! Press ENTER to quit..." << std::endl;
+		std::cin.get();
+		return 1;
+	}
+
 	return 0;
 }

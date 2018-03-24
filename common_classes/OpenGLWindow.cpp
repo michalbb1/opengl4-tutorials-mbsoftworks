@@ -81,9 +81,15 @@ GLFWwindow* OpenGLWindow::getWindow()
 	return _window;
 }
 
-void OpenGLWindow::closeWindow()
+void OpenGLWindow::closeWindow(bool hasErrorOccured)
 {
 	glfwSetWindowShouldClose(_window, true);
+	_hasErrorOccured = hasErrorOccured;
+}
+
+bool OpenGLWindow::hasErrorOccured()
+{
+	return _hasErrorOccured;
 }
 
 void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int height)
