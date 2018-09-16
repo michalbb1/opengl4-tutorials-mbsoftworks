@@ -7,6 +7,7 @@
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
+VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
@@ -14,8 +15,8 @@ void OpenGLWindow::initializeScene()
 {
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	vertexShader.loadShaderFromFile("data/shaders/tut002/shader.vert", GL_VERTEX_SHADER);
-	fragmentShader.loadShaderFromFile("data/shaders/tut002/shader.frag", GL_FRAGMENT_SHADER);
+	vertexShader.loadShaderFromFile("data/shaders/tut003/shader.vert", GL_VERTEX_SHADER);
+	fragmentShader.loadShaderFromFile("data/shaders/tut003/shader.frag", GL_FRAGMENT_SHADER);
 
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
@@ -37,8 +38,11 @@ void OpenGLWindow::initializeScene()
 	glBindVertexArray(mainVAO);
 
 	glm::vec3 vTriangle[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
-	glm::vec3 vQuad[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
+	glm::vec3 vTriangleColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.0f, 0.0f, 1.0f) };
 
+	glm::vec3 vQuad[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
+	glm::vec3 vQuadColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 0.0f) };
+	
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
 	shapesVBO.addData(vTriangle, sizeof(glm::vec3) * 3);
@@ -47,6 +51,15 @@ void OpenGLWindow::initializeScene()
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+
+	colorsVBO.createVBO();
+	colorsVBO.bindVBO();
+	colorsVBO.addData(vTriangleColors, sizeof(glm::vec3) * 3);
+	colorsVBO.addData(vQuadColors, sizeof(glm::vec3) * 4);
+	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
 }
 
 void OpenGLWindow::renderScene()
