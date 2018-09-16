@@ -45,6 +45,9 @@
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\uniform.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
     <ClInclude Include="..\common_classes\vertexBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -122,6 +122,7 @@
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
     <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="002-first-shader.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\uniform.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
   </ItemGroup>

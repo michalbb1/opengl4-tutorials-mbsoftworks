@@ -19,7 +19,7 @@ bool Shader::loadShaderFromFile(const std::string& fileName, GLenum shaderType)
 	
 	_shaderID = glCreateShader(shaderType);
 
-	glShaderSource(_shaderID, fileLines.size(), sProgram, NULL);
+	glShaderSource(_shaderID, (GLsizei)fileLines.size(), sProgram, NULL);
 	glCompileShader(_shaderID);
 
 	delete[] sProgram;
@@ -79,7 +79,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
 	char slashCharacter = '/';
 	auto normFileName = string_utils::normalizeSlashes(fileName, slashCharacter);
 
-	int slashIndex = -1;
+	size_t slashIndex = -1;
 	for (auto i = fileName.size() - 1; i >= 0; i--)
 	{
 		if (fileName[i] == slashCharacter)
