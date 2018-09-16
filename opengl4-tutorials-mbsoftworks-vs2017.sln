@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "001-creating-opengl4-window
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "002-first-shader", "002-first-shader\002-first-shader.vcxproj", "{5442FAE2-D913-4296-B14B-D156BC1A6C83}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "003-adding-colors", "003-adding-colors\003-adding-colors.vcxproj", "{08BF4ECF-B475-4F27-819D-04561FC66733}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{5442FAE2-D913-4296-B14B-D156BC1A6C83}.Release|x64.Build.0 = Release|x64
 		{5442FAE2-D913-4296-B14B-D156BC1A6C83}.Release|x86.ActiveCfg = Release|Win32
 		{5442FAE2-D913-4296-B14B-D156BC1A6C83}.Release|x86.Build.0 = Release|Win32
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Debug|x64.ActiveCfg = Debug|x64
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Debug|x64.Build.0 = Debug|x64
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Debug|x86.ActiveCfg = Debug|Win32
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Debug|x86.Build.0 = Debug|Win32
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Release|x64.ActiveCfg = Release|x64
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Release|x64.Build.0 = Release|x64
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Release|x86.ActiveCfg = Release|Win32
+		{08BF4ECF-B475-4F27-819D-04561FC66733}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
