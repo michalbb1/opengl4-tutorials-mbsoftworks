@@ -15,7 +15,7 @@ namespace string_utils
 		std::vector<std::string> res;
 		while (true)
 		{
-			int pos = s.find(t);
+			auto pos = s.find(t);
 			if (pos == -1)
 			{
 				if (s.size() > 0)
