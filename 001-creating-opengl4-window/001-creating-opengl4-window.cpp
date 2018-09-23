@@ -12,17 +12,18 @@ void OpenGLWindow::renderScene()
 
 void OpenGLWindow::releaseScene()
 {
-
+	// nothing to release at the moment
 }
 
 void OpenGLWindow::handleInput()
 {
 	if (keyPressedOnce(GLFW_KEY_ESCAPE))
+	{
 		closeWindow();
+	}
 }
 
 void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
-

@@ -5,7 +5,9 @@ std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 OpenGLWindow::OpenGLWindow()
 {
 	for (auto i = 0; i < 512; i++)
+	{
 		_keyWasPressed[i] = false;
+	}
 }
 
 bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorVersion, int minorVersion, bool showFullscreen)
@@ -22,7 +24,9 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	_window = glfwCreateWindow(videoMode->width, videoMode->height, windowTitle.c_str(), showFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (_window == nullptr)
+	{
 		return false;
+	}
 
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -44,12 +48,16 @@ bool OpenGLWindow::keyPressedOnce(int keyCode)
 	if (keyPressed(keyCode))
 	{
 		if (!_keyWasPressed[keyCode])
+		{
 			result = true;
-
+		}
+		
 		_keyWasPressed[keyCode] = true;
 	}
 	else
+	{
 		_keyWasPressed[keyCode] = false;
+	}
 
 	return result;
 }
@@ -72,8 +80,10 @@ void OpenGLWindow::runApp()
 	glfwDestroyWindow(_window);
 	_windows.erase(_windows.find(_window));
 	
-	if(_windows.size() == 0)
+	if (_windows.size() == 0)
+	{
 		glfwTerminate();
+	}
 }
 
 GLFWwindow* OpenGLWindow::getWindow()
@@ -95,5 +105,7 @@ bool OpenGLWindow::hasErrorOccured()
 void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int height)
 {
 	if (_windows.count(window) != 0)
+	{
 		_windows[window]->onWindowSizeChanged(window, width, height);
+	}
 }

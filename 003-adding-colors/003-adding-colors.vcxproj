@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{5442FAE2-D913-4296-B14B-D156BC1A6C83}</ProjectGuid>
-    <RootNamespace>My002firstshader</RootNamespace>
+    <ProjectGuid>{08BF4ECF-B475-4F27-819D-04561FC66733}</ProjectGuid>
+    <RootNamespace>My003addingcolors</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,7 +74,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -82,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -125,7 +125,7 @@
     <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
-    <ClCompile Include="002-first-shader.cpp" />
+    <ClCompile Include="003-adding-colors.cpp" />
     <ClCompile Include="main_windows.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +135,6 @@
     <ClInclude Include="..\common_classes\stringUtils.h" />
     <ClInclude Include="..\common_classes\uniform.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
-    <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
