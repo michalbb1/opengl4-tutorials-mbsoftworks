@@ -15,7 +15,7 @@ public:
 	/** \brief Creates a new VBO, with optional reserved buffer size.
 	*   \param size Buffer size reservation, in bytes (so that memory allocations don't take place while adding data)
 	*/
-	void createVBO(uint32_t reserveSize = 0);
+	void createVBO(uint32_t reserveSizeBytes = 0);
 
 	/** \brief Binds this vertex buffer object (makes current).
 	*   \param bufferType Type of the bound buffer (usually GL_ARRAY_BUFFER, but can be also GL_ELEMENT_BUFFER for instance)
@@ -26,7 +26,7 @@ public:
 	*   \param ptrData  Pointer to the data (arbitrary type)
 	*   \param dataSize Size of the added data (in bytes)
 	*/
-	void addData(void* ptrData, uint32_t dataSize);
+	void addData(void* ptrData, uint32_t dataSizeBytes);
 
 	/** \brief Gets pointer to the data from in-memory buffer (only before uploading them).
 	*   \return Pointer to the raw data.
@@ -74,5 +74,6 @@ private:
 	uint32_t _uploadedDataSize; ///< Holds buffer data size after uploading to GPU
 	std::vector<unsigned char> _rawData; ///< In-memory raw data buffer, used to gather the data for VBO.
 
+	bool _isBufferCreated = false;
 	bool _isDataUploaded = false; ///< Flag telling, if data has been uploaded to GPU already.
 };
