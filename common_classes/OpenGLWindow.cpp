@@ -4,9 +4,9 @@ std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
 OpenGLWindow::OpenGLWindow()
 {
-	for (auto i = 0; i < 512; i++)
+	for (bool& kwp : _keyWasPressed)
 	{
-		_keyWasPressed[i] = false;
+		kwp = false;
 	}
 }
 
@@ -29,7 +29,7 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	}
 
 	glfwMakeContextCurrent(_window);
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	glfwSetWindowSizeCallback(_window, onWindowSizeChangedStatic);
 
 	_windows[_window] = this;
@@ -37,7 +37,7 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	return true;
 }
 
-bool OpenGLWindow::keyPressed(int keyCode)
+bool OpenGLWindow::keyPressed(int keyCode) const
 {
 	return glfwGetKey(_window, keyCode) == GLFW_PRESS;
 }
@@ -65,7 +65,7 @@ bool OpenGLWindow::keyPressedOnce(int keyCode)
 void OpenGLWindow::runApp()
 {
 	initializeScene();
-
+	
 	while (glfwWindowShouldClose(_window) == false)
 	{
 		renderScene();
@@ -86,7 +86,7 @@ void OpenGLWindow::runApp()
 	}
 }
 
-GLFWwindow* OpenGLWindow::getWindow()
+GLFWwindow* OpenGLWindow::getWindow() const
 {
 	return _window;
 }
@@ -97,7 +97,7 @@ void OpenGLWindow::closeWindow(bool hasErrorOccured)
 	_hasErrorOccured = hasErrorOccured;
 }
 
-bool OpenGLWindow::hasErrorOccured()
+bool OpenGLWindow::hasErrorOccured() const
 {
 	return _hasErrorOccured;
 }

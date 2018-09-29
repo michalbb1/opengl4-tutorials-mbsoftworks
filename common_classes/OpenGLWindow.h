@@ -31,7 +31,7 @@ public:
 	*   \param  windowTitle    Title of a created window
 	*   \return Pointer to GLFW window or nullptr, if the window does not exist yet.
 	*/
-	GLFWwindow* getWindow();
+	GLFWwindow* getWindow() const;
 
 	//* \brief Runs the whole application. Contains the main application loop.
 	void runApp();
@@ -60,7 +60,7 @@ public:
 	*   \param  keyCode GLFW code of the key to check
 	*   \return True, if key is pressed, or false otherwwise.
 	*/
-	bool keyPressed(int keyCode);
+	bool keyPressed(int keyCode) const;
 
 	/** \brief  Checks, if specified key was pressed. This function won't return true again, unless the key has been released and pressed again.
 	*   \param  keyCode GLFW code of the key to check
@@ -84,7 +84,7 @@ public:
 	/** \brief  Gets the error flag.
 	*   \return True, if error has occured, or false otherwise.
 	*/
-	bool hasErrorOccured();
+	bool hasErrorOccured() const;
 
 private:
 	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
