@@ -22,6 +22,9 @@
     <Filter Include="Source Files\glad">
       <UniqueIdentifier>{2833f05e-8556-4255-8fdc-2ca90f284d5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\glad">
+      <UniqueIdentifier>{5cd8cf6d-4fba-434b-b3d8-a16cfb6f7eb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main_windows.cpp">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
+      <Filter>Header Files\glad</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
