@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{e2a1e043-7ee0-4880-a892-df1e76bd6dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes">
+      <UniqueIdentifier>{bf99abb1-35af-47ff-aa37-6f0eddbfd8c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes">
+      <UniqueIdentifier>{3a610122-3d5d-4bb4-8c8f-d72e3f868688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\glad">
+      <UniqueIdentifier>{1938b915-5b83-478b-9a3b-8c8cb7b15c4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderProgram.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\uniform.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\glad\src\glad.c">
+      <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="004-entering-third-dimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\OpenGLWindow.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderProgram.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\stringUtils.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniform.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\vertexBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
+      <Filter>Header Files\glad</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
