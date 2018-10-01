@@ -1,11 +1,11 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <vector>
 #include <string>
 #include <map>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 /**
   Provides easy and convenient way to handle OpenGL Window creation and basic scene management (init, render and release).
@@ -15,7 +15,7 @@ class OpenGLWindow
 {
 public:
 	
-	//* \brief Constructor of the class, initializes internal structures.
+	///* \brief Constructor of the class, initializes internal structures.
 	OpenGLWindow();
 
 	/** \brief  Creates a window with OpenGL context with given title and context version. 
@@ -58,13 +58,13 @@ public:
 
 	/** \brief  Checks, if specified key is currently pressed
 	*   \param  keyCode GLFW code of the key to check
-	*   \return True, if key is pressed, or false otherwwise.
+	*   \return True, if key is pressed, or false otherwise.
 	*/
 	bool keyPressed(int keyCode) const;
 
 	/** \brief  Checks, if specified key was pressed. This function won't return true again, unless the key has been released and pressed again.
 	*   \param  keyCode GLFW code of the key to check
-	*   \return True, if key was pressed once, or false otherwwise.
+	*   \return True, if key was pressed once, or false otherwise.
 	*/
 	bool keyPressedOnce(int keyCode);
 
@@ -86,10 +86,30 @@ public:
 	*/
 	bool hasErrorOccured() const;
 
+	/** \brief  Gets the projection matrix for the current window size.
+	*   \return Projection matrix;
+	*/
+	glm::mat4 getProjectionMatrix() const;
+
+	float sof(float value) const;
+	double sof(double value) const;
+	double getTimeDelta() const;
+	int getFPS() const;
+
 private:
 	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
 	bool _keyWasPressed[512]; ///< Array of bools, used by keyPressedOnce function
 	bool _hasErrorOccured = false; ///< Error flag, indicates, if any kind of error has occured
+
+	glm::mat4 _projectionMatrix;
+	void recalculateProjectionMatrix();
+
+	double _lastFrameTime;
+	double _lastFrameTimeFPS;
+	double _timeDelta;
+	int _FPS;
+	int _nextFPS;
+	void updateDeltaTimeAndFPS();
 
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.
 	static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);

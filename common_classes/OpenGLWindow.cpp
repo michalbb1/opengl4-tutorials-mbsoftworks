@@ -1,8 +1,10 @@
 #include "OpenGLWindow.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
-OpenGLWindow::OpenGLWindow()
+OpenGLWindow::OpenGLWindow() : _timeDelta(0.0)
 {
 	for (bool& kwp : _keyWasPressed)
 	{
@@ -64,10 +66,13 @@ bool OpenGLWindow::keyPressedOnce(int keyCode)
 
 void OpenGLWindow::runApp()
 {
+	recalculateProjectionMatrix();
 	initializeScene();
+	_lastFrameTime = _lastFrameTimeFPS = glfwGetTime(); // Update time first time, so that calculations are correct
 	
-	while (glfwWindowShouldClose(_window) == false)
+	while (glfwWindowShouldClose(_window) == 0)
 	{
+		updateDeltaTimeAndFPS();
 		renderScene();
 
 		glfwSwapBuffers(_window);
@@ -80,7 +85,7 @@ void OpenGLWindow::runApp()
 	glfwDestroyWindow(_window);
 	_windows.erase(_windows.find(_window));
 	
-	if (_windows.size() == 0)
+	if (_windows.empty())
 	{
 		glfwTerminate();
 	}
@@ -102,10 +107,58 @@ bool OpenGLWindow::hasErrorOccured() const
 	return _hasErrorOccured;
 }
 
+glm::mat4 OpenGLWindow::getProjectionMatrix() const
+{
+	return _projectionMatrix;
+}
+
+float OpenGLWindow::sof(float value) const
+{
+	return value * float(_timeDelta);
+}
+
+double OpenGLWindow::sof(double value) const
+{
+	return value * _timeDelta;
+}
+
+double OpenGLWindow::getTimeDelta() const
+{
+	return _timeDelta;
+}
+
+int OpenGLWindow::getFPS() const
+{
+	return _FPS;
+}
+
+void OpenGLWindow::recalculateProjectionMatrix()
+{
+	int width, height;
+	glfwGetWindowSize(getWindow(), &width, &height);
+	_projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1000.0f);
+}
+
+void OpenGLWindow::updateDeltaTimeAndFPS()
+{
+	const auto currentTime = glfwGetTime();
+	_timeDelta = currentTime - _lastFrameTime;
+	_lastFrameTime = currentTime;
+	_nextFPS++;
+
+	if(currentTime - _lastFrameTimeFPS > 1.0)
+	{
+		_lastFrameTimeFPS = currentTime;
+		_FPS = _nextFPS;
+		_nextFPS = 0;
+	}
+}
+
 void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int height)
 {
 	if (_windows.count(window) != 0)
 	{
+		_windows[window]->recalculateProjectionMatrix();
 		_windows[window]->onWindowSizeChanged(window, width, height);
 	}
 }
