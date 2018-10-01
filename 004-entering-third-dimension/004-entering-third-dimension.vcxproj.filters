@@ -51,6 +51,9 @@
     <ClCompile Include="004-entering-third-dimension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\staticGeometry.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
       <Filter>Header Files\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\staticGeometry.h">
+      <Filter>Header Files\common_classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

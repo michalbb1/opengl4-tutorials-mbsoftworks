@@ -3,6 +3,9 @@
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/vertexBufferObject.h"
+#include "../common_classes/staticGeometry.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
@@ -11,12 +14,14 @@ VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
+float currentAngle;
+
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
-	vertexShader.loadShaderFromFile("data/shaders/tut003/shader.vert", GL_VERTEX_SHADER);
-	fragmentShader.loadShaderFromFile("data/shaders/tut003/shader.frag", GL_FRAGMENT_SHADER);
+	vertexShader.loadShaderFromFile("data/shaders/tut004/shader.vert", GL_VERTEX_SHADER);
+	fragmentShader.loadShaderFromFile("data/shaders/tut004/shader.frag", GL_FRAGMENT_SHADER);
 
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
@@ -37,29 +42,37 @@ void OpenGLWindow::initializeScene()
 	glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
 	glBindVertexArray(mainVAO);
 
-	glm::vec3 vTriangle[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
-	glm::vec3 vTriangleColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.0f, 0.0f, 1.0f) };
-
-	glm::vec3 vQuad[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
-	glm::vec3 vQuadColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 0.0f) };
-	
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle, sizeof(glm::vec3) * 3);
-	shapesVBO.addData(vQuad, sizeof(glm::vec3) * 4);
+	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
+	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
-	colorsVBO.addData(vTriangleColors, sizeof(glm::vec3) * 3);
-	colorsVBO.addData(vQuadColors, sizeof(glm::vec3) * 4);
+	for(auto i = 0; i < 6; i++)
+	{
+		colorsVBO.addData(static_geometry::cubeFaceColors, sizeof(static_geometry::cubeFaceColors));
+	}
+
+	for (auto i = 0; i < 4; i++)
+	{
+		colorsVBO.addData(static_geometry::pyramidFaceColors, sizeof(static_geometry::pyramidFaceColors));
+	}
+
 	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+
+	int width, height;
+	glfwGetWindowSize(getWindow(), &width, &height);
+
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0);
 }
 
 void OpenGLWindow::renderScene()
@@ -69,8 +82,43 @@ void OpenGLWindow::renderScene()
 	mainProgram.useProgram();
 	glBindVertexArray(mainVAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawArrays(GL_TRIANGLE_STRIP, 3, 4);
+	mainProgram["matrices.projectionMatrix"] = getProjectionMatrix();
+	mainProgram["matrices.viewMatrix"] = glm::lookAt(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	// Render rotating cube in the middle
+	auto modelMatrixCube = glm::mat4(1.0);
+	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+	modelMatrixCube = glm::scale(modelMatrixCube, glm::vec3(5.0f, 5.0f, 5.0f));
+	
+	mainProgram["matrices.modelMatrix"] = modelMatrixCube;
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// Render 4 pyramids around the cube
+	glm::vec3 pyramidTranslationVectors[] =
+	{
+		glm::vec3(-12.0f, 7.0f, 0.0f),
+		glm::vec3(12.0f, 7.0f, 0.0f),
+		glm::vec3(12.0f, -7.0f, 0.0f),
+		glm::vec3(-12.0f, -7.0f, 0.0f)
+	};
+
+	for (auto pyramidTranslation : pyramidTranslationVectors)
+	{
+		glm::mat4 modelMatrixPyramid = glm::mat4(1.0);
+		modelMatrixPyramid = glm::translate(modelMatrixPyramid, pyramidTranslation);
+		modelMatrixPyramid = glm::rotate(modelMatrixPyramid, currentAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixPyramid = glm::scale(modelMatrixPyramid, glm::vec3(3.0f, 3.0f, 3.0f));
+
+		mainProgram["matrices.modelMatrix"] = modelMatrixPyramid;
+		glDrawArrays(GL_TRIANGLES, 36, 12);
+	}
+
+	currentAngle += glm::radians(sof(90.0f));
+
+	std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
+	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
 void OpenGLWindow::releaseScene()
