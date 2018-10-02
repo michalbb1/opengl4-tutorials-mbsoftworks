@@ -1,12 +1,14 @@
 #include "OpenGLWindow.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
 OpenGLWindow::OpenGLWindow()
 {
-	for (auto i = 0; i < 512; i++)
+	for (bool& kwp : _keyWasPressed)
 	{
-		_keyWasPressed[i] = false;
+		kwp = false;
 	}
 }
 
@@ -29,15 +31,16 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	}
 
 	glfwMakeContextCurrent(_window);
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	glfwSetWindowSizeCallback(_window, onWindowSizeChangedStatic);
+	glfwMaximizeWindow(_window);
 
 	_windows[_window] = this;
 
 	return true;
 }
 
-bool OpenGLWindow::keyPressed(int keyCode)
+bool OpenGLWindow::keyPressed(int keyCode) const
 {
 	return glfwGetKey(_window, keyCode) == GLFW_PRESS;
 }
@@ -64,10 +67,15 @@ bool OpenGLWindow::keyPressedOnce(int keyCode)
 
 void OpenGLWindow::runApp()
 {
+	recalculateProjectionMatrix();
 	initializeScene();
-
-	while (glfwWindowShouldClose(_window) == false)
+	
+	// Update time at the beginning, so that calculations are correct
+	_lastFrameTime = _lastFrameTimeFPS = glfwGetTime();
+	
+	while (glfwWindowShouldClose(_window) == 0)
 	{
+		updateDeltaTimeAndFPS();
 		renderScene();
 
 		glfwSwapBuffers(_window);
@@ -80,13 +88,13 @@ void OpenGLWindow::runApp()
 	glfwDestroyWindow(_window);
 	_windows.erase(_windows.find(_window));
 	
-	if (_windows.size() == 0)
+	if (_windows.empty())
 	{
 		glfwTerminate();
 	}
 }
 
-GLFWwindow* OpenGLWindow::getWindow()
+GLFWwindow* OpenGLWindow::getWindow() const
 {
 	return _window;
 }
@@ -97,15 +105,63 @@ void OpenGLWindow::closeWindow(bool hasErrorOccured)
 	_hasErrorOccured = hasErrorOccured;
 }
 
-bool OpenGLWindow::hasErrorOccured()
+bool OpenGLWindow::hasErrorOccured() const
 {
 	return _hasErrorOccured;
+}
+
+glm::mat4 OpenGLWindow::getProjectionMatrix() const
+{
+	return _projectionMatrix;
+}
+
+float OpenGLWindow::sof(float value) const
+{
+	return value * float(_timeDelta);
+}
+
+double OpenGLWindow::sof(double value) const
+{
+	return value * _timeDelta;
+}
+
+double OpenGLWindow::getTimeDelta() const
+{
+	return _timeDelta;
+}
+
+int OpenGLWindow::getFPS() const
+{
+	return _FPS;
+}
+
+void OpenGLWindow::recalculateProjectionMatrix()
+{
+	int width, height;
+	glfwGetWindowSize(getWindow(), &width, &height);
+	_projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1000.0f);
+}
+
+void OpenGLWindow::updateDeltaTimeAndFPS()
+{
+	const auto currentTime = glfwGetTime();
+	_timeDelta = currentTime - _lastFrameTime;
+	_lastFrameTime = currentTime;
+	_nextFPS++;
+
+	if(currentTime - _lastFrameTimeFPS > 1.0)
+	{
+		_lastFrameTimeFPS = currentTime;
+		_FPS = _nextFPS;
+		_nextFPS = 0;
+	}
 }
 
 void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int height)
 {
 	if (_windows.count(window) != 0)
 	{
+		_windows[window]->recalculateProjectionMatrix();
 		_windows[window]->onWindowSizeChanged(window, width, height);
 	}
 }

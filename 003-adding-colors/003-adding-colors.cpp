@@ -45,8 +45,8 @@ void OpenGLWindow::initializeScene()
 	
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle, sizeof(glm::vec3) * 3);
-	shapesVBO.addData(vQuad, sizeof(glm::vec3) * 4);
+	shapesVBO.addData(vTriangle, sizeof(vTriangle));
+	shapesVBO.addData(vQuad, sizeof(vQuad));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -79,6 +79,9 @@ void OpenGLWindow::releaseScene()
 
 	vertexShader.deleteShader();
 	fragmentShader.deleteShader();
+
+	shapesVBO.deleteVBO();
+	colorsVBO.deleteVBO();
 
 	glDeleteVertexArrays(1, &mainVAO);
 }

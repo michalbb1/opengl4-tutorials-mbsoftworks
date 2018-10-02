@@ -8,7 +8,7 @@ Application entry point function. This is Windows version and uses Windows-speci
 
 int main()
 {
-	const std::string& windowTitle = "003.) Adding Colors - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
+	const std::string& windowTitle = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
 	int majorVersion = 4;
 	int minorVersion = 4;
 	bool showFullscreen = MessageBox(nullptr, "Would you like to run in fullscreen mode?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES;
