@@ -4,7 +4,7 @@
 
 std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
-OpenGLWindow::OpenGLWindow() : _timeDelta(0.0)
+OpenGLWindow::OpenGLWindow()
 {
 	for (bool& kwp : _keyWasPressed)
 	{
@@ -33,6 +33,7 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	glfwSetWindowSizeCallback(_window, onWindowSizeChangedStatic);
+	glfwMaximizeWindow(_window);
 
 	_windows[_window] = this;
 
@@ -68,7 +69,9 @@ void OpenGLWindow::runApp()
 {
 	recalculateProjectionMatrix();
 	initializeScene();
-	_lastFrameTime = _lastFrameTimeFPS = glfwGetTime(); // Update time first time, so that calculations are correct
+	
+	// Update time at the beginning, so that calculations are correct
+	_lastFrameTime = _lastFrameTimeFPS = glfwGetTime();
 	
 	while (glfwWindowShouldClose(_window) == 0)
 	{

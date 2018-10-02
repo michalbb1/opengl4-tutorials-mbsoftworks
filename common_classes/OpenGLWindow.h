@@ -87,13 +87,28 @@ public:
 	bool hasErrorOccured() const;
 
 	/** \brief  Gets the projection matrix for the current window size.
-	*   \return Projection matrix;
+	*   \return Projection matrix.
 	*/
 	glm::mat4 getProjectionMatrix() const;
 
+	/** \brief  Gets the adjusted float value, that takes frames per second into account.
+	*   \return "Speed Optimized Floating Point Value (sof)".
+	*/
 	float sof(float value) const;
+
+	/** \brief  Gets the adjusted double value, that takes frames per second into account.
+	*   \return "Speed Optimized Floating Point Value (sof)".
+	*/
 	double sof(double value) const;
+
+	/** \brief  Gets time delta - time passed since the last frame in seconds.
+	*   \return Time delta.
+	*/
 	double getTimeDelta() const;
+
+	/** \brief  Gets current Frames Per Second (FPS).
+	*   \return FPS.
+	*/
 	int getFPS() const;
 
 private:
@@ -104,11 +119,11 @@ private:
 	glm::mat4 _projectionMatrix;
 	void recalculateProjectionMatrix();
 
-	double _lastFrameTime;
-	double _lastFrameTimeFPS;
-	double _timeDelta;
-	int _FPS;
-	int _nextFPS;
+	double _lastFrameTime = 0.0;
+	double _lastFrameTimeFPS = 0.0;
+	double _timeDelta = 0.0;
+	int _FPS = 0;
+	int _nextFPS = 0;
 	void updateDeltaTimeAndFPS();
 
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.
