@@ -67,6 +67,8 @@ void OpenGLWindow::releaseScene()
 	vertexShader.deleteShader();
 	fragmentShader.deleteShader();
 
+	shapesVBO.deleteVBO();
+
 	glDeleteVertexArrays(1, &mainVAO);
 }
 
