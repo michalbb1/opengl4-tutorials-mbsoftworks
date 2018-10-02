@@ -42,6 +42,7 @@ void OpenGLWindow::initializeScene()
 	glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
 	glBindVertexArray(mainVAO);
 
+	// Setup vertex positions first
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
 	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
@@ -51,6 +52,7 @@ void OpenGLWindow::initializeScene()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
+	// Setup colors now
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
 	for(auto i = 0; i < 6; i++)
@@ -95,7 +97,7 @@ void OpenGLWindow::renderScene()
 	mainProgram["matrices.modelMatrix"] = modelMatrixCube;
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// Render 4 pyramids around the cube
+	// Render 4 pyramids around the cube with the positions defined in the following array
 	glm::vec3 pyramidTranslationVectors[] =
 	{
 		glm::vec3(-12.0f, 7.0f, 0.0f),
@@ -112,7 +114,7 @@ void OpenGLWindow::renderScene()
 		modelMatrixPyramid = glm::scale(modelMatrixPyramid, glm::vec3(3.0f, 3.0f, 3.0f));
 
 		mainProgram["matrices.modelMatrix"] = modelMatrixPyramid;
-		glDrawArrays(GL_TRIANGLES, 36, 12);
+		glDrawArrays(GL_TRIANGLES, 36, 12); // Pyramid vertices start after cube, that is on index 36
 	}
 
 	currentAngle += glm::radians(sof(90.0f));
