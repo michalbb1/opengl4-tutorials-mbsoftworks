@@ -146,6 +146,7 @@
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
     <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\simpleWalkingCamera.cpp" />
     <ClCompile Include="..\common_classes\staticGeometry.cpp" />
     <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />
+    <ClInclude Include="..\common_classes\simpleWalkingCamera.h" />
     <ClInclude Include="..\common_classes\staticGeometry.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
     <ClInclude Include="..\common_classes\uniform.h" />
