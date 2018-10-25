@@ -14,7 +14,7 @@ VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
-float currentAngle;
+float rotationAngleRad;
 
 void OpenGLWindow::initializeScene()
 {
@@ -89,9 +89,9 @@ void OpenGLWindow::renderScene()
 
 	// Render rotating cube in the middle
 	auto modelMatrixCube = glm::mat4(1.0);
-	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(1.0f, 0.0f, 0.0f));
-	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-	modelMatrixCube = glm::rotate(modelMatrixCube, currentAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
 	modelMatrixCube = glm::scale(modelMatrixCube, glm::vec3(5.0f, 5.0f, 5.0f));
 	
 	mainProgram["matrices.modelMatrix"] = modelMatrixCube;
@@ -110,14 +110,14 @@ void OpenGLWindow::renderScene()
 	{
 		glm::mat4 modelMatrixPyramid = glm::mat4(1.0);
 		modelMatrixPyramid = glm::translate(modelMatrixPyramid, pyramidTranslation);
-		modelMatrixPyramid = glm::rotate(modelMatrixPyramid, currentAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixPyramid = glm::rotate(modelMatrixPyramid, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixPyramid = glm::scale(modelMatrixPyramid, glm::vec3(3.0f, 3.0f, 3.0f));
 
 		mainProgram["matrices.modelMatrix"] = modelMatrixPyramid;
 		glDrawArrays(GL_TRIANGLES, 36, 12); // Pyramid vertices start after cube, that is on index 36
 	}
 
-	currentAngle += glm::radians(sof(90.0f));
+	rotationAngleRad += glm::radians(sof(90.0f));
 
 	std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());

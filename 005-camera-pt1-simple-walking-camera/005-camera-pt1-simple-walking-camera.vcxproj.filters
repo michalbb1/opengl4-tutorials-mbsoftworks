@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{dd04db99-7357-4962-9098-81381fdcaf5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes">
+      <UniqueIdentifier>{8079606f-9278-4b47-bcb7-efc43c68190f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes">
+      <UniqueIdentifier>{2e1bea72-9453-42dd-b801-a8b79e9951f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\glad">
+      <UniqueIdentifier>{cfe2c038-c708-4f61-a5f0-fac9b9664ca0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="005-camera-pt1-simple-walking-camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\glad\src\glad.c">
+      <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderProgram.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\staticGeometry.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\uniform.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\simpleWalkingCamera.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\OpenGLWindow.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderProgram.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\staticGeometry.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\stringUtils.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniform.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\vertexBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
+      <Filter>Header Files\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\simpleWalkingCamera.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
