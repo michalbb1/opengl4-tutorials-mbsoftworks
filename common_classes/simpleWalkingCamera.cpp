@@ -37,24 +37,20 @@ glm::mat4 SimpleWalkingCamera::getViewMatrix() const
 
 void SimpleWalkingCamera::update(std::function<bool(int)> keyInputFunc, std::function<float(float)> speedCorrectionFunc)
 {
-	if (keyInputFunc(_forwardKeyCode))
-	{
+	if (keyInputFunc(_forwardKeyCode)) {
 		moveBy(speedCorrectionFunc(_moveSpeed));
 	}
 
-	if (keyInputFunc(_forwardKeyCode))
-	{
-		moveBy(speedCorrectionFunc(_moveSpeed));
+	if (keyInputFunc(_backwardKeyCode)) {
+		moveBy(-speedCorrectionFunc(_moveSpeed));
 	}
 
-	if (keyInputFunc(_forwardKeyCode))
-	{
-		moveBy(speedCorrectionFunc(_moveSpeed));
+	if (keyInputFunc(_rotateLeftKeyCode)) {
+		rotateBy(speedCorrectionFunc(_rotationSpeed));
 	}
 
-	if (keyInputFunc(_forwardKeyCode))
-	{
-		moveBy(speedCorrectionFunc(_moveSpeed));
+	if (keyInputFunc(_rotateRightKeyCode)) {
+		rotateBy(-speedCorrectionFunc(_rotationSpeed));
 	}
 }
 

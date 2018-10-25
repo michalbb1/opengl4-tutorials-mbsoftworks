@@ -7,7 +7,7 @@
 class SimpleWalkingCamera
 {
 public:
-	SimpleWalkingCamera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed = 25.0f, float rotationSpeed = 135.0f);
+	SimpleWalkingCamera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed = 10.0f, float rotationSpeed = 135.0f);
 
 	void setMoveSpeed(float moveSpeed);
 	void setRotationSpeed(float degreesPerSecond);
