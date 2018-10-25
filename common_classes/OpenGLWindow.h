@@ -111,6 +111,16 @@ public:
 	*/
 	int getFPS() const;
 
+	/** \brief  Turns vertical synchronization on or off.
+	*   \param  enable True, if you want to enable it, or false otherwise
+	*/
+	void setVerticalSynchronization(bool enable);
+
+	/** \brief  Checks, if vertical synchronization is on or off.
+	*   \return True, if vertical synchronization is enabled, or false otherwise.
+	*/
+	bool isVerticalSynchronizationEnabled();
+
 private:
 	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
 	bool _keyWasPressed[512]; ///< Array of bools, used by keyPressedOnce function
@@ -119,11 +129,14 @@ private:
 	glm::mat4 _projectionMatrix;
 	void recalculateProjectionMatrix();
 
-	double _lastFrameTime = 0.0;
-	double _lastFrameTimeFPS = 0.0;
-	double _timeDelta = 0.0;
-	int _FPS = 0;
-	int _nextFPS = 0;
+	double _lastFrameTime = 0.0; ///< Time of last frame
+	double _lastFrameTimeFPS = 0.0; ///< Time of last FPS Update
+	double _timeDelta = 0.0; ///< Time delta between last frame and current frame
+	int _FPS = 0; ///< Current FPS
+	int _nextFPS = 0; ///< Next FPS, that is being counted and will update the _FPS
+	bool _isVerticalSynchronizationEnabled = false; ///< Stores information, if vertical synchronization is enabled
+
+	/** \brief  Updates frame times and FPS counters. */
 	void updateDeltaTimeAndFPS();
 
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.

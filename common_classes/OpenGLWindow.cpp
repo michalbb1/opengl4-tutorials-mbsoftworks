@@ -67,6 +67,7 @@ bool OpenGLWindow::keyPressedOnce(int keyCode)
 
 void OpenGLWindow::runApp()
 {
+	setVerticalSynchronization(true);
 	recalculateProjectionMatrix();
 	initializeScene();
 	
@@ -133,6 +134,17 @@ double OpenGLWindow::getTimeDelta() const
 int OpenGLWindow::getFPS() const
 {
 	return _FPS;
+}
+
+void OpenGLWindow::setVerticalSynchronization(bool enable)
+{
+	glfwSwapInterval(enable ? 1 : 0);
+	_isVerticalSynchronizationEnabled = enable;
+}
+
+bool OpenGLWindow::isVerticalSynchronizationEnabled()
+{
+	return _isVerticalSynchronizationEnabled;
 }
 
 void OpenGLWindow::recalculateProjectionMatrix()
