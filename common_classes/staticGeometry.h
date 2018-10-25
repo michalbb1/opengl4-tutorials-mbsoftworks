@@ -4,9 +4,15 @@
 
 namespace static_geometry
 {
+	// A simple cube with unit size
 	extern glm::vec3 cubeVertices[36];
 	extern glm::vec3 cubeFaceColors[6];
 
+	// A simple pyramid with unit size
 	extern glm::vec3 pyramidVertices[12];
 	extern glm::vec3 pyramidFaceColors[3];
+
+	// Ground, that has greenish color
+	extern glm::vec3 plainGroundVertices[4];
+	extern glm::vec3 plainGroundColors[4];
 }
