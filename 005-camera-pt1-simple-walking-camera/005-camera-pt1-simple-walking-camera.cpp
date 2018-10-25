@@ -15,8 +15,8 @@ VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
-SimpleWalkingCamera camera(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 0.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-float rotationAngle; // in radians
+SimpleWalkingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+float rotationAngleRad; // in radians
 
 void OpenGLWindow::initializeScene()
 {
@@ -47,6 +47,7 @@ void OpenGLWindow::initializeScene()
 	// Setup vertex positions first
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
+	shapesVBO.addData(static_geometry::plainGroundVertices, sizeof(static_geometry::plainGroundVertices));
 	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
 	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
@@ -57,6 +58,9 @@ void OpenGLWindow::initializeScene()
 	// Setup colors now
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
+
+	colorsVBO.addData(static_geometry::plainGroundColors, sizeof(static_geometry::plainGroundColors));
+
 	for(auto i = 0; i < 6; i++)
 	{
 		colorsVBO.addData(static_geometry::cubeFaceColors, sizeof(static_geometry::cubeFaceColors));
@@ -89,39 +93,75 @@ void OpenGLWindow::renderScene()
 	mainProgram["matrices.projectionMatrix"] = getProjectionMatrix();
 	mainProgram["matrices.viewMatrix"] = camera.getViewMatrix();
 
-	// Render rotating cube in the middle
-	auto modelMatrixCube = glm::mat4(1.0);
-	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngle, glm::vec3(1.0f, 0.0f, 0.0f));
-	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-	modelMatrixCube = glm::rotate(modelMatrixCube, rotationAngle, glm::vec3(0.0f, 0.0f, 1.0f));
-	modelMatrixCube = glm::scale(modelMatrixCube, glm::vec3(5.0f, 5.0f, 5.0f));
-	
-	mainProgram["matrices.modelMatrix"] = modelMatrixCube;
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	// Render ground
+	mainProgram["matrices.modelMatrix"] = glm::mat4(1.0);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	// Render 4 pyramids around the cube with the positions defined in the following array
-	glm::vec3 pyramidTranslationVectors[] =
+	// Render "houses" on the left
+	for (int i = 0; i < 10; i++)
 	{
-		glm::vec3(-12.0f, 7.0f, 0.0f),
-		glm::vec3(12.0f, 7.0f, 0.0f),
-		glm::vec3(12.0f, -7.0f, 0.0f),
-		glm::vec3(-12.0f, -7.0f, 0.0f)
-	};
+		// Lets' predefine some sizes
+		float houseBottomSize = 10.0f;
+		float roofTopSize = 12.0f;
+		float translateTopY = (houseBottomSize + roofTopSize) / 2.0f;
 
-	for (auto pyramidTranslation : pyramidTranslationVectors)
-	{
-		glm::mat4 modelMatrixPyramid = glm::mat4(1.0);
-		modelMatrixPyramid = glm::translate(modelMatrixPyramid, pyramidTranslation);
-		modelMatrixPyramid = glm::rotate(modelMatrixPyramid, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrixPyramid = glm::scale(modelMatrixPyramid, glm::vec3(3.0f, 3.0f, 3.0f));
+		// First, calculate the basic position of house
+		auto modelMatrixHouse = glm::mat4(1.0);
+		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(-40.0f, 2.5f, -125.0f + i * 25.0f));
 
-		mainProgram["matrices.modelMatrix"] = modelMatrixPyramid;
-		glDrawArrays(GL_TRIANGLES, 36, 12); // Pyramid vertices start after cube, that is on index 36
+		// Render bottom cube of the house
+		glm::mat4 modelMatrixBottom = glm::rotate(modelMatrixHouse, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
+		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
+		glDrawArrays(GL_TRIANGLES, 4, 36);
+
+		// Render top (roof) of the house
+		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
+		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
+		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
+		glDrawArrays(GL_TRIANGLES, 40, 12);
 	}
 
-	rotationAngle += glm::radians(sof(90.0f));
+	// Render "skyscrapers" on the right
+	for (int i = 0; i < 10; i++)
+	{
+		float houseBottomSize = 10.0f;
+		float houseMiddleSize = 7.0f;
+		float houseTopSize = 4.0f;
 
-	std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
+		// First, calculate the basic position of skyscraper
+		auto modelMatrixHouse = glm::mat4(1.0);
+		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(40.0f, 2.5f, -125.0f + i * 25.0f));
+
+		// Render the bottom part of skyscraper
+		glm::mat4 modelMatrixBottom = glm::rotate(modelMatrixHouse, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
+		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
+		glDrawArrays(GL_TRIANGLES, 4, 36);
+
+		// Render the middle part of skyscraper
+		float translateMiddleY = (houseBottomSize + houseMiddleSize) / 2.0f;
+		glm::mat4 modelMatrixMiddle = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateMiddleY, 0.0f));
+		modelMatrixMiddle = glm::rotate(modelMatrixMiddle, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixMiddle = glm::scale(modelMatrixMiddle, glm::vec3(houseMiddleSize, houseMiddleSize, houseMiddleSize));
+		mainProgram["matrices.modelMatrix"] = modelMatrixMiddle;
+		glDrawArrays(GL_TRIANGLES, 4, 36);
+
+		// Render the top part of skyscraper
+		float translateTopY = houseMiddleSize + (houseBottomSize + houseTopSize) / 2.0f;
+		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
+		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(houseTopSize, houseTopSize, houseTopSize));
+		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
+		glDrawArrays(GL_TRIANGLES, 4, 36);
+	}
+
+	rotationAngleRad += glm::radians(sof(45.0f));
+
+	std::string windowTitleWithFPS = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+		+ std::to_string(getFPS()) +
+		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
@@ -140,8 +180,13 @@ void OpenGLWindow::releaseScene()
 
 void OpenGLWindow::handleInput()
 {
-	if (keyPressedOnce(GLFW_KEY_ESCAPE))
+	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
 		closeWindow();
+	}
+
+	if (keyPressedOnce(GLFW_KEY_F3)) {
+		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+	}
 
 	camera.update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return this->sof(f); });
 }
