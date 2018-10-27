@@ -126,7 +126,7 @@ private:
 	bool _keyWasPressed[512]; ///< Array of bools, used by keyPressedOnce function
 	bool _hasErrorOccured = false; ///< Error flag, indicates, if any kind of error has occured
 
-	glm::mat4 _projectionMatrix;
+	glm::mat4 _projectionMatrix; ///< Precalculated projection matrix, when size changes, it's recalculated
 	void recalculateProjectionMatrix();
 
 	double _lastFrameTime = 0.0; ///< Time of last frame

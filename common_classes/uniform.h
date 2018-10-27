@@ -54,8 +54,8 @@ public:
 	void set(const glm::mat4* matrices, int count = 1);
 
 private:
-	ShaderProgram* _shaderProgram;
+	ShaderProgram* _shaderProgram; ///< Pointer to shader program this uniform belongs to
 
-	std::string _name;
-	int _location;
+	std::string _name; ///< Name of uniform
+	int _location; ///< OpenGL assigned uniform location (cached in this variable)
 };
