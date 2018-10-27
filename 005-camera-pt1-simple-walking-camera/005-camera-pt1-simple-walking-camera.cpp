@@ -98,24 +98,25 @@ void OpenGLWindow::renderScene()
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	// Render "houses" on the left
-	for (int i = 0; i < 10; i++)
+	for (auto i = 0; i < 10; i++)
 	{
 		// Lets' predefine some sizes
-		float houseBottomSize = 10.0f;
-		float roofTopSize = 12.0f;
-		float translateTopY = (houseBottomSize + roofTopSize) / 2.0f;
+		auto houseBottomSize = 10.0f;
+		auto roofTopSize = 12.0f;
 
 		// First, calculate the basic position of house
 		auto modelMatrixHouse = glm::mat4(1.0);
-		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(-40.0f, 2.5f, -125.0f + i * 25.0f));
+		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(-40.0f, 0.0f, -125.0f + i * 25.0f));
 
 		// Render bottom cube of the house
-		glm::mat4 modelMatrixBottom = glm::rotate(modelMatrixHouse, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
+		modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render top (roof) of the house
+		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 1.0f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
 		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
@@ -124,24 +125,25 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Render "skyscrapers" on the right
-	for (int i = 0; i < 10; i++)
+	for (auto i = 0; i < 10; i++)
 	{
-		float houseBottomSize = 10.0f;
-		float houseMiddleSize = 7.0f;
-		float houseTopSize = 4.0f;
+		auto houseBottomSize = 10.0f;
+		auto houseMiddleSize = 7.0f;
+		auto houseTopSize = 4.0f;
 
 		// First, calculate the basic position of skyscraper
 		auto modelMatrixHouse = glm::mat4(1.0);
-		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(40.0f, 2.5f, -125.0f + i * 25.0f));
+		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(40.0f, 0.0f, -125.0f + i * 25.0f));
 
 		// Render the bottom part of skyscraper
-		glm::mat4 modelMatrixBottom = glm::rotate(modelMatrixHouse, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
+		modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render the middle part of skyscraper
-		float translateMiddleY = (houseBottomSize + houseMiddleSize) / 2.0f;
+		auto translateMiddleY = houseBottomSize + houseMiddleSize / 2.0f;
 		glm::mat4 modelMatrixMiddle = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateMiddleY, 0.0f));
 		modelMatrixMiddle = glm::rotate(modelMatrixMiddle, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixMiddle = glm::scale(modelMatrixMiddle, glm::vec3(houseMiddleSize, houseMiddleSize, houseMiddleSize));
@@ -149,7 +151,7 @@ void OpenGLWindow::renderScene()
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render the top part of skyscraper
-		float translateTopY = houseMiddleSize + (houseBottomSize + houseTopSize) / 2.0f;
+		auto translateTopY = houseMiddleSize + houseBottomSize + houseTopSize / 2.0f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
 		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(houseTopSize, houseTopSize, houseTopSize));
