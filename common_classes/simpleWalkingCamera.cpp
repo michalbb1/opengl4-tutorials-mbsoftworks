@@ -22,6 +22,11 @@ void SimpleWalkingCamera::setMoveSpeed(float moveSpeed)
 	_moveSpeed = moveSpeed;
 }
 
+void SimpleWalkingCamera::setRotationSpeed(float degreesPerSecond)
+{
+	_rotationSpeed = degreesPerSecond;
+}
+
 void SimpleWalkingCamera::setControls(int forwardKeyCode, int backwardKeyCode, int rotateLeftKeyCode, int rotateRightKeyCode)
 {
 	_forwardKeyCode = forwardKeyCode;
@@ -65,7 +70,7 @@ void SimpleWalkingCamera::moveBy(float distance)
 void SimpleWalkingCamera::rotateBy(float angleInDegrees)
 {
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::vec4 rotatedViewVector = rotationMatrix * glm::vec4(getNormalizedViewVector(), 1.0f);
+	glm::vec4 rotatedViewVector = rotationMatrix * glm::vec4(getNormalizedViewVector(), 0.0f);
 	_viewPoint = _position + glm::vec3(rotatedViewVector.x, rotatedViewVector.y, rotatedViewVector.z);
 }
 
