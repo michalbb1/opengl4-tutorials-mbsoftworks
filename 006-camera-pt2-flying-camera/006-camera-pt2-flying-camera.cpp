@@ -6,7 +6,7 @@
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/vertexBufferObject.h"
 #include "../common_classes/staticGeometry.h"
-#include "../common_classes/simpleWalkingCamera.h"
+#include "../common_classes/flyingCamera.h"
 
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
@@ -15,7 +15,7 @@ VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
-SimpleWalkingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+FlyingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 float rotationAngleRad; // in radians
 
 void OpenGLWindow::initializeScene()
@@ -164,7 +164,7 @@ void OpenGLWindow::renderScene()
 	std::string windowTitleWithFPS = "006.) Camera pt. 2 - Flying Camera - Tutorial by Michal Bubnar - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
 		+ std::to_string(getFPS()) +
 		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+	//glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
 void OpenGLWindow::releaseScene()
@@ -190,7 +190,15 @@ void OpenGLWindow::handleInput()
 		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
 	}
 
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return this->sof(f); });
+	int posX, posY, width, height;
+	glfwGetWindowPos(getWindow(), &posX, &posY);
+	glfwGetWindowSize(getWindow(), &width, &height);
+	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+		[this](float f) {return this->sof(f); });
 }
 
 void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)

@@ -42,9 +42,6 @@
     <ClCompile Include="..\common_classes\shaderProgram.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\common_classes\simpleWalkingCamera.cpp">
-      <Filter>Source Files\common_classes</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\staticGeometry.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -57,6 +54,9 @@
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\flyingCamera.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h">
@@ -66,9 +66,6 @@
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
     <ClInclude Include="..\common_classes\shaderProgram.h">
-      <Filter>Header Files\common_classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common_classes\simpleWalkingCamera.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
     <ClInclude Include="..\common_classes\staticGeometry.h">
@@ -85,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
       <Filter>Header Files\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\flyingCamera.h">
+      <Filter>Header Files\common_classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
