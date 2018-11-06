@@ -55,14 +55,14 @@ private:
 	*/
 	glm::vec3 getNormalizedViewVector() const;
 
-	glm::vec3 _position; ///< Camera's position (eye position)
-	glm::vec3 _viewPoint; ///< Viewpoint - where does camera look to
-	glm::vec3 _upVector; ///< Up vector of the camera
+	glm::vec3 _position; //!< Camera's position (eye position)
+	glm::vec3 _viewPoint; //!< Viewpoint - where does camera look to
+	glm::vec3 _upVector; //!< Up vector of the camera
 
-	float _moveSpeed; ///< How fast the camera is moving forwards and backwards
-	float _rotationSpeed; ///< How fast the camera rotates around Y-axis (in degrees per second)
-	int _forwardKeyCode; ///< Key to move forward
-	int _backwardKeyCode; ///< Key to move backward
-	int _rotateLeftKeyCode; ///< Key to rotate left
-	int _rotateRightKeyCode; ///< Key to rotate right
+	float _moveSpeed; //!< How fast the camera is moving forwards and backwards
+	float _rotationSpeed; //!< How fast the camera rotates around Y-axis (in degrees per second)
+	int _forwardKeyCode; //!< Key to move forward
+	int _backwardKeyCode; //!< Key to move backward
+	int _rotateLeftKeyCode; //!< Key to rotate left
+	int _rotateRightKeyCode; //!< Key to rotate right
 };

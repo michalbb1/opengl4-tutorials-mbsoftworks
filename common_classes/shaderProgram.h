@@ -52,7 +52,7 @@ public:
 
 private:
 
-	GLuint _shaderProgramID;  ///< OpenGL-assigned shader program ID
-	bool _isLinked = false; ///< Flag teling, whether shader program has been linked successfully
-	std::map<std::string, Uniform> _uniforms; ///< Cache of uniform locations (reduces OpenGL calls)
+	GLuint _shaderProgramID;  //! OpenGL-assigned shader program ID
+	bool _isLinked = false; //! Flag teling, whether shader program has been linked successfully
+	std::map<std::string, Uniform> _uniforms; //! Cache of uniform locations (reduces OpenGL calls)
 };
