@@ -76,16 +76,16 @@ private:
 	*/
 	glm::vec3 getNormalizedViewVector() const;
 
-	glm::vec3 _position; ///< Camera's position (eye position)
-	glm::vec3 _viewPoint; ///< Viewpoint - where does camera look to
-	glm::vec3 _upVector; ///< Up vector of the camera
+	glm::vec3 _position; //!< Camera's position (eye position)
+	glm::vec3 _viewPoint; //!< Viewpoint - where does camera look to
+	glm::vec3 _upVector; //!< Up vector of the camera
 
-	glm::i32vec2 _windowCenterPosition; ///< Center of the window (to restore cursor position every frame to)
-	float _mouseSensitivity; ///< Mouse sensitivity in degrees per pixel
+	glm::i32vec2 _windowCenterPosition; //!< Center of the window (to restore cursor position every frame to)
+	float _mouseSensitivity; //!< Mouse sensitivity in degrees per pixel
 
-	float _moveSpeed; ///< How fast the camera is moving forwards and backwards
-	int _forwardKeyCode; ///< Key to move forward
-	int _backwardKeyCode; ///< Key to move backward
-	int _strafeLeftKeyCode; ///< Key to rotate left
-	int _strafeRightKeyCode; ///< Key to rotate right
+	float _moveSpeed; //!< How fast the camera is moving forwards and backwards
+	int _forwardKeyCode; //!< Key to move forward
+	int _backwardKeyCode; //!< Key to move backward
+	int _strafeLeftKeyCode; //!< Key to rotate left
+	int _strafeRightKeyCode; //!< Key to rotate right
 };

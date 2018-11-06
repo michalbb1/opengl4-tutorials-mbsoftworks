@@ -69,11 +69,11 @@ public:
 	void deleteVBO();
 
 private:
-	GLuint _bufferID = 0; ///< OpenGL assigned buffer ID
-	int _bufferType; ///< Buffer type (GL_ARRAY_BUFFER, GL_ELEMENT_BUFFER...)
-	uint32_t _uploadedDataSize; ///< Holds buffer data size after uploading to GPU
-	std::vector<unsigned char> _rawData; ///< In-memory raw data buffer, used to gather the data for VBO.
+	GLuint _bufferID = 0; //! OpenGL assigned buffer ID
+	int _bufferType; //! Buffer type (GL_ARRAY_BUFFER, GL_ELEMENT_BUFFER...)
+	uint32_t _uploadedDataSize; //! Holds buffer data size after uploading to GPU
+	std::vector<unsigned char> _rawData; //! In-memory raw data buffer, used to gather the data for VBO.
 
 	bool _isBufferCreated = false;
-	bool _isDataUploaded = false; ///< Flag telling, if data has been uploaded to GPU already.
+	bool _isDataUploaded = false; //! Flag telling, if data has been uploaded to GPU already.
 };

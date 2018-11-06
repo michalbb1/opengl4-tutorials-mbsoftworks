@@ -122,19 +122,19 @@ public:
 	bool isVerticalSynchronizationEnabled();
 
 private:
-	GLFWwindow* _window = nullptr; ///< Pointer to GLFWwindow, nullptr by default
-	bool _keyWasPressed[512]; ///< Array of bools, used by keyPressedOnce function
-	bool _hasErrorOccured = false; ///< Error flag, indicates, if any kind of error has occured
+	GLFWwindow* _window = nullptr; //!< Pointer to GLFWwindow, nullptr by default
+	bool _keyWasPressed[512]; //!< Array of bools, used by keyPressedOnce function
+	bool _hasErrorOccured = false; //!< Error flag, indicates, if any kind of error has occured
 
-	glm::mat4 _projectionMatrix; ///< Precalculated projection matrix, when size changes, it's recalculated
+	glm::mat4 _projectionMatrix; //!< Precalculated projection matrix, when size changes, it's recalculated
 	void recalculateProjectionMatrix();
 
-	double _lastFrameTime = 0.0; ///< Time of last frame
-	double _lastFrameTimeFPS = 0.0; ///< Time of last FPS Update
-	double _timeDelta = 0.0; ///< Time delta between last frame and current frame
-	int _FPS = 0; ///< Current FPS
-	int _nextFPS = 0; ///< Next FPS, that is being counted and will update the _FPS
-	bool _isVerticalSynchronizationEnabled = false; ///< Stores information, if vertical synchronization is enabled
+	double _lastFrameTime = 0.0; //!< Time of last frame
+	double _lastFrameTimeFPS = 0.0; //!< Time of last FPS Update
+	double _timeDelta = 0.0; //!< Time delta between last frame and current frame
+	int _FPS = 0; //!< Current FPS
+	int _nextFPS = 0; //!< Next FPS, that is being counted and will update the _FPS
+	bool _isVerticalSynchronizationEnabled = false; //!< Stores information, if vertical synchronization is enabled
 
 	/** \brief  Updates frame times and FPS counters. */
 	void updateDeltaTimeAndFPS();
@@ -142,5 +142,5 @@ private:
 	//* \brief Static method, that is set as callback to GLFW framework about window size changed.
 	static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);
 
-	static std::map<GLFWwindow*, OpenGLWindow*> _windows; ///< std::map used to map GLFWwindow pointers to OpenGLWindow (our class)
+	static std::map<GLFWwindow*, OpenGLWindow*> _windows; //!< std::map used to map GLFWwindow pointers to OpenGLWindow (our class)
 };
