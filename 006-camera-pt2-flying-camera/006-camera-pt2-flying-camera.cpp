@@ -164,7 +164,7 @@ void OpenGLWindow::renderScene()
 	std::string windowTitleWithFPS = "006.) Camera pt. 2 - Flying Camera - Tutorial by Michal Bubnar - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
 		+ std::to_string(getFPS()) +
 		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-	//glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
 void OpenGLWindow::releaseScene()

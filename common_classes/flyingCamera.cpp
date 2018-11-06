@@ -3,12 +3,12 @@
 
 #include "flyingCamera.h"
 
-FlyingCamera::FlyingCamera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed)
+FlyingCamera::FlyingCamera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed, float mouseSensitivity)
 	: _position(position)
 	, _viewPoint(viewPoint)
 	, _upVector(upVector)
 	, _moveSpeed(moveSpeed)
-	, _mouseSensitivity(0.15f)
+	, _mouseSensitivity(mouseSensitivity)
 {
 	// Standard WSAD controls, as you are used to from games :)
 	setControls(GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D);
@@ -74,7 +74,6 @@ void FlyingCamera::update(std::function<bool(int)> keyInputFunc,
 		rotateUpDown(float(delta.y) * _mouseSensitivity);
 	}
 
-	_lastMousePosition = curMousePosition;
 	setCursorPosFunc(_windowCenterPosition);
 }
 
