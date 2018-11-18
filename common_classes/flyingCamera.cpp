@@ -32,7 +32,7 @@ void FlyingCamera::setControls(int forwardKeyCode, int backwardKeyCode, int stra
 	_strafeRightKeyCode = strafeRightKeyCode;
 }
 
-void FlyingCamera::setWindowCenterPosition(glm::i32vec2 windowCenterPosition)
+void FlyingCamera::setWindowCenterPosition(const glm::i32vec2& windowCenterPosition)
 {
 	_windowCenterPosition = windowCenterPosition;
 }
@@ -118,8 +118,8 @@ void FlyingCamera::rotateUpDown(float angleInDegrees)
 		glm::vec3 rotationAxis = glm::cross(getNormalizedViewVector(), _upVector);
 		rotationAxis = glm::normalize(rotationAxis);
 
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), -rotationAxis);
-		glm::vec4 rotatedViewVector = rotationMatrix / glm::vec4(getNormalizedViewVector(), 0.0f);
+		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), rotationAxis);
+		glm::vec4 rotatedViewVector = rotationMatrix * glm::vec4(getNormalizedViewVector(), 0.0f);
 
 		_viewPoint = _position + glm::vec3(rotatedViewVector);
 	}

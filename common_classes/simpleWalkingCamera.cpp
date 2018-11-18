@@ -11,10 +11,7 @@ SimpleWalkingCamera::SimpleWalkingCamera(const glm::vec3& position, const glm::v
 	, _rotationSpeed(rotationSpeed)
 {
 	// Standard WSAD controls, as you are used to from games :)
-	_forwardKeyCode     = GLFW_KEY_W;
-	_backwardKeyCode    = GLFW_KEY_S;
-	_rotateLeftKeyCode  = GLFW_KEY_A;
-	_rotateRightKeyCode = GLFW_KEY_D;
+	setControls(GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D);
 }
 
 void SimpleWalkingCamera::setMoveSpeed(float moveSpeed)

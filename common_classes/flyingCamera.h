@@ -31,7 +31,7 @@ public:
 	/** \brief  Sets center of window position, in pixels. This is required for camera rotation, that resets cursor position constantly.
 	*   \param windowCenterPosition Center of the window
 	*/
-	void setWindowCenterPosition(glm::i32vec2 windowCenterPosition);
+	void setWindowCenterPosition(const glm::i32vec2& windowCenterPosition);
 
 	/** \brief  Gets the current view matrix, depending on position and viewpoint of camera.
 	*   \return 4x4 view matrix.
