@@ -42,10 +42,25 @@ glm::mat4 FlyingCamera::getViewMatrix() const
 	return glm::lookAt(_position, _viewPoint, _upVector);
 }
 
-void FlyingCamera::update(std::function<bool(int)> keyInputFunc,
-	std::function<glm::i32vec2()> getCursorPosFunc,
-	std::function<void(const glm::i32vec2&)> setCursorPosFunc,
-	std::function<float(float)> speedCorrectionFunc)
+glm::vec3 FlyingCamera::getEye() const
+{
+	return _position;
+}
+
+glm::vec3 FlyingCamera::getViewPoint() const
+{
+	return _viewPoint;
+}
+
+glm::vec3 FlyingCamera::getUpVector() const
+{
+	return _upVector;
+}
+
+void FlyingCamera::update(const std::function<bool(int)>& keyInputFunc,
+	const std::function<glm::i32vec2()>& getCursorPosFunc,
+	const std::function<void(const glm::i32vec2&)>& setCursorPosFunc,
+	const std::function<float(float)>& speedCorrectionFunc)
 {
 	if (keyInputFunc(_forwardKeyCode)) {
 		moveBy(speedCorrectionFunc(_moveSpeed));

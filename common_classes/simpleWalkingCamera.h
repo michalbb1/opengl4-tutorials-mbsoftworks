@@ -32,11 +32,26 @@ public:
 	*/
 	glm::mat4 getViewMatrix() const;
 
+	/** \brief  Gets the current eye position (camera's position).
+	*   \return Eye position.
+	*/
+	glm::vec3 getEye() const;
+
+	/** \brief  Gets the point camera looks to.
+	*   \return Viewpoint position.
+	*/
+	glm::vec3 getViewPoint() const;
+
+	/** \brief  Gets the up vector of the camera.
+	*   \return Up vector of the camera.
+	*/
+	glm::vec3 getUpVector() const;
+
 	/** \brief  Updates camera - reacts on key presses and updates camera's internal state (position, view vector...)
 	*   \param keyInputFunc        Function that detects key presses
 	*   \param speedCorrectionFunc Function, that corrects floating point value according to the time passed
 	*/
-	void update(std::function<bool(int)> keyInputFunc, std::function<float(float)> speedCorrectionFunc);
+	void update(const std::function<bool(int)>& keyInputFunc, const std::function<float(float)>& speedCorrectionFunc);
 
 private:
 
