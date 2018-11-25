@@ -76,9 +76,6 @@ void OpenGLWindow::initializeScene()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
-	int width, height;
-	glfwGetWindowSize(getWindow(), &width, &height);
-
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
 }
@@ -161,7 +158,7 @@ void OpenGLWindow::renderScene()
 
 	rotationAngleRad += glm::radians(sof(45.0f));
 
-	std::string windowTitleWithFPS = "006.) Camera pt. 2 - Flying Camera - Tutorial by Michal Bubnar - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+	std::string windowTitleWithFPS = "006.) Camera pt. 2 - Flying Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
 		+ std::to_string(getFPS()) +
 		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());

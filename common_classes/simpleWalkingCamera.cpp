@@ -37,7 +37,22 @@ glm::mat4 SimpleWalkingCamera::getViewMatrix() const
 	return glm::lookAt(_position, _viewPoint, _upVector);
 }
 
-void SimpleWalkingCamera::update(std::function<bool(int)> keyInputFunc, std::function<float(float)> speedCorrectionFunc)
+glm::vec3 SimpleWalkingCamera::getEye() const
+{
+	return _position;
+}
+
+glm::vec3 SimpleWalkingCamera::getViewPoint() const
+{
+	return _viewPoint;
+}
+
+glm::vec3 SimpleWalkingCamera::getUpVector() const
+{
+	return _upVector;
+}
+
+void SimpleWalkingCamera::update(const std::function<bool(int)>& keyInputFunc, const std::function<float(float)>& speedCorrectionFunc)
 {
 	if (keyInputFunc(_forwardKeyCode)) {
 		moveBy(speedCorrectionFunc(_moveSpeed));

@@ -70,9 +70,6 @@ void OpenGLWindow::initializeScene()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
-	int width, height;
-	glfwGetWindowSize(getWindow(), &width, &height);
-
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
 }
