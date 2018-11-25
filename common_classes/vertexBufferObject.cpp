@@ -31,9 +31,11 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 	glBindBuffer(_bufferType, _bufferID);
 }
 
-void VertexBufferObject::addData(void* ptrData, uint32_t dataSize)
+void VertexBufferObject::addData(void* ptrData, uint32_t dataSize, int repeat)
 {
-	_rawData.insert(_rawData.end(), (unsigned char*)ptrData, (unsigned char*)ptrData + dataSize);
+	for (int i = 0; i < repeat; i++) {
+		_rawData.insert(_rawData.end(), (unsigned char*)ptrData, (unsigned char*)ptrData + dataSize);
+	}
 }
 
 void* VertexBufferObject::getCurrentDataPointer()
