@@ -20,18 +20,38 @@ enum MinificationFilter
 class Sampler
 {
 public:
+	/** \brief  Creates sampler object. */
 	void create();
+
+	/** \brief  Binds sampler object to specific texture unit.
+	*   \param  textureUnit  Texture unit index to bind sampler to
+	*/
 	void bind(int textureUnit = 0) const;
+
+	/** \brief  Deletes sampler object. */
 	void deleteSampler();
 
+	/** \brief  Sets magnification filter of the sampler.
+	*   \param  magnificationFilter  Magnification filter
+	*/
 	void setMagnificationFilter(MagnificationFilter magnificationFilter) const;
+
+	/** \brief  Sets minification filter of the sampler.
+	*   \param  minificationFilter  Minification filter
+	*/
 	void setMinificationFilter(MinificationFilter minificationFilter) const;
 
+	/** \brief  Sets the texture repetition with the sampler.
+	*   \param  repeat  True, if the texture should be repeated or false, if it should be clamped
+	*/
 	void setRepeat(bool repeat) const;
 
 private:
-	GLuint _samplerID = 0;
-	bool _isCreated = false;
+	GLuint _samplerID = 0; //!< OpenGL-assigned sampler ID
+	bool _isCreated = false; //!< Flag telling, if sampler has been created
 
+	/** \brief  Checks, if the sampler has been created and if not, logs it into console.
+	*   \return True, if sampler has been created or false otherwise.
+	*/
 	bool createdCheck() const;
 };
