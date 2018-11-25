@@ -51,6 +51,12 @@
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
       <Filter>Header Files\glad</Filter>
     </ClInclude>
+    <ClInclude Include="..\common_classes\texture.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\sampler.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="007-textures-pt1-single-texture.cpp">
@@ -82,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\texture.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\sampler.cpp">
+      <Filter>Source Files\common_classes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

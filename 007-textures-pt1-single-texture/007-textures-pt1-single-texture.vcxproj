@@ -120,10 +120,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h" />
+    <ClInclude Include="..\common_classes\sampler.h" />
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />
     <ClInclude Include="..\common_classes\staticGeometry.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\texture.h" />
     <ClInclude Include="..\common_classes\uniform.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
@@ -131,9 +133,11 @@
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp" />
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\sampler.cpp" />
     <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
     <ClCompile Include="..\common_classes\staticGeometry.cpp" />
+    <ClCompile Include="..\common_classes\texture.cpp" />
     <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />

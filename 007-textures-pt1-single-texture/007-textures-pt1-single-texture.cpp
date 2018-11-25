@@ -7,23 +7,32 @@
 #include "../common_classes/vertexBufferObject.h"
 #include "../common_classes/staticGeometry.h"
 #include "../common_classes/flyingCamera.h"
+#include "../common_classes/texture.h"
+#include "../common_classes/sampler.h"
 
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
-VertexBufferObject colorsVBO;
+VertexBufferObject texCoordsVBO;
 
 GLuint mainVAO;
 
-FlyingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-float rotationAngleRad; // in radians
+FlyingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
+
+Texture groundTexture;
+Texture houseTexture;
+Texture roofTexture;
+
+Texture filterTextures[10];
+Sampler samplersShowcase[10];
+int groundSamplerIndex = 9;
 
 void OpenGLWindow::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
-	vertexShader.loadShaderFromFile("data/shaders/tut004/shader.vert", GL_VERTEX_SHADER);
-	fragmentShader.loadShaderFromFile("data/shaders/tut004/shader.frag", GL_FRAGMENT_SHADER);
+	vertexShader.loadShaderFromFile("data/shaders/tut007/shader.vert", GL_VERTEX_SHADER);
+	fragmentShader.loadShaderFromFile("data/shaders/tut007/shader.frag", GL_FRAGMENT_SHADER);
 
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
@@ -51,36 +60,82 @@ void OpenGLWindow::initializeScene()
 	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
 	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
-	// Setup colors now
-	colorsVBO.createVBO();
-	colorsVBO.bindVBO();
-
-	colorsVBO.addData(static_geometry::plainGroundColors, sizeof(static_geometry::plainGroundColors));
-
-	for(auto i = 0; i < 6; i++)
-	{
-		colorsVBO.addData(static_geometry::cubeFaceColors, sizeof(static_geometry::cubeFaceColors));
-	}
-
-	for (auto i = 0; i < 4; i++)
-	{
-		colorsVBO.addData(static_geometry::pyramidFaceColors, sizeof(static_geometry::pyramidFaceColors));
-	}
-
-	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
-
+	// Setup texture coordinates next
+	texCoordsVBO.createVBO();
+	texCoordsVBO.bindVBO();
+	texCoordsVBO.addData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
+	texCoordsVBO.addData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
+	texCoordsVBO.addData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
+	
+	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-
-	int width, height;
-	glfwGetWindowSize(getWindow(), &width, &height);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
+
+	groundTexture.loadTexture2D("data/textures/clay.png");
+	houseTexture.loadTexture2D("data/textures/brick.png");
+	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
+
+	filterTextures[0].loadTexture2D("data/textures/tut007/mag_nearest_min_nearest.png");
+	filterTextures[1].loadTexture2D("data/textures/tut007/mag_nearest_min_bilinear.png");
+	filterTextures[2].loadTexture2D("data/textures/tut007/mag_nearest_min_nearest_mipmap.png");
+	filterTextures[3].loadTexture2D("data/textures/tut007/mag_nearest_min_linear_mipmap.png");
+	filterTextures[4].loadTexture2D("data/textures/tut007/mag_nearest_min_linear_mipmap_linear.png");
+
+	filterTextures[5].loadTexture2D("data/textures/tut007/mag_linear_min_nearest.png");
+	filterTextures[6].loadTexture2D("data/textures/tut007/mag_linear_min_linear.png");
+	filterTextures[7].loadTexture2D("data/textures/tut007/mag_linear_min_nearest_mipmap.png");
+	filterTextures[8].loadTexture2D("data/textures/tut007/mag_linear_min_linear_mipmap.png");
+	filterTextures[9].loadTexture2D("data/textures/tut007/mag_linear_min_linear_mipmap_linear.png");
+
+	for (auto& sampler : samplersShowcase) {
+		sampler.create();
+	}
+
+	samplersShowcase[0].bind();
+	samplersShowcase[0].setMagnificationFilter(MAG_FILTER_NEAREST);
+	samplersShowcase[0].setMinificationFilter(MIN_FILTER_NEAREST);
+
+	samplersShowcase[1].bind();
+	samplersShowcase[1].setMagnificationFilter(MAG_FILTER_NEAREST);
+	samplersShowcase[1].setMinificationFilter(MIN_FILTER_BILINEAR);
+
+	samplersShowcase[2].bind();
+	samplersShowcase[2].setMagnificationFilter(MAG_FILTER_NEAREST);
+	samplersShowcase[2].setMinificationFilter(MIN_FILTER_NEAREST_MIPMAP);
+
+	samplersShowcase[3].bind();
+	samplersShowcase[3].setMagnificationFilter(MAG_FILTER_NEAREST);
+	samplersShowcase[3].setMinificationFilter(MIN_FILTER_BILINEAR);
+
+	samplersShowcase[4].bind();
+	samplersShowcase[4].setMagnificationFilter(MAG_FILTER_NEAREST);
+	samplersShowcase[4].setMinificationFilter(MIN_FILTER_TRILINEAR);
+
+	samplersShowcase[5].bind();
+	samplersShowcase[5].setMagnificationFilter(MAG_FILTER_BILINEAR);
+	samplersShowcase[5].setMinificationFilter(MIN_FILTER_NEAREST);
+
+	samplersShowcase[6].bind();
+	samplersShowcase[6].setMagnificationFilter(MAG_FILTER_BILINEAR);
+	samplersShowcase[6].setMinificationFilter(MIN_FILTER_BILINEAR);
+
+	samplersShowcase[7].bind();
+	samplersShowcase[7].setMagnificationFilter(MAG_FILTER_BILINEAR);
+	samplersShowcase[7].setMinificationFilter(MIN_FILTER_NEAREST_MIPMAP);
+
+	samplersShowcase[8].bind();
+	samplersShowcase[8].setMagnificationFilter(MAG_FILTER_BILINEAR);
+	samplersShowcase[8].setMinificationFilter(MIN_FILTER_BILINEAR);
+
+	samplersShowcase[9].bind();
+	samplersShowcase[9].setMagnificationFilter(MAG_FILTER_BILINEAR);
+	samplersShowcase[9].setMinificationFilter(MIN_FILTER_TRILINEAR);
 }
 
 void OpenGLWindow::renderScene()
@@ -95,73 +150,91 @@ void OpenGLWindow::renderScene()
 
 	// Render ground
 	mainProgram["matrices.modelMatrix"] = glm::mat4(1.0);
+	mainProgram["color"] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	groundTexture.bind();
+	samplersShowcase[groundSamplerIndex].bind();
+	mainProgram["gSampler"] = 0;
+
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+	const auto startPointLeft = glm::vec3(-40.0f, 0.0f, 75.0f);
+	const auto startPointRight = glm::vec3(40.0f, 0.0f, 0.0f);
+	const auto houseBottomSize = 10.0f;
+	const auto roofTopSize = 12.0f;
+	
 	// Render "houses" on the left
-	for (auto i = 0; i < 10; i++)
+	for (auto i = 0; i < 5; i++)
 	{
-		// Lets' predefine some sizes
-		auto houseBottomSize = 10.0f;
-		auto roofTopSize = 12.0f;
-
+		samplersShowcase[i].bind();
 		// First, calculate the basic position of house
 		auto modelMatrixHouse = glm::mat4(1.0);
-		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(-40.0f, 0.0f, -125.0f + i * 25.0f));
+		auto housePosition = startPointLeft + glm::vec3(0.0f, 0.0f, -i * 25.0f);
+		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
 
 		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
-		modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
-		glDrawArrays(GL_TRIANGLES, 4, 36);
+		mainProgram["color"] = i == groundSamplerIndex ? glm::vec4(0.25f, 0.8f, 1.0f, 1.0f) : glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-		// Render top (roof) of the house
-		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 1.0f;
+		houseTexture.bind();
+		glDrawArrays(GL_TRIANGLES, 4, 18);
+		glDrawArrays(GL_TRIANGLES, 28, 6);
+		
+		filterTextures[i].bind();
+		glDrawArrays(GL_TRIANGLES, 22, 6);
+
+		roofTexture.bind();
+		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
-		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
 		glDrawArrays(GL_TRIANGLES, 40, 12);
+
+		if(glm::distance(camera.getEye(), housePosition) < houseBottomSize*0.66f) {
+			groundSamplerIndex = i;
+		}
 	}
 
-	// Render "skyscrapers" on the right
-	for (auto i = 0; i < 10; i++)
+	// Render "houses" on the right
+	for (auto i = 5, j = 0; i < 10; i++, j++)
 	{
-		auto houseBottomSize = 10.0f;
-		auto houseMiddleSize = 7.0f;
-		auto houseTopSize = 4.0f;
+		samplersShowcase[i].bind();
 
-		// First, calculate the basic position of skyscraper
+		// First, calculate the basic position of house 
 		auto modelMatrixHouse = glm::mat4(1.0);
-		modelMatrixHouse = glm::translate(modelMatrixHouse, glm::vec3(40.0f, 0.0f, -125.0f + i * 25.0f));
+		auto housePosition = startPointRight + glm::vec3(0.0f, 0.0f, -j * 25.0f);
+		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
 
-		// Render the bottom part of skyscraper
+		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
-		modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
-		glDrawArrays(GL_TRIANGLES, 4, 36);
+		mainProgram["color"] = i == groundSamplerIndex ? glm::vec4(0.25f, 0.8f, 1.0f, 1.0f) : glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-		// Render the middle part of skyscraper
-		auto translateMiddleY = houseBottomSize + houseMiddleSize / 2.0f;
-		glm::mat4 modelMatrixMiddle = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateMiddleY, 0.0f));
-		modelMatrixMiddle = glm::rotate(modelMatrixMiddle, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrixMiddle = glm::scale(modelMatrixMiddle, glm::vec3(houseMiddleSize, houseMiddleSize, houseMiddleSize));
-		mainProgram["matrices.modelMatrix"] = modelMatrixMiddle;
-		glDrawArrays(GL_TRIANGLES, 4, 36);
+		houseTexture.bind();
+		glDrawArrays(GL_TRIANGLES, 4, 12);
+		glDrawArrays(GL_TRIANGLES, 22, 12);
 
-		// Render the top part of skyscraper
-		auto translateTopY = houseMiddleSize + houseBottomSize + houseTopSize / 2.0f;
+		filterTextures[i].bind();
+		glDrawArrays(GL_TRIANGLES, 16, 6);
+
+		roofTexture.bind();
+		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
-		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(houseTopSize, houseTopSize, houseTopSize));
+		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
-		glDrawArrays(GL_TRIANGLES, 4, 36);
+		glDrawArrays(GL_TRIANGLES, 40, 12);
+
+		if (glm::distance(camera.getEye(), housePosition) < houseBottomSize*0.66f) {
+			groundSamplerIndex = i;
+		}
 	}
 
-	rotationAngleRad += glm::radians(sof(45.0f));
-
-	std::string windowTitleWithFPS = "007.) Textures pt. 1 - Single Texture - Tutorial by Michal Bubnar - Tutorial by Michal Bubnar - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+	std::string windowTitleWithFPS = "007.) Textures pt. 1 - Single Texture - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
 		+ std::to_string(getFPS()) +
 		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
@@ -175,7 +248,17 @@ void OpenGLWindow::releaseScene()
 	fragmentShader.deleteShader();
 
 	shapesVBO.deleteVBO();
-	colorsVBO.deleteVBO();
+	texCoordsVBO.deleteVBO();
+
+	groundTexture.deleteTexture();
+	houseTexture.deleteTexture();
+	roofTexture.deleteTexture();
+
+	for(auto i = 0; i < 10; i++)
+	{
+		filterTextures[i].deleteTexture();
+		samplersShowcase[i].deleteSampler();
+	}
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
