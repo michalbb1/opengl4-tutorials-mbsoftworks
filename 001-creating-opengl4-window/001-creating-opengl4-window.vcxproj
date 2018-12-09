@@ -23,6 +23,7 @@
     <ProjectGuid>{6202ED4E-AB30-4B4C-945C-D7CE975EA3D6}</ProjectGuid>
     <RootNamespace>My01creatingopengl4window</RootNamespace>
     <ProjectName>001-creating-opengl4-window</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
