@@ -29,7 +29,7 @@ bool Texture::loadTexture2D(const std::string& fileName, bool generateMipmaps)
 	}
 	else if(_bytesPerPixel == 1)
 	{
-		internalFormat = format = GL_ALPHA;
+		internalFormat = format = GL_DEPTH_COMPONENT;
 	}
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, _width, _height, 0, format, GL_UNSIGNED_BYTE, imageData);
