@@ -129,7 +129,7 @@ void OpenGLWindow::initializeScene()
 	houseTextureFront.loadTexture2D("data/textures/tut008/house_texture_front.png");
 	houseTextureSide.loadTexture2D("data/textures/tut008/house_texture_side.png");
 	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
-	pavementTexture.loadTexture2D("data/textures/brick_pavement.jpg");
+	pavementTexture.loadTexture2D("data/textures/pavement.jpg");
 
 	mainSampler.create();
 	mainSampler.bind();
