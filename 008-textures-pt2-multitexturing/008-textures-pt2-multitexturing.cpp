@@ -33,13 +33,13 @@ Texture roofTexture;
 
 Sampler mainSampler;
 
-struct HouseTranslation
+struct HouseTransformation
 {
 	glm::vec3 position;
 	float angle;
 };
 
-std::vector<HouseTranslation> houseTranslations
+std::vector<HouseTransformation> houseTransformations
 {
 	{glm::vec3(-140, 0, 94), glm::radians(90.0f)},
 	{glm::vec3(-140, 0, 64), glm::radians(90.0f)},
@@ -176,7 +176,7 @@ void OpenGLWindow::renderScene()
 	const auto roofTopSize = 12.0f;
 	
 	// Render "houses" on the left
-	for (auto& houseTranslation : houseTranslations)
+	for (auto& houseTranslation : houseTransformations)
 	{
 		const auto housePosition = houseTranslation.position;
 		const auto angle = houseTranslation.angle;
@@ -263,7 +263,7 @@ void OpenGLWindow::handleInput()
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
 		[this](float f) {return this->sof(f); });
 
-	auto& housePos = houseTranslations[houseTranslations.size() - 1].position;
+	auto& housePos = houseTransformations[houseTransformations.size() - 1].position;
 	if (keyPressed(GLFW_KEY_LEFT))
 	{
 		housePos.x -= sof(20.0f);
