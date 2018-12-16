@@ -211,8 +211,9 @@ void OpenGLWindow::renderScene()
 	}
 	
 	std::string windowTitleWithFPS = "008.) Textures pt. 2 - Multitexturing - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
-		+ std::to_string(getFPS()) +
-		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
+		+ std::to_string(getFPS())
+		+ ", Max texture units: " + std::to_string(Texture::getNumTextureImageUnits())
+		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
 
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }

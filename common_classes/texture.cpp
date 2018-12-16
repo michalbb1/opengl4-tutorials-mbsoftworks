@@ -1,4 +1,5 @@
 #include <iostream>
+#include <mutex>
 
 #include "texture.h"
 
@@ -76,6 +77,15 @@ int Texture::getHeight() const
 int Texture::getBytesPerPixel() const
 {
 	return _bytesPerPixel;
+}
+
+int Texture::getNumTextureImageUnits()
+{
+	static std::once_flag queryOnceFlag;
+	static int maxTextureUnits;
+	std::call_once(queryOnceFlag, []() {glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits); });
+	
+	return maxTextureUnits;
 }
 
 bool Texture::isLoadedCheck() const
