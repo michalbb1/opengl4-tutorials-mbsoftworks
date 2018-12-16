@@ -25,6 +25,9 @@
     <Filter Include="Source Files\glad">
       <UniqueIdentifier>{440c51f9-98fc-461c-80e2-d5c3e85942b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\stb">
+      <UniqueIdentifier>{8c23c07d-40fd-4acd-a32f-4d9388597b16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h">
@@ -56,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\sampler.h">
       <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_image.h">
+      <Filter>Header Files\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
