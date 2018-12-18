@@ -14,7 +14,7 @@ void main()
 	vec4 snowTexel = texture(snowSampler, ioVertexTexCoord);
 	vec4 pathTexel = texture(pathSampler, ioVertexTexCoord / 20.0f);
 	vec4 pavementTexel = texture(pavementSampler, ioVertexTexCoord);
-	float pathStrength = pathTexel.r;
-	float snowStrength = 1.0-pathStrength;
-	outputColor = pavementTexel*pathStrength + snowTexel*snowStrength;
+	float pathWeight = pathTexel.r;
+	float snowWeight = 1.0-pathWeight;
+	outputColor = pavementTexel*pathWeight + snowTexel*snowWeight;
 }
