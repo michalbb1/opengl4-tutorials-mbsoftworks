@@ -71,8 +71,5 @@
     <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
-      <Filter>Header Files\glad</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

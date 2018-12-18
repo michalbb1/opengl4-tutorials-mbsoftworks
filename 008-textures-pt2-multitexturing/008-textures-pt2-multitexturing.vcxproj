@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{08BF4ECF-B475-4F27-819D-04561FC66733}</ProjectGuid>
-    <RootNamespace>My003addingcolors</RootNamespace>
+    <ProjectGuid>{C79A3CE2-1D87-45B9-9D82-14FE155B4F3F}</ProjectGuid>
+    <RootNamespace>My008texturespt2multitexturing</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,7 +74,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -82,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -119,22 +119,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\common_classes\flyingCamera.h" />
+    <ClInclude Include="..\common_classes\sampler.h" />
+    <ClInclude Include="..\common_classes\shader.h" />
+    <ClInclude Include="..\common_classes\shaderProgram.h" />
+    <ClInclude Include="..\common_classes\staticGeometry.h" />
+    <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\texture.h" />
+    <ClInclude Include="..\common_classes\uniform.h" />
+    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
+    <ClInclude Include="..\dependencies\stb\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common_classes\flyingCamera.cpp" />
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\sampler.cpp" />
     <ClCompile Include="..\common_classes\shader.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\staticGeometry.cpp" />
+    <ClCompile Include="..\common_classes\texture.cpp" />
     <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
-    <ClCompile Include="003-adding-colors.cpp" />
+    <ClCompile Include="008-textures-pt2-multitexturing.cpp" />
     <ClCompile Include="main_windows.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common_classes\OpenGLWindow.h" />
-    <ClInclude Include="..\common_classes\shader.h" />
-    <ClInclude Include="..\common_classes\shaderProgram.h" />
-    <ClInclude Include="..\common_classes\stringUtils.h" />
-    <ClInclude Include="..\common_classes\uniform.h" />
-    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

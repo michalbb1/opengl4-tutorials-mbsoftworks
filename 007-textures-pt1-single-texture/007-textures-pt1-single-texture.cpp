@@ -154,7 +154,7 @@ void OpenGLWindow::renderScene()
 
 	groundTexture.bind();
 	samplersShowcase[groundSamplerIndex].bind();
-	mainProgram["gSampler"] = 0;
+	mainProgram["sampler"] = 0;
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

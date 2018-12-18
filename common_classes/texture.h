@@ -36,6 +36,11 @@ public:
 	*   \return Bytes per pixel of texture.
 	*/
 	int getBytesPerPixel() const;
+
+	/** \brief  Gets number of texture units on current hardware.
+	*   \return Number of texture units.
+	*/
+	static int getNumTextureImageUnits();
 	
 private:
 	GLuint _textureID = 0; //!< OpenGL-assigned texture ID

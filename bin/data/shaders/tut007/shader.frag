@@ -5,11 +5,11 @@ layout(location = 0) out vec4 outputColor;
 smooth in vec3 ioVertexColor;
 smooth in vec2 ioVertexTexCoord;
 
-uniform sampler2D gSampler;
+uniform sampler2D sampler;
 uniform vec4 color;
 
 void main()
 {
-	vec4 texColor = texture(gSampler, ioVertexTexCoord);
+	vec4 texColor = texture(sampler, ioVertexTexCoord);
 	outputColor = texColor*color;
 }

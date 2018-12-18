@@ -14,23 +14,26 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Header Files\common_classes">
-      <UniqueIdentifier>{02c3ec84-b8cd-4e31-bb42-0bc472d74b1e}</UniqueIdentifier>
+      <UniqueIdentifier>{2578426a-2541-4473-b2e8-581c2406d2ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\glad">
-      <UniqueIdentifier>{71234996-af53-4114-905b-a4b471281a93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\common_classes">
-      <UniqueIdentifier>{32246bd4-fe7f-40f0-9122-2e74950caeba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\glad">
-      <UniqueIdentifier>{440c51f9-98fc-461c-80e2-d5c3e85942b3}</UniqueIdentifier>
+      <UniqueIdentifier>{8758f6b7-688a-4811-8095-cf34cada70dd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\stb">
-      <UniqueIdentifier>{8c23c07d-40fd-4acd-a32f-4d9388597b16}</UniqueIdentifier>
+      <UniqueIdentifier>{2e562f50-69c2-414c-ad80-4097ee45c77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes">
+      <UniqueIdentifier>{31da3bfd-89a8-466b-ae19-197740cc63de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{b16e277e-4268-48f7-a510-8c248ed1cb40}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\sampler.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
     <ClInclude Include="..\common_classes\shader.h">
@@ -45,6 +48,9 @@
     <ClInclude Include="..\common_classes\stringUtils.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="..\common_classes\texture.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
     <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
@@ -54,27 +60,18 @@
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
       <Filter>Header Files\glad</Filter>
     </ClInclude>
-    <ClInclude Include="..\common_classes\texture.h">
-      <Filter>Header Files\common_classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common_classes\sampler.h">
-      <Filter>Header Files\common_classes</Filter>
-    </ClInclude>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Header Files\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="007-textures-pt1-single-texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\sampler.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\shader.cpp">
@@ -86,6 +83,9 @@
     <ClCompile Include="..\common_classes\staticGeometry.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\texture.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
     <ClCompile Include="..\common_classes\uniform.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -95,11 +95,11 @@
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
-    <ClCompile Include="..\common_classes\texture.cpp">
-      <Filter>Source Files\common_classes</Filter>
+    <ClCompile Include="008-textures-pt2-multitexturing.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common_classes\sampler.cpp">
-      <Filter>Source Files\common_classes</Filter>
+    <ClCompile Include="main_windows.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <mutex>
 
 #include "texture.h"
 
@@ -29,7 +30,7 @@ bool Texture::loadTexture2D(const std::string& fileName, bool generateMipmaps)
 	}
 	else if(_bytesPerPixel == 1)
 	{
-		internalFormat = format = GL_ALPHA;
+		internalFormat = format = GL_DEPTH_COMPONENT;
 	}
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, _width, _height, 0, format, GL_UNSIGNED_BYTE, imageData);
@@ -76,6 +77,15 @@ int Texture::getHeight() const
 int Texture::getBytesPerPixel() const
 {
 	return _bytesPerPixel;
+}
+
+int Texture::getNumTextureImageUnits()
+{
+	static std::once_flag queryOnceFlag;
+	static int maxTextureUnits;
+	std::call_once(queryOnceFlag, []() {glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits); });
+	
+	return maxTextureUnits;
 }
 
 bool Texture::isLoadedCheck() const
