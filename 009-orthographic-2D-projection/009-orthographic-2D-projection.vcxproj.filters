@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\common_classes">
+      <UniqueIdentifier>{b95ca08d-4bb5-4433-aeab-33039dbe1f52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\glad">
+      <UniqueIdentifier>{b2574d1e-eb6e-4261-a61d-bd581b90f9fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stb">
+      <UniqueIdentifier>{7125de02-b36c-46b6-ae14-133cfd8d9812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes">
+      <UniqueIdentifier>{2bbc810b-0a3f-41df-b954-f29d77370234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{c58aa01f-01e5-4f09-9067-5664abc64e10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="009-orthographic-2D-projection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\flyingCamera.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\sampler.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderProgram.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\staticGeometry.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\texture.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\uniform.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\glad\src\glad.c">
+      <Filter>Source Files\glad</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\flyingCamera.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\sampler.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderProgram.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\staticGeometry.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\stringUtils.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\texture.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniform.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\vertexBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
+      <Filter>Header Files\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_image.h">
+      <Filter>Header Files\stb</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
