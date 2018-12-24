@@ -116,6 +116,11 @@ glm::mat4 OpenGLWindow::getProjectionMatrix() const
 	return _projectionMatrix;
 }
 
+glm::mat4 OpenGLWindow::getOrthoProjectionMatrix() const
+{
+	return _orthoMatrix;
+}
+
 float OpenGLWindow::sof(float value) const
 {
 	return value * float(_timeDelta);
@@ -152,6 +157,7 @@ void OpenGLWindow::recalculateProjectionMatrix()
 	int width, height;
 	glfwGetWindowSize(getWindow(), &width, &height);
 	_projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1000.0f);
+	_orthoMatrix = glm::ortho(0.0f, float(width), 0.0f, float(height));
 }
 
 void OpenGLWindow::updateDeltaTimeAndFPS()

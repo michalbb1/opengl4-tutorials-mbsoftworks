@@ -76,4 +76,13 @@ namespace static_geometry
 		glm::vec3(0.0f, 0.35f, 0.25f),
 		glm::vec3(0.0f, 0.8f, 0.2f)
 	};
+
+	// Render using triangle strip!
+	glm::vec2 quad2D[4] =
+	{
+		glm::vec2(0, 1), // Top-left point
+		glm::vec2(0, 0), // Bottom-left point
+		glm::vec2(1, 1), // Top-right point
+		glm::vec2(1, 0) // Bottom-right point
+	};
 }

@@ -18,4 +18,7 @@ namespace static_geometry
 	extern glm::vec3 plainGroundVertices[4];
 	extern glm::vec2 plainGroundTexCoords[4];
 	extern glm::vec3 plainGroundColors[4];
+
+	// 2D quad of unit size, anchored in lower-left point (same as texture coordinates, render with triangle strip)
+	extern glm::vec2 quad2D[4];
 }
