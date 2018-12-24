@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h" />
+    <ClInclude Include="..\common_classes\OpenGLWindow.h" />
     <ClInclude Include="..\common_classes\sampler.h" />
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />

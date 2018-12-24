@@ -12,14 +12,19 @@
 
 Shader groundVertexShader, groundFragmentShader;
 Shader vertexShader, fragmentShader;
+Shader ortho2DVertexShader, ortho2DFragmentShader;
 
 ShaderProgram groundProgram;
 ShaderProgram mainProgram;
+ShaderProgram ortho2DProgram;
 
 VertexBufferObject shapesVBO;
 VertexBufferObject texCoordsVBO;
-
 GLuint mainVAO;
+
+VertexBufferObject hudVerticesVBO;
+VertexBufferObject hudTexCoordsVBO;
+GLuint hudVAO;
 
 FlyingCamera camera(glm::vec3(-120.0f, 8.0f, 120.0f), glm::vec3(-120.0f, 8.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
@@ -30,8 +35,13 @@ Texture houseTexture;
 Texture houseTextureFront;
 Texture houseTextureSide;
 Texture roofTexture;
+Texture christmasTree;
+Texture snowflake;
 
 Sampler mainSampler;
+Sampler hudSampler;
+
+bool blendingEnabled = true;
 
 struct HouseTransformation
 {
@@ -70,6 +80,9 @@ void OpenGLWindow::initializeScene()
 	groundVertexShader.loadShaderFromFile("data/shaders/tut008/ground_shader.vert", GL_VERTEX_SHADER);
 	groundFragmentShader.loadShaderFromFile("data/shaders/tut008/ground_shader.frag", GL_FRAGMENT_SHADER);
 
+	ortho2DVertexShader.loadShaderFromFile("data/shaders/tut009/ortho2D.vert", GL_VERTEX_SHADER);
+	ortho2DFragmentShader.loadShaderFromFile("data/shaders/tut009/ortho2D.frag", GL_FRAGMENT_SHADER);
+
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
 		closeWindow(true);
@@ -91,6 +104,16 @@ void OpenGLWindow::initializeScene()
 	groundProgram.addShaderToProgram(groundFragmentShader);
 
 	if (!groundProgram.linkProgram())
+	{
+		closeWindow(true);
+		return;
+	}
+
+	ortho2DProgram.createProgram();
+	ortho2DProgram.addShaderToProgram(ortho2DVertexShader);
+	ortho2DProgram.addShaderToProgram(ortho2DFragmentShader);
+
+	if (!ortho2DProgram.linkProgram())
 	{
 		closeWindow(true);
 		return;
@@ -130,11 +153,37 @@ void OpenGLWindow::initializeScene()
 	houseTextureSide.loadTexture2D("data/textures/tut008/house_texture_side.png");
 	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
 	pavementTexture.loadTexture2D("data/textures/pavement.jpg");
+	christmasTree.loadTexture2D("data/textures/tut009/christmas_tree.png", false);
+	snowflake.loadTexture2D("data/textures/tut009/snowflake.png", false);
 
 	mainSampler.create();
 	mainSampler.bind();
 	mainSampler.setMagnificationFilter(MAG_FILTER_BILINEAR);
 	mainSampler.setMinificationFilter(MIN_FILTER_TRILINEAR);
+
+	hudSampler.create();
+	hudSampler.bind();
+	hudSampler.setMagnificationFilter(MAG_FILTER_BILINEAR);
+	hudSampler.setMinificationFilter(MIN_FILTER_BILINEAR);
+
+	glGenVertexArrays(1, &hudVAO); // Creates one Vertex Array Object
+	glBindVertexArray(hudVAO);
+
+	hudVerticesVBO.createVBO();
+	hudVerticesVBO.bindVBO();
+	hudVerticesVBO.addData(static_geometry::quad2D, sizeof(glm::vec2) * 4);
+
+	hudVerticesVBO.uploadDataToGPU(GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+
+	hudTexCoordsVBO.createVBO();
+	hudTexCoordsVBO.bindVBO();
+	hudTexCoordsVBO.addData(static_geometry::quad2D, sizeof(glm::vec2) * 4);
+
+	hudTexCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
 }
 
 void OpenGLWindow::renderScene()
@@ -209,12 +258,52 @@ void OpenGLWindow::renderScene()
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
 		glDrawArrays(GL_TRIANGLES, 40, 12);
 	}
+
+	glDisable(GL_DEPTH_TEST);
+
+	if (blendingEnabled)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	glDepthMask(0);
+
+	int width, height;
+	glfwGetWindowSize(getWindow(), &width, &height);
+	
+	ortho2DProgram.useProgram();
+	glBindVertexArray(hudVAO);
+	hudSampler.bind();
+	ortho2DProgram["matrices.projectionMatrix"] = getOrthoProjectionMatrix();
+	ortho2DProgram["sampler"] = 0;
+	ortho2DProgram["color"] = glm::vec4(1.0, 1.0, 1.0, 1.0);
+
+	// Render Christmas tree bottom left
+	glm::mat4 model = glm::mat4(1.0);
+	model = glm::scale(model, glm::vec3(256, 256, 1));
+	ortho2DProgram["matrices.modelMatrix"] = model;
+	christmasTree.bind(0);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	// Render snowflake bottom right
+	model = glm::translate(glm::mat4(1.0), glm::vec3(width - christmasTree.getWidth(), 0, 0));
+	model = glm::scale(model, glm::vec3(snowflake.getWidth(), snowflake.getHeight(), 1));
+	ortho2DProgram["matrices.modelMatrix"] = model;
+	snowflake.bind(0);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 	std::string windowTitleWithFPS = std::string("009.) Orthographic 2D Projection - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
 		+ "FPS: " + std::to_string(getFPS())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
+		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
+		+ ", Blending: " + (blendingEnabled ? "On" : "Off") + " (Press F4 to toggle)";
 
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+
+	if (blendingEnabled) {
+		glDisable(GL_BLEND);
+	}
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(1);
 }
 
 void OpenGLWindow::releaseScene()
@@ -229,6 +318,8 @@ void OpenGLWindow::releaseScene()
 
 	shapesVBO.deleteVBO();
 	texCoordsVBO.deleteVBO();
+	hudVerticesVBO.deleteVBO();
+	hudTexCoordsVBO.deleteVBO();
 
 	snowTexture.deleteTexture();
 	pathTexture.deleteTexture();
@@ -237,10 +328,13 @@ void OpenGLWindow::releaseScene()
 	houseTextureFront.deleteTexture();
 	houseTextureSide.deleteTexture();
 	roofTexture.deleteTexture();
+	christmasTree.deleteTexture();
+	snowflake.deleteTexture();
 
 	mainSampler.deleteSampler();
 
 	glDeleteVertexArrays(1, &mainVAO);
+	glDeleteVertexArrays(1, &hudVAO);
 }
 
 void OpenGLWindow::handleInput()
@@ -263,22 +357,8 @@ void OpenGLWindow::handleInput()
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
 		[this](float f) {return this->sof(f); });
 
-	auto& housePos = houseTransformations[houseTransformations.size() - 1].position;
-	if (keyPressed(GLFW_KEY_LEFT))
-	{
-		housePos.x -= sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_RIGHT))
-	{
-		housePos.x += sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_UP))
-	{
-		housePos.z -= sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_DOWN))
-	{
-		housePos.z += sof(20.0f);
+	if (keyPressedOnce(GLFW_KEY_F4)) {
+		blendingEnabled = !blendingEnabled;
 	}
 }
 

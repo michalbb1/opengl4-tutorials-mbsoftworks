@@ -101,5 +101,8 @@
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Header Files\stb</Filter>
     </ClInclude>
+    <ClInclude Include="..\common_classes\OpenGLWindow.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
