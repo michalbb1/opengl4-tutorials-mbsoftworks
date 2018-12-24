@@ -91,6 +91,11 @@ public:
 	*/
 	glm::mat4 getProjectionMatrix() const;
 
+	/** \brief  Gets the orthographic projection matrix for the current window size.
+	*   \return Orthographic projection matrix.
+	*/
+	glm::mat4 getOrthoProjectionMatrix() const;
+
 	/** \brief  Gets the adjusted float value, that takes frames per second into account.
 	*   \return "Speed Optimized Floating Point Value (sof)".
 	*/
@@ -127,6 +132,7 @@ private:
 	bool _hasErrorOccured = false; //!< Error flag, indicates, if any kind of error has occured
 
 	glm::mat4 _projectionMatrix; //!< Precalculated projection matrix, when size changes, it's recalculated
+	glm::mat4 _orthoMatrix; //!< Precalculated orthographic projection matrix, when size changes, it's recalculated
 	void recalculateProjectionMatrix();
 
 	double _lastFrameTime = 0.0; //!< Time of last frame
