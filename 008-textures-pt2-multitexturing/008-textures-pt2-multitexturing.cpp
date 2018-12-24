@@ -263,24 +263,6 @@ void OpenGLWindow::handleInput()
 		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
 		[this](float f) {return this->sof(f); });
-
-	auto& housePos = houseTransformations[houseTransformations.size() - 1].position;
-	if (keyPressed(GLFW_KEY_LEFT))
-	{
-		housePos.x -= sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_RIGHT))
-	{
-		housePos.x += sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_UP))
-	{
-		housePos.z -= sof(20.0f);
-	}
-	if (keyPressed(GLFW_KEY_DOWN))
-	{
-		housePos.z += sof(20.0f);
-	}
 }
 
 void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
