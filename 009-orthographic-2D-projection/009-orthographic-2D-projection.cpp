@@ -280,7 +280,7 @@ void OpenGLWindow::renderScene()
 
 	// Render Christmas tree bottom left
 	glm::mat4 model = glm::mat4(1.0);
-	model = glm::scale(model, glm::vec3(256, 256, 1));
+	model = glm::scale(model, glm::vec3(christmasTree.getWidth(), christmasTree.getHeight(), 1));
 	ortho2DProgram["matrices.modelMatrix"] = model;
 	christmasTree.bind(0);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -292,18 +292,18 @@ void OpenGLWindow::renderScene()
 	snowflake.bind(0);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
+	if (blendingEnabled) {
+		glDisable(GL_BLEND);
+	}
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(1);
+
 	std::string windowTitleWithFPS = std::string("009.) Orthographic 2D Projection - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
 		+ "FPS: " + std::to_string(getFPS())
 		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
 		+ ", Blending: " + (blendingEnabled ? "On" : "Off") + " (Press F4 to toggle)";
 
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
-
-	if (blendingEnabled) {
-		glDisable(GL_BLEND);
-	}
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(1);
 }
 
 void OpenGLWindow::releaseScene()
