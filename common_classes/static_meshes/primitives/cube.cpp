@@ -42,19 +42,51 @@ Cube::Cube(bool withPositions, bool withTextureCoordinates, bool withNormals)
 	initializeData();
 }
 
-void Cube::render()
+void Cube::render() const
 {
+	if (!_isInitialized) {
+		return;
+	}
+
 	glBindVertexArray(_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void Cube::release()
+void Cube::renderFaces(int facesBitmask) const
 {
+	if (!_isInitialized) {
+		return;
+	}
+
+	glBindVertexArray(_vao);
+
+	if (facesBitmask & CUBE_FRONT_FACE) {
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+	if (facesBitmask & CUBE_BACK_FACE) {
+		glDrawArrays(GL_TRIANGLES, 6, 6);
+	}
+	if (facesBitmask & CUBE_LEFT_FACE) {
+		glDrawArrays(GL_TRIANGLES, 12, 6);
+	}
+	if (facesBitmask & CUBE_BACK_FACE) {
+		glDrawArrays(GL_TRIANGLES, 18, 6);
+	}
+	if (facesBitmask & CUBE_TOP_FACE) {
+		glDrawArrays(GL_TRIANGLES, 24, 6);
+	}
+	if (facesBitmask & CUBE_BOTTOM_FACE) {  
+		glDrawArrays(GL_TRIANGLES, 30, 6);
+	}
 }
 
 void Cube::initializeData()
 {
-	glCreateVertexArrays(1, &_vao);
+	if (_isInitialized) {
+		return;
+	}
+
+	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 
 	const int numVertices = 36;
@@ -64,54 +96,28 @@ void Cube::initializeData()
 	
 	if (hasPositions())
 	{
-		for (auto i = 0; i < numVertices; i++)
-		{
-			_vbo.addData(&vertices[i], sizeof(glm::vec3));
-		}
+		_vbo.addData(vertices, sizeof(glm::vec3)*numVertices);
 	}
 
 	if (hasTextureCoordinates())
 	{
-		for (auto i = 0; i < numVertices; i++)
+		for (auto i = 0; i < 6; i++)
 		{
-			_vbo.addData(&textureCoordinates[i % 6], sizeof(glm::vec2));
+			_vbo.addData(textureCoordinates, sizeof(glm::vec2)*6);
 		}
 	}
 
 	if (hasNormals())
 	{
-		for (auto i = 0; i < numVertices; i++)
+		for (auto i = 0; i < 6; i++)
 		{
-			_vbo.addData(&normals[i % 6], sizeof(glm::vec3));
+			_vbo.addData(normals, sizeof(glm::vec3)*6);
 		}
 	}
 
 	_vbo.uploadDataToGPU(GL_STATIC_DRAW);
-
-	uint32_t offset = 0;
-	if (hasPositions())
-	{
-		glEnableVertexAttribArray(POSITION_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(POSITION_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)offset);
-
-		offset += sizeof(glm::vec3)*numVertices;
-	}
-
-	if (hasTextureCoordinates())
-	{
-		glEnableVertexAttribArray(TEXTURE_COORDINATE_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(TEXTURE_COORDINATE_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)offset);
-
-		offset += sizeof(glm::vec2)*numVertices;
-	}
-
-	if (hasNormals())
-	{
-		glEnableVertexAttribArray(NORMAL_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(NORMAL_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)offset);
-
-		offset += sizeof(glm::vec3)*numVertices;
-	}
+	setVertexAttributesPointers(numVertices);
+	_isInitialized = true;
 }
 
 } // namespace static_meshes
