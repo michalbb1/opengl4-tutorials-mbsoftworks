@@ -7,7 +7,9 @@
 class Texture
 {
 public:
-	/** \brief  Loads image file a 2D OpenGL texture.
+	~Texture();
+
+	/** \brief  Loads image file as 2D OpenGL texture.
 	*   \param  fileName        path to an image file
 	*   \param  generateMipmaps true, if mipmaps should be generated automatically
 	*   \return True, if the texture have been loaded correctly or false otherwise.

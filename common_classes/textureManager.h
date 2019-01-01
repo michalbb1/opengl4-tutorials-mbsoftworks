@@ -28,7 +28,7 @@ public:
 
 	/** \brief  Retrieves texture with a specified key.
 	*   \param  key Key to restore texture from
-	*   \return Texture class from a specified key.
+	*   \return Texture instance from a specified key.
 	*/
 	const Texture& getTexture(const std::string& key) const;
 

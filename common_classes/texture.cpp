@@ -6,6 +6,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+Texture::~Texture()
+{
+	deleteTexture();
+}
+
 bool Texture::loadTexture2D(const std::string& fileName, bool generateMipmaps)
 {
 	stbi_set_flip_vertically_on_load(1);

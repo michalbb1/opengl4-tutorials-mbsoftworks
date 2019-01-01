@@ -8,10 +8,8 @@ TextureManager& TextureManager::getInstance()
 
 void TextureManager::loadTexture2D(const std::string& key, const std::string& fileName, bool generateMipmaps)
 {
-	if (containsTexture(key))
-	{
-		auto msg = "Texture with key '" + key + "' already exists!";
-		throw std::runtime_error(msg.c_str());
+	if (containsTexture(key)) {
+		return;
 	}
 
 	auto texturePtr = std::make_unique<Texture>();
@@ -32,10 +30,6 @@ const Texture& TextureManager::getTexture(const std::string& key) const
 
 void TextureManager::clearTextureCache()
 {
-	for (auto& keyTexturePair : _textureCache) {
-		keyTexturePair.second->deleteTexture();
-	}
-
 	_textureCache.clear();
 }
 
