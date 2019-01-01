@@ -37,16 +37,18 @@ bool ShaderProgram::linkProgram()
 	return _isLinked;
 }
 
-void ShaderProgram::useProgram()
+void ShaderProgram::useProgram() const
 {
-	if (_isLinked)
+	if (_isLinked) {
 		glUseProgram(_shaderProgramID);
+	}
 }
 
 void ShaderProgram::deleteProgram()
 {
-	if (!_isLinked)
+	if (!_isLinked) {
 		return;
+	}
 
 	glDeleteProgram(_shaderProgramID);
 	_isLinked = false;

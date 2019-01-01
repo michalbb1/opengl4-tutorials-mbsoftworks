@@ -31,7 +31,7 @@ public:
 	bool linkProgram();
 
 	//* \brief Uses this shader program (makes current).
-	void useProgram();
+	void useProgram() const;
 
 	//* \brief Deletes this shader program.
 	void deleteProgram();
