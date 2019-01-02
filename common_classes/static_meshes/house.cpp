@@ -1,3 +1,5 @@
+#include <mutex>
+
 #include "house.h"
 
 #include <glm/glm.hpp>
@@ -15,12 +17,19 @@ const std::string House::ROOF_TEXTURE_KEY = "house_roof";
 
 House::House(bool withPositions, bool withTextureCoordinates, bool withNormals)
 	: StaticMesh3D(withPositions, withTextureCoordinates, withNormals)
-	, wallsTexture(TextureManager::getInstance().getTexture(WALLS_TEXTURE_KEY))
-	, doorWallTexture(TextureManager::getInstance().getTexture(DOOR_WALL_TEXTURE_KEY))
-	, windowsWallTexture(TextureManager::getInstance().getTexture(WINDOWS_WALL_TEXTURE_KEY))
-	, roofTexture(TextureManager::getInstance().getTexture(ROOF_TEXTURE_KEY))
 	, cube(withPositions, withTextureCoordinates, withNormals)
-	, pyramid(withPositions, withTextureCoordinates, withNormals) {}
+	, pyramid(withPositions, withTextureCoordinates, withNormals)
+{
+	static std::once_flag prepareOnceFlag;
+	std::call_once(prepareOnceFlag, []()
+	{
+		auto& tm = TextureManager::getInstance();
+		tm.loadTexture2D(WALLS_TEXTURE_KEY, "data/textures/brick.png");
+		tm.loadTexture2D(DOOR_WALL_TEXTURE_KEY, "data/textures/tut008/house_texture_front.png");
+		tm.loadTexture2D(WINDOWS_WALL_TEXTURE_KEY, "data/textures/tut008/house_texture_side.png");
+		tm.loadTexture2D(ROOF_TEXTURE_KEY, "data/textures/prismarine_dark.png");
+	});
+}
 
 void House::render() const
 {
@@ -30,6 +39,10 @@ void House::render() const
 void House::render(const glm::vec3& position, float rotationAngle) const
 {
 	auto& mainProgram = ShaderProgramManager::getInstance().getShaderProgram("main");
+	const Texture& wallsTexture = TextureManager::getInstance().getTexture(WALLS_TEXTURE_KEY);
+	const Texture& doorWallTexture = TextureManager::getInstance().getTexture(DOOR_WALL_TEXTURE_KEY);
+	const Texture& windowsWallTexture = TextureManager::getInstance().getTexture(WINDOWS_WALL_TEXTURE_KEY);
+	const Texture& roofTexture = TextureManager::getInstance().getTexture(ROOF_TEXTURE_KEY);
 
 	const auto houseBottomSize = 10.0f;
 	const auto roofTopSize = 12.0f;
@@ -61,15 +74,6 @@ void House::render(const glm::vec3& position, float rotationAngle) const
 	modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
 	mainProgram[ShaderConstants::modelMatrix()] = modelMatrixTop;
 	pyramid.render();
-}
-
-void House::prepareTextures()
-{
-	auto& tm = TextureManager::getInstance();
-	tm.loadTexture2D(WALLS_TEXTURE_KEY, "data/textures/brick.png");
-	tm.loadTexture2D(DOOR_WALL_TEXTURE_KEY, "data/textures/tut008/house_texture_front.png");
-	tm.loadTexture2D(WINDOWS_WALL_TEXTURE_KEY, "data/textures/tut008/house_texture_side.png");
-	tm.loadTexture2D(ROOF_TEXTURE_KEY, "data/textures/prismarine_dark.png");
 }
 
 } // namespace static_meshes

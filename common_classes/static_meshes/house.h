@@ -14,32 +14,28 @@
 
 namespace static_meshes {
 
+/**
+	House static mesh, using scaled cube and pyramid for rendering.
+*/
 class House : public StaticMesh3D
 {
 public:
-	static const std::string WALLS_TEXTURE_KEY;
-	static const std::string DOOR_WALL_TEXTURE_KEY;
-	static const std::string WINDOWS_WALL_TEXTURE_KEY;
-	static const std::string ROOF_TEXTURE_KEY;
+	static const std::string WALLS_TEXTURE_KEY; //!< Key to store house walls texture with
+	static const std::string DOOR_WALL_TEXTURE_KEY; //!< Key to store house door wall texture with
+	static const std::string WINDOWS_WALL_TEXTURE_KEY; //!< Key to store house windows wall texture with
+	static const std::string ROOF_TEXTURE_KEY; //!< Key to store house roof texture with
 
 	House(bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
 	void render() const override;
 	void render(const glm::vec3& position, float rotationAngle) const;
 
-	static void prepareTextures();
-
 protected:
 	void initializeData() override {}
 
 private:
-	const Texture& wallsTexture;
-	const Texture& doorWallTexture;
-	const Texture& windowsWallTexture;
-	const Texture& roofTexture;
-
-	Cube cube;
-	Pyramid pyramid;
+	Cube cube; //!< Cube static mesh used to render house with
+	Pyramid pyramid; //!< Pyramid static mesh used to render house with
 };
 
 } // namespace static_meshes
