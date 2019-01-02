@@ -32,16 +32,23 @@ ShaderProgram& ShaderProgramManager::getShaderProgram(const std::string& key) co
 	return *_shaderProgramCache.at(key);
 }
 
+void ShaderProgramManager::linkAllPrograms()
+{
+	for (const auto& keyShaderProgramPair : _shaderProgramCache)
+	{
+		if (!keyShaderProgramPair.second->linkProgram()) {
+			auto msg = "Could not link shader program with key '" + keyShaderProgramPair.first + "'!";
+			throw std::runtime_error(msg.c_str());
+		}
+	}
+}
+
 void ShaderProgramManager::clearShaderProgramCache()
 {
-	for (auto& keyShaderProgramPair : _shaderProgramCache) {
-		keyShaderProgramPair.second->deleteProgram();
-	}
-
 	_shaderProgramCache.clear();
 }
 
-bool ShaderProgramManager::containsShaderProgram(const std::string & key) const
+bool ShaderProgramManager::containsShaderProgram(const std::string& key) const
 {
 	return _shaderProgramCache.count(key) > 0;
 }

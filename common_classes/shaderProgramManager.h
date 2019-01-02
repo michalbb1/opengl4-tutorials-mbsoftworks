@@ -31,7 +31,11 @@ public:
 	*/
 	ShaderProgram& getShaderProgram(const std::string& key) const;
 
-	/** \brief  Deletes all the shader prrograms loaded and clears the shader program cache. */
+	/** \brief  Performs linkage of all existing shader programs.
+	*/
+	void linkAllPrograms();
+
+	/** \brief  Deletes all the shader programs loaded and clears the shader program cache. */
 	void clearShaderProgramCache();
 
 private:
