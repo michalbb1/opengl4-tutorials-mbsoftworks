@@ -8,20 +8,30 @@ MatrixManager& MatrixManager::getInstance()
 
 const glm::mat4& MatrixManager::getProjectionMatrix() const
 {
-	return projectionMatrix;
+	return _projectionMatrix;
+}
+
+const glm::mat4& MatrixManager::getOrthoMatrix() const
+{
+	return _orthoProjectionMatrix;
 }
 
 const glm::mat4& MatrixManager::getViewMatrix() const
 {
-	return viewMatrix;
+	return _viewMatrix;
 }
 
 void MatrixManager::setProjectionMatrix(const glm::mat4& projectionMatrix)
 {
-	this->projectionMatrix = projectionMatrix;
+	_projectionMatrix = projectionMatrix;
+}
+
+void MatrixManager::setOrthoProjectionMatrix(const glm::mat4& orthoProjectionMatrix)
+{
+	_orthoProjectionMatrix = orthoProjectionMatrix;
 }
 
 void MatrixManager::setViewMatrix(const glm::mat4& viewMatrix)
 {
-	this->viewMatrix = viewMatrix;
+	_viewMatrix = viewMatrix;
 }
