@@ -4,6 +4,9 @@
 
 #include <glad/glad.h>
 
+/**
+  Wraps OpenGL texture into convenient class.
+*/
 class Texture
 {
 public:
