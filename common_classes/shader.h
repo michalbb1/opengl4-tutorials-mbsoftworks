@@ -23,6 +23,7 @@ public:
 	DEFINE_SHADER_CONSTANT(viewMatrix,       "matrices.viewMatrix");
 
 	DEFINE_SHADER_CONSTANT(color, "color");
+	DEFINE_SHADER_CONSTANT(sampler, "sampler");
 };
 
 /**
