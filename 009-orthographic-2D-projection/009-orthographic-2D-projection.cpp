@@ -225,10 +225,10 @@ void OpenGLWindow::renderScene()
 	const auto roofTopSize = 12.0f;
 	
 	// Render "houses" on the left
-	for (auto& houseTranslation : houseTransformations)
+	for (auto& houseTransformation : houseTransformations)
 	{
-		const auto housePosition = houseTranslation.position;
-		const auto angle = houseTranslation.angle;
+		const auto housePosition = houseTransformation.position;
+		const auto angle = houseTransformation.angle;
 		// First, calculate the basic position of house
 		auto modelMatrixHouse = glm::mat4(1.0);
 		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
