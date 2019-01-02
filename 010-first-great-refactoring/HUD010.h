@@ -12,10 +12,10 @@
 class HUD010 : public HUD
 {
 public:
-	HUD010(const OpenGLWindow& window);
-
 	const static std::string CHRISTMAS_TREE_TEXTURE_KEY;
 	const static std::string SNOWFLAKE_TREE_TEXTURE_KEY;
+
+	HUD010(const OpenGLWindow& window);
 
 	/** \brief  Checks, if blending in HUD is enabled.
 	*   \return True, if blending is enabled or false otherwise.

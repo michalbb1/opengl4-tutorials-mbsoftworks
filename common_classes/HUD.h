@@ -13,10 +13,10 @@
 class HUD
 {
 public:
-	HUD(const OpenGLWindow& window);
-
 	static const std::string ORTHO_2D_PROGRAM_KEY; //!< Key for shader program for rendering in 2D
 	static const std::string HUD_SAMPLER_KEY; //!< Key for sampler used for HUD objects
+
+	HUD(const OpenGLWindow& window);
 
 	//* \brief Renders HUD. */
 	virtual void renderHUD() const = 0;
