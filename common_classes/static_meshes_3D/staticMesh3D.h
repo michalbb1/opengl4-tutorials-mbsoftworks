@@ -10,12 +10,12 @@ namespace static_meshes_3D {
 class StaticMesh3D
 {
 public:
-	StaticMesh3D(bool withPositions, bool withTextureCoordinates, bool withNormals);
-	~StaticMesh3D();
-
 	static const int POSITION_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex position (0)
 	static const int TEXTURE_COORDINATE_ATTRIBUTE_INDEX; //!< Vertex attribute index of texture coordinate (1)
 	static const int NORMAL_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex normal (2)
+
+	StaticMesh3D(bool withPositions, bool withTextureCoordinates, bool withNormals);
+	virtual ~StaticMesh3D();
 
 	/** \brief  Renders static mesh. */
 	virtual void render() const = 0;

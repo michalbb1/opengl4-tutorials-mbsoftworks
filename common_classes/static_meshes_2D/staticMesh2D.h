@@ -10,11 +10,11 @@ namespace static_meshes_2D {
 class StaticMesh2D
 {
 public:
-	StaticMesh2D(bool withPositions, bool withTextureCoordinates);
-	~StaticMesh2D();
-
 	static const int POSITION_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex position (0)
 	static const int TEXTURE_COORDINATE_ATTRIBUTE_INDEX; //!< Vertex attribute index of texture coordinate (1)
+
+	StaticMesh2D(bool withPositions, bool withTextureCoordinates);
+	virtual ~StaticMesh2D();
 
 	/** \brief  Renders static mesh. */
 	virtual void render() const = 0;
