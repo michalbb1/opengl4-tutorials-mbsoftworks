@@ -12,7 +12,7 @@
 #include "primitives/cube.h"
 #include "primitives/pyramid.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 /**
 	House static mesh, using scaled cube and pyramid for rendering.
@@ -38,4 +38,4 @@ private:
 	Pyramid pyramid; //!< Pyramid static mesh used to render house with
 };
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

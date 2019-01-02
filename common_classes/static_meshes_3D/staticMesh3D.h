@@ -2,7 +2,7 @@
 
 #include "../vertexBufferObject.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 class StaticMesh3D
 {
@@ -55,4 +55,4 @@ protected:
 	void setVertexAttributesPointers(int numVertices);
 };
 
-}; // namespace static_meshes
+}; // namespace static_meshes_3D

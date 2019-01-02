@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 /**
 	Pyramid static mesh of unit size.
@@ -26,4 +26,4 @@ private:
 	void initializeData() override;
 };
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

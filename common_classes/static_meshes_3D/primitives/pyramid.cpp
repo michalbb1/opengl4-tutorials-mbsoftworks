@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 glm::vec3 Pyramid::vertices[12] =
 {
@@ -80,4 +80,4 @@ void Pyramid::initializeData()
 	_isInitialized = true;
 }
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

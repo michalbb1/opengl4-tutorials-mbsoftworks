@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 glm::vec3 Cube::vertices[36] =
 {
@@ -120,4 +120,4 @@ void Cube::initializeData()
 	_isInitialized = true;
 }
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

@@ -6,7 +6,7 @@
 #include "../textureManager.h"
 #include "../shaderProgramManager.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 glm::vec3 PlainGround::vertices[4] =
 {
@@ -71,4 +71,4 @@ void PlainGround::initializeData()
 	_isInitialized = true;
 }
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

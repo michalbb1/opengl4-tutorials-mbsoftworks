@@ -10,7 +10,7 @@
 
 #include "staticMesh3D.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 /**
 	Plain ground static mesh.
@@ -29,4 +29,4 @@ protected:
 	virtual void initializeData() override;
 };
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

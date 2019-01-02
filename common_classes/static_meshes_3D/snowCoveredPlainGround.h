@@ -2,7 +2,7 @@
 
 #include "plainGround.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 /**
 	Plain ground static mesh covered with snow and pavement.
@@ -15,4 +15,4 @@ public:
 	void render() const override;
 };
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

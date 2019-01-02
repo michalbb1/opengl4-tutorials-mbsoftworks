@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 const int CUBE_FRONT_FACE = 1; //!< Bitmask to render cube front face
 const int CUBE_BACK_FACE = 1 << 1; //!< Bitmask to render cube back face
@@ -34,4 +34,4 @@ private:
 	void initializeData() override;
 };
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

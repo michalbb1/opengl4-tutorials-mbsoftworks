@@ -13,7 +13,7 @@
 
 #include "snowCoveredPlainGround.h"
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 SnowCoveredPlainGround::SnowCoveredPlainGround(bool withPositions, bool withTextureCoordinates, bool withNormals) : PlainGround(withPositions, withTextureCoordinates, withNormals)
 {
@@ -66,4 +66,4 @@ void SnowCoveredPlainGround::render() const
 	PlainGround::render();
 }
 
-} // namespace static_meshes
+} // namespace static_meshes_3D

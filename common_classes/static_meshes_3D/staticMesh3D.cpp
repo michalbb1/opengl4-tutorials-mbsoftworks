@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace static_meshes {
+namespace static_meshes_3D {
 
 const int StaticMesh3D::POSITION_ATTRIBUTE_INDEX           = 0;
 const int StaticMesh3D::TEXTURE_COORDINATE_ATTRIBUTE_INDEX = 1;
@@ -84,4 +84,4 @@ void StaticMesh3D::setVertexAttributesPointers(int numVertices)
 	}
 }
 
-} // namespace static_meshes
+} // namespace static_meshes_3D
