@@ -11,6 +11,11 @@ StaticMesh2D::StaticMesh2D(bool withPositions, bool withTextureCoordinates)
 	: _hasPositions(withPositions)
 	, _hasTextureCoordinates(withTextureCoordinates) {}
 
+StaticMesh2D::~StaticMesh2D()
+{
+	deleteMesh();
+}
+
 void StaticMesh2D::deleteMesh()
 {
 	if (!_isInitialized) {

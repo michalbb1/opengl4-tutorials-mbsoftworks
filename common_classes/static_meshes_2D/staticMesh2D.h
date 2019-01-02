@@ -11,6 +11,7 @@ class StaticMesh2D
 {
 public:
 	StaticMesh2D(bool withPositions, bool withTextureCoordinates);
+	~StaticMesh2D();
 
 	static const int POSITION_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex position (0)
 	static const int TEXTURE_COORDINATE_ATTRIBUTE_INDEX; //!< Vertex attribute index of texture coordinate (1)
