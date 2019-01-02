@@ -11,7 +11,7 @@ const glm::mat4& MatrixManager::getProjectionMatrix() const
 	return _projectionMatrix;
 }
 
-const glm::mat4& MatrixManager::getOrthoMatrix() const
+const glm::mat4& MatrixManager::getOrthoProjectionMatrix() const
 {
 	return _orthoProjectionMatrix;
 }
