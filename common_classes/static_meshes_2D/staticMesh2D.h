@@ -2,19 +2,18 @@
 
 #include "../vertexBufferObject.h"
 
-namespace static_meshes_3D {
+namespace static_meshes_2D {
 
 /**
-	Represents generic 3D static mesh.
+	Represents generic 2D static mesh.
 */
-class StaticMesh3D
+class StaticMesh2D
 {
 public:
-	StaticMesh3D(bool withPositions, bool withTextureCoordinates, bool withNormals);
+	StaticMesh2D(bool withPositions, bool withTextureCoordinates);
 
 	static const int POSITION_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex position (0)
 	static const int TEXTURE_COORDINATE_ATTRIBUTE_INDEX; //!< Vertex attribute index of texture coordinate (1)
-	static const int NORMAL_ATTRIBUTE_INDEX; //!< Vertex attribute index of vertex normal (2)
 
 	/** \brief  Renders static mesh. */
 	virtual void render() const = 0;
@@ -35,17 +34,11 @@ public:
 	/** \brief  Checks, if static mesh has vertex normals.
 	*   \return True if it has or false otherwise.
 	*/
-	bool hasNormals() const;
-
-	/** \brief  Calculates byte size of one vertex, depending on its attributes.
-	*   \return True if it has or false otherwise.
-	*/
 	int getVertexByteSize() const;
 
 protected:
 	bool _hasPositions = false; //!< Flag telling, if we have vertex positions
 	bool _hasTextureCoordinates = false; //!< Flag telling, if we have texture coordinates
-	bool _hasNormals = false; //!< Flag telling, if we have vertex normals
 
 	bool _isInitialized = false; //!< Is mesh initialized flag
 	GLuint _vao = 0; //!< VAO ID from OpenGL
@@ -58,4 +51,4 @@ protected:
 	void setVertexAttributesPointers(int numVertices);
 };
 
-}; // namespace static_meshes_3D
+}; // namespace static_meshes_2D

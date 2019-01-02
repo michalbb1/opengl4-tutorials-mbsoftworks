@@ -28,17 +28,29 @@
     <Filter Include="Source Files\glad">
       <UniqueIdentifier>{32ffc0e1-fe27-4146-b2ca-ca99f134d14c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\common_classes\static_meshes">
-      <UniqueIdentifier>{9f12beec-0f56-4056-9971-0e100b8dcc71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\common_classes\static_meshes\primitives">
-      <UniqueIdentifier>{c8790cfe-6a14-422a-86d2-2ee5619939ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\common_classes\static_meshes_3D">
       <UniqueIdentifier>{0be07c82-ff67-4c22-acd7-ecf3e3074a6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\common_classes\static_meshes_3D\primitives">
       <UniqueIdentifier>{52e73d89-7061-4b67-bea5-e8975a50f22a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_3D">
+      <UniqueIdentifier>{9f12beec-0f56-4056-9971-0e100b8dcc71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_3D\primitives">
+      <UniqueIdentifier>{c8790cfe-6a14-422a-86d2-2ee5619939ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D">
+      <UniqueIdentifier>{59ecb3f5-4354-45ef-870b-c96e208a8310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D\primitives">
+      <UniqueIdentifier>{a76cc9df-0cb5-4f4a-9ed2-a0486b667dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_2D">
+      <UniqueIdentifier>{cf238d2f-b42b-4e76-8640-7987bba23381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_2D\primitives">
+      <UniqueIdentifier>{03cd982a-7fe7-4a87-9ceb-22588433920f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,22 +106,28 @@
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp">
-      <Filter>Source Files\common_classes\static_meshes\primitives</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp">
-      <Filter>Source Files\common_classes\static_meshes\primitives</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\house.cpp">
-      <Filter>Source Files\common_classes\static_meshes</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp">
-      <Filter>Source Files\common_classes\static_meshes</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\snowCoveredPlainGround.cpp">
-      <Filter>Source Files\common_classes\static_meshes</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp">
-      <Filter>Source Files\common_classes\static_meshes</Filter>
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp">
+      <Filter>Source Files\common_classes\static_meshes_2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp">
+      <Filter>Source Files\common_classes\static_meshes_2D\primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +199,15 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h">
       <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h">
+      <Filter>Header Files\common_classes\static_meshes_2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h">
+      <Filter>Header Files\common_classes\static_meshes_2D\primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
