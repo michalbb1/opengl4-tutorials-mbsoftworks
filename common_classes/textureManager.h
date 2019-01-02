@@ -12,7 +12,7 @@ class TextureManager
 {
 public:
 	TextureManager(const TextureManager&) = delete;
-	void operator=(const TextureManager&) = delete;  
+	void operator=(const TextureManager&) = delete;
 
 	/** \brief  Gets the one and only instance of the texture manager.
 	*   \return Texture manager instance.
