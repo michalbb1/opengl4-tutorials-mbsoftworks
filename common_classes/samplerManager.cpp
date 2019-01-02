@@ -17,8 +17,8 @@ Sampler& SamplerManager::createSampler(const std::string & key, const Magnificat
 	std::unique_ptr<Sampler> sampler = std::make_unique<Sampler>();
 	sampler->create();
 	sampler->bind();
-	sampler->setMagnificationFilter(MAG_FILTER_BILINEAR);
-	sampler->setMinificationFilter(MIN_FILTER_BILINEAR);
+	sampler->setMagnificationFilter(magnificationFilter);
+	sampler->setMinificationFilter(minificationFilter);
 	_samplerCache[key] = std::move(sampler);
 
 	return getSampler(key);
