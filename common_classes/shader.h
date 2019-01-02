@@ -21,6 +21,8 @@ public:
 	DEFINE_SHADER_CONSTANT(modelMatrix,      "matrices.modelMatrix");
 	DEFINE_SHADER_CONSTANT(projectionMatrix, "matrices.projectionMatrix");
 	DEFINE_SHADER_CONSTANT(viewMatrix,       "matrices.viewMatrix");
+
+	DEFINE_SHADER_CONSTANT(color, "color");
 };
 
 /**
