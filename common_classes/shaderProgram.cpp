@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+ShaderProgram::~ShaderProgram()
+{
+	deleteProgram();
+}
+
 void ShaderProgram::createProgram()
 {
 	_shaderProgramID = glCreateProgram();

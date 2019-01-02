@@ -16,6 +16,7 @@
 class ShaderProgram
 {
 public:
+	~ShaderProgram();
 
 	//* \brief Creates a new shader program.
 	void createProgram();
