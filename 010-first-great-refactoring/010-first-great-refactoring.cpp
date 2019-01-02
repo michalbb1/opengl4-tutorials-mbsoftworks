@@ -77,7 +77,6 @@ void OpenGLWindow::initializeScene()
 		snowCoveredPlainGround = std::make_unique<static_meshes_3D::SnowCoveredPlainGround>(true, true, true);
 		
 		hud = std::make_unique<HUD010>(*this);
-
 		spm.linkAllPrograms();
 
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
@@ -140,9 +139,9 @@ void OpenGLWindow::releaseScene()
 	TextureManager::getInstance().clearTextureCache();
 	SamplerManager::getInstance().clearSamplerCache();
 
-	house.release();
-	snowCoveredPlainGround.release();
-	hud.release();
+	house.reset();
+	snowCoveredPlainGround.reset();
+	hud.reset();
 }
 
 void OpenGLWindow::handleInput()
