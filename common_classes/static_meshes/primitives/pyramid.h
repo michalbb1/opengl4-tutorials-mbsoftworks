@@ -9,6 +9,9 @@
 
 namespace static_meshes {
 
+/**
+	Pyramid static mesh of unit size.
+*/
 class Pyramid : public StaticMesh3D
 {
 public:
@@ -16,8 +19,8 @@ public:
 
 	void render() const override;
 
-	static glm::vec3 vertices[12];
-	static glm::vec2 textureCoordinates[3];
+	static glm::vec3 vertices[12]; //!< Array of mesh vertices
+	static glm::vec2 textureCoordinates[3]; //!< Array of mesh texture coordinates
 
 private:
 	void initializeData() override;
