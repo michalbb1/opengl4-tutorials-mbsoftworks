@@ -6,6 +6,11 @@
 
 #include "stringUtils.h"
 
+Shader::~Shader()
+{
+	deleteShader();
+}
+
 bool Shader::loadShaderFromFile(const std::string& fileName, GLenum shaderType)
 {
 	std::vector<std::string> fileLines;

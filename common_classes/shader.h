@@ -5,13 +5,34 @@
 #include <vector>
 #include <string>
 
+#define DEFINE_SHADER_CONSTANT(constantName, constantValue) \
+static const std::string constantName()                     \
+{                                                           \
+	static std::string value = constantValue;               \
+	return value;                                           \
+}
+
+/**
+  Storage of all commonly used constants in shader programs.
+*/
+class ShaderConstants
+{
+public:
+	DEFINE_SHADER_CONSTANT(modelMatrix,      "matrices.modelMatrix");
+	DEFINE_SHADER_CONSTANT(projectionMatrix, "matrices.projectionMatrix");
+	DEFINE_SHADER_CONSTANT(viewMatrix,       "matrices.viewMatrix");
+
+	DEFINE_SHADER_CONSTANT(color, "color");
+	DEFINE_SHADER_CONSTANT(sampler, "sampler");
+};
+
 /**
   Wraps OpenGL shader loading and compilation into a very convenient class.
 */
-
 class Shader
 {
 public:
+	~Shader();
 
 	/** \brief Loads and compiles shader from a specified file.
 	*   \param  fileName   path to a file

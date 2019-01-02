@@ -2,12 +2,18 @@
 
 #include <glad/glad.h>
 
+/**
+  Magnification filters enumeration.
+*/
 enum MagnificationFilter
 {
 	MAG_FILTER_NEAREST, // Nearest filter for magnification
 	MAG_FILTER_BILINEAR, // Bilinear filter for magnification
 };
 
+/**
+  Minification filters enumeration.
+*/
 enum MinificationFilter
 {
 	MIN_FILTER_NEAREST, // Nearest filter for minification
@@ -17,9 +23,14 @@ enum MinificationFilter
 	MIN_FILTER_TRILINEAR, // Bilinear filter for minification on two closest mipmaps, then averaged
 };
 
+/**
+  Wraps OpenGL sampler into a convenient class.
+*/
 class Sampler
 {
 public:
+	~Sampler();
+
 	/** \brief  Creates sampler object. */
 	void create();
 
