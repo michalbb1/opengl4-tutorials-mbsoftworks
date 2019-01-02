@@ -2,6 +2,11 @@
 
 #include "sampler.h"
 
+Sampler::~Sampler()
+{
+	deleteSampler();
+}
+
 void Sampler::create()
 {
 	if (_isCreated) {
