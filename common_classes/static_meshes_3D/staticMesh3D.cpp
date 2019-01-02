@@ -13,6 +13,11 @@ StaticMesh3D::StaticMesh3D(bool withPositions, bool withTextureCoordinates, bool
 	, _hasTextureCoordinates(withTextureCoordinates)
 	, _hasNormals(withNormals) {}
 
+StaticMesh3D::~StaticMesh3D()
+{
+	deleteMesh();
+}
+
 void StaticMesh3D::deleteMesh()
 {
 	if (!_isInitialized) {
