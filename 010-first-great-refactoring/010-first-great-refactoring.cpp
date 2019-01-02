@@ -1,3 +1,6 @@
+#include <iostream>
+#include <memory>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../common_classes/OpenGLWindow.h"
@@ -10,40 +13,21 @@
 #include "../common_classes/texture.h"
 #include "../common_classes/sampler.h"
 
-Shader groundVertexShader, groundFragmentShader;
-Shader vertexShader, fragmentShader;
-Shader ortho2DVertexShader, ortho2DFragmentShader;
+#include "../common_classes/shaderManager.h"
+#include "../common_classes/shaderProgramManager.h"
+#include "../common_classes/textureManager.h"
+#include "../common_classes/samplerManager.h"
+#include "../common_classes/matrixManager.h"
 
-ShaderProgram groundProgram;
-ShaderProgram mainProgram;
-ShaderProgram ortho2DProgram;
+#include "../common_classes/static_meshes_3D/house.h"
+#include "../common_classes/static_meshes_3D/snowCoveredPlainGround.h"
 
-VertexBufferObject shapesVBO;
-VertexBufferObject texCoordsVBO;
-GLuint mainVAO;
-
-VertexBufferObject hudVerticesVBO;
-VertexBufferObject hudTexCoordsVBO;
-GLuint hudVAO;
+#include "HUD010.h"
 
 FlyingCamera camera(glm::vec3(-120.0f, 8.0f, 120.0f), glm::vec3(-120.0f, 8.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
-
-Texture snowTexture;
-Texture pathTexture;
-Texture pavementTexture;
-Texture houseTexture;
-Texture houseTextureFront;
-Texture houseTextureSide;
-Texture roofTexture;
-Texture christmasTree;
-Texture snowflake;
-
-Sampler mainSampler;
-Sampler hudSampler;
-
-bool blendingEnabled = true;
-#include "../common_classes/static_meshes/cube.h"
-static_meshes::Cube* cube;
+std::unique_ptr<static_meshes_3D::House> house;
+std::unique_ptr<static_meshes_3D::SnowCoveredPlainGround> snowCoveredPlainGround;
+std::unique_ptr<HUD010> hud;
 
 struct HouseTransformation
 {
@@ -76,272 +60,89 @@ void OpenGLWindow::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
-	vertexShader.loadShaderFromFile("data/shaders/tut007/shader.vert", GL_VERTEX_SHADER);
-	fragmentShader.loadShaderFromFile("data/shaders/tut007/shader.frag", GL_FRAGMENT_SHADER);
-
-	groundVertexShader.loadShaderFromFile("data/shaders/tut008/ground_shader.vert", GL_VERTEX_SHADER);
-	groundFragmentShader.loadShaderFromFile("data/shaders/tut008/ground_shader.frag", GL_FRAGMENT_SHADER);
-
-	ortho2DVertexShader.loadShaderFromFile("data/shaders/tut009/ortho2D.vert", GL_VERTEX_SHADER);
-	ortho2DFragmentShader.loadShaderFromFile("data/shaders/tut009/ortho2D.frag", GL_FRAGMENT_SHADER);
-
-	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
+	try
 	{
+		auto& sm = ShaderManager::getInstance();
+		auto& spm = ShaderProgramManager::getInstance();
+		auto& tm = TextureManager::getInstance();
+
+		sm.loadVertexShader("tut007_main", "data/shaders/tut007/shader.vert");
+		sm.loadFragmentShader("tut007_main", "data/shaders/tut007/shader.frag");
+
+		auto& mainShaderProgram = spm.createShaderProgram("main");
+		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut007_main"));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut007_main"));
+
+		house = std::make_unique<static_meshes_3D::House>();
+		snowCoveredPlainGround = std::make_unique<static_meshes_3D::SnowCoveredPlainGround>(true, true, true);
+		
+		hud = std::make_unique<HUD010>(*this);
+
+		spm.linkAllPrograms();
+
+		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
+	}
+	catch (const std::runtime_error& ex)
+	{
+		std::cout << "Error occured during initialization: " << ex.what() << std::endl;
 		closeWindow(true);
 		return;
 	}
-
-	mainProgram.createProgram();
-	mainProgram.addShaderToProgram(vertexShader);
-	mainProgram.addShaderToProgram(fragmentShader);
-
-	if (!mainProgram.linkProgram())
-	{
-		closeWindow(true);
-		return;
-	}
-
-	groundProgram.createProgram();
-	groundProgram.addShaderToProgram(groundVertexShader);
-	groundProgram.addShaderToProgram(groundFragmentShader);
-
-	if (!groundProgram.linkProgram())
-	{
-		closeWindow(true);
-		return;
-	}
-
-	ortho2DProgram.createProgram();
-	ortho2DProgram.addShaderToProgram(ortho2DVertexShader);
-	ortho2DProgram.addShaderToProgram(ortho2DFragmentShader);
-
-	if (!ortho2DProgram.linkProgram())
-	{
-		closeWindow(true);
-		return;
-	}
-
-	glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
-	glBindVertexArray(mainVAO);
-
-	// Setup vertex positions first
-	shapesVBO.createVBO();
-	shapesVBO.bindVBO();
-	shapesVBO.addData(static_geometry::plainGroundVertices, sizeof(static_geometry::plainGroundVertices));
-	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
-	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
-	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-
-	// Setup texture coordinates next
-	texCoordsVBO.createVBO();
-	texCoordsVBO.bindVBO();
-	texCoordsVBO.addData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
-	texCoordsVBO.addData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
-	texCoordsVBO.addData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
-	
-	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
-
-	snowTexture.loadTexture2D("data/textures/snow.png");
-	pathTexture.loadTexture2D("data/textures/tut008/path.png");
-	houseTexture.loadTexture2D("data/textures/brick.png");
-	houseTextureFront.loadTexture2D("data/textures/tut008/house_texture_front.png");
-	houseTextureSide.loadTexture2D("data/textures/tut008/house_texture_side.png");
-	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
-	pavementTexture.loadTexture2D("data/textures/pavement.jpg");
-	christmasTree.loadTexture2D("data/textures/tut009/christmas_tree.png", false);
-	snowflake.loadTexture2D("data/textures/tut009/snowflake.png", false);
-
-	mainSampler.create();
-	mainSampler.bind();
-	mainSampler.setMagnificationFilter(MAG_FILTER_BILINEAR);
-	mainSampler.setMinificationFilter(MIN_FILTER_TRILINEAR);
-
-	hudSampler.create();
-	hudSampler.bind();
-	hudSampler.setMagnificationFilter(MAG_FILTER_BILINEAR);
-	hudSampler.setMinificationFilter(MIN_FILTER_BILINEAR);
-
-	glGenVertexArrays(1, &hudVAO); // Creates one Vertex Array Object
-	glBindVertexArray(hudVAO);
-
-	hudVerticesVBO.createVBO();
-	hudVerticesVBO.bindVBO();
-	hudVerticesVBO.addData(static_geometry::quad2D, sizeof(glm::vec2) * 4);
-
-	hudVerticesVBO.uploadDataToGPU(GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-
-	hudTexCoordsVBO.createVBO();
-	hudTexCoordsVBO.bindVBO();
-	hudTexCoordsVBO.addData(static_geometry::quad2D, sizeof(glm::vec2) * 4);
-
-	hudTexCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-
-	cube = new static_meshes::Cube();
 }
 
 void OpenGLWindow::renderScene()
 {
+	const auto& spm = ShaderProgramManager::getInstance();
+	const auto& tm = TextureManager::getInstance();
+	auto& mm = MatrixManager::getInstance();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	groundProgram.useProgram();
-	glBindVertexArray(mainVAO);
+	// Set matrices in matrix manager
+	mm.setProjectionMatrix(getProjectionMatrix());
+	mm.setOrthoProjectionMatrix(getOrthoProjectionMatrix());
+	mm.setViewMatrix(camera.getViewMatrix());
 
-	groundProgram["matrices.projectionMatrix"] = getProjectionMatrix();
-	groundProgram["matrices.viewMatrix"] = camera.getViewMatrix();
+	snowCoveredPlainGround->render();
 
-	// Render ground
-	groundProgram["matrices.modelMatrix"] = glm::mat4(1.0);
-
-	// Setup snow texture
-	snowTexture.bind(0);
-	mainSampler.bind(0);
-	groundProgram["snowSampler"] = 0;
-
-	// Setup path texture
-	pathTexture.bind(1);
-	mainSampler.bind(1);
-	groundProgram["pathSampler"] = 1;
-
-	// Setup pavement texture
-	pavementTexture.bind(2);
-	mainSampler.bind(2);
-	groundProgram["pavementSampler"] = 2;
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
+	// Render all houses
+	auto& mainProgram = spm.getShaderProgram("main");
 	mainProgram.useProgram();
-	mainProgram["matrices.projectionMatrix"] = getProjectionMatrix();
-	mainProgram["matrices.viewMatrix"] = camera.getViewMatrix();
-	mainProgram["color"] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	SamplerManager::getInstance().getSampler("main").bind();
+	mainProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
+	mainProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
+	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	mainProgram[ShaderConstants::sampler()] = 0;
 
-	const auto houseBottomSize = 10.0f;
-	const auto roofTopSize = 12.0f;
-	
-	// Render "houses" on the left
-	for (auto& houseTranslation : houseTransformations)
+	for (auto& houseTransformation : houseTransformations)
 	{
-		const auto housePosition = houseTranslation.position;
-		const auto angle = houseTranslation.angle;
-		// First, calculate the basic position of house
-		auto modelMatrixHouse = glm::mat4(1.0);
-		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
-
-		// Render bottom cube of the house
-		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
-		modelMatrixBottom = glm::rotate(modelMatrixBottom, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
-		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
-
-		// Render just plain house walls made of bricks
-		houseTexture.bind();
-		cube->render();
-		/*
-		glDrawArrays(GL_TRIANGLES, 10, 6);
-		glDrawArrays(GL_TRIANGLES, 28, 6);
-		// Render house wall with a door and windows
-		houseTextureFront.bind();
-		glDrawArrays(GL_TRIANGLES, 4, 6);
-		// Render house wall with a window
-		houseTextureSide.bind();
-		glDrawArrays(GL_TRIANGLES, 16, 12);
-		*/
-
-		roofTexture.bind();
-		const auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
-		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
-		modelMatrixTop = glm::rotate(modelMatrixTop, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
-		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
-		glDrawArrays(GL_TRIANGLES, 40, 12);
+		house->render(houseTransformation.position, houseTransformation.angle);
 	}
 
-	glDisable(GL_DEPTH_TEST);
+	// Render HUD
+	hud->renderHUD();
 
-	if (blendingEnabled)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-	glDepthMask(0);
-
-	int width, height;
-	glfwGetWindowSize(getWindow(), &width, &height);
-	
-	ortho2DProgram.useProgram();
-	glBindVertexArray(hudVAO);
-	hudSampler.bind();
-	ortho2DProgram["matrices.projectionMatrix"] = getOrthoProjectionMatrix();
-	ortho2DProgram["sampler"] = 0;
-	ortho2DProgram["color"] = glm::vec4(1.0, 1.0, 1.0, 1.0);
-
-	// Render Christmas tree bottom left
-	glm::mat4 model = glm::mat4(1.0);
-	model = glm::scale(model, glm::vec3(256, 256, 1));
-	ortho2DProgram["matrices.modelMatrix"] = model;
-	christmasTree.bind(0);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-	// Render snowflake bottom right
-	model = glm::translate(glm::mat4(1.0), glm::vec3(width - christmasTree.getWidth(), 0, 0));
-	model = glm::scale(model, glm::vec3(snowflake.getWidth(), snowflake.getHeight(), 1));
-	ortho2DProgram["matrices.modelMatrix"] = model;
-	snowflake.bind(0);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	
+	// Update window title
 	std::string windowTitleWithFPS = std::string("010.) First Great Refactoring - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
 		+ "FPS: " + std::to_string(getFPS())
 		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
-		+ ", Blending: " + (blendingEnabled ? "On" : "Off") + " (Press F4 to toggle)";
+		+ ", Blending: " + (hud->isBlendingEnabled() ? "On" : "Off") + " (Press F4 to toggle)";
 
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
-
-	if (blendingEnabled) {
-		glDisable(GL_BLEND);
-	}
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(1);
 }
 
 void OpenGLWindow::releaseScene()
 {
-	groundProgram.deleteProgram();
-	mainProgram.deleteProgram();
+	ShaderManager::getInstance().clearShaderCache();
+	ShaderProgramManager::getInstance().clearShaderProgramCache();
+	TextureManager::getInstance().clearTextureCache();
+	SamplerManager::getInstance().clearSamplerCache();
 
-	groundVertexShader.deleteShader();
-	groundFragmentShader.deleteShader();
-	vertexShader.deleteShader();
-	fragmentShader.deleteShader();
-
-	shapesVBO.deleteVBO();
-	texCoordsVBO.deleteVBO();
-	hudVerticesVBO.deleteVBO();
-	hudTexCoordsVBO.deleteVBO();
-
-	snowTexture.deleteTexture();
-	pathTexture.deleteTexture();
-	pavementTexture.deleteTexture();
-	houseTexture.deleteTexture();
-	houseTextureFront.deleteTexture();
-	houseTextureSide.deleteTexture();
-	roofTexture.deleteTexture();
-	christmasTree.deleteTexture();
-	snowflake.deleteTexture();
-
-	mainSampler.deleteSampler();
-
-	glDeleteVertexArrays(1, &mainVAO);
-	glDeleteVertexArrays(1, &hudVAO);
+	house.release();
+	snowCoveredPlainGround.release();
+	hud.release();
 }
 
 void OpenGLWindow::handleInput()
@@ -365,7 +166,7 @@ void OpenGLWindow::handleInput()
 		[this](float f) {return this->sof(f); });
 
 	if (keyPressedOnce(GLFW_KEY_F4)) {
-		blendingEnabled = !blendingEnabled;
+		hud->toggleBlending();
 	}
 }
 
