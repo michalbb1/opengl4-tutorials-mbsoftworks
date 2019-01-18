@@ -50,7 +50,7 @@ protected:
 
 	bool _isInitialized = false; //!< Is mesh initialized flag
 	GLuint _vao = 0; //!< VAO ID from OpenGL
-	VertexBufferObject _vbo; //!< Our VBO wrapper class
+	VertexBufferObject _vbo; //!< Our VBO wrapper class holding static mesh data
 
 	/** \brief  Initializes vertex data. */
 	virtual void initializeData() = 0;
