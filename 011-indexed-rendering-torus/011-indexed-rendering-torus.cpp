@@ -5,13 +5,7 @@
 
 #include "../common_classes/OpenGLWindow.h"
 
-#include "../common_classes/shader.h"
-#include "../common_classes/shaderProgram.h"
-#include "../common_classes/vertexBufferObject.h"
-#include "../common_classes/staticGeometry.h"
 #include "../common_classes/flyingCamera.h"
-#include "../common_classes/texture.h"
-#include "../common_classes/sampler.h"
 
 #include "../common_classes/shaderManager.h"
 #include "../common_classes/shaderProgramManager.h"
@@ -19,41 +13,33 @@
 #include "../common_classes/samplerManager.h"
 #include "../common_classes/matrixManager.h"
 
-#include "../common_classes/static_meshes_3D/house.h"
-#include "../common_classes/static_meshes_3D/snowCoveredPlainGround.h"
+#include "../common_classes/static_meshes_3D/plainGround.h"
+#include "../common_classes/static_meshes_3D/primitives/pyramid.h"
+#include "../common_classes/static_meshes_3D/primitives/torus.h"
 
-FlyingCamera camera(glm::vec3(-120.0f, 8.0f, 120.0f), glm::vec3(-120.0f, 8.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
+FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
-struct HouseTransformation
+std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
+std::unique_ptr<static_meshes_3D::Torus> torus;
+std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
+float rotationAngleRad = 0.0f;
+std::vector<glm::vec3> objectPositions
 {
-	glm::vec3 position;
-	float angle;
-};
-
-std::vector<HouseTransformation> houseTransformations
-{
-	{glm::vec3(-140, 0, 94), glm::radians(90.0f)},
-	{glm::vec3(-140, 0, 64), glm::radians(90.0f)},
-	{glm::vec3(-140, 0, 34), glm::radians(90.0f)},
-	{glm::vec3(-140, 0, 4), glm::radians(90.0f)},
-	{glm::vec3(-97, 0, 18), glm::radians(-90.0f)},
-	{glm::vec3(-97, 0, 48), glm::radians(-90.0f)},
-	{glm::vec3(-97, 0, 78), glm::radians(-90.0f)},
-	{glm::vec3(-63, 0, -14), glm::radians(180.0f)},
-	{glm::vec3(-33, 0, -14), glm::radians(180.0f)},
-	{glm::vec3(-3, 0, -14), glm::radians(180.0f)},
-	{glm::vec3(27, 0, -14), glm::radians(180.0f)},
-	{glm::vec3(-75, 0, -64), glm::radians(0.0f)},
-	{glm::vec3(-45, 0, -64), glm::radians(0.0f)},
-	{glm::vec3(-15, 0, -64), glm::radians(0.0f)},
-	{glm::vec3(15, 0, -64), glm::radians(0.0f)},
-	{glm::vec3(45, 0, -64), glm::radians(0.0f)},
-	{glm::vec3(-121, 0, -54), glm::radians(45.0f)}
+	glm::vec3(-30.0f, 0.0f, -50.0f),
+	glm::vec3(-30.0f, 0.0f, -25.0f),
+	glm::vec3(-30.0f, 0.0f, 0.0f),
+	glm::vec3(-30.0f, 0.0f, 25.0f),
+	glm::vec3(-30.0f, 0.0f, 50.0f),
+	glm::vec3(30.0f, 0.0f, -50.0f),
+	glm::vec3(30.0f, 0.0f, -25.0f),
+	glm::vec3(30.0f, 0.0f, 0.0f),
+	glm::vec3(30.0f, 0.0f, 25.0f),
+	glm::vec3(30.0f, 0.0f, 50.0f)
 };
 
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
+	glClearColor(0.18f, 0.0f, 0.356f, 1.0f);
 
 	try
 	{
@@ -71,6 +57,13 @@ void OpenGLWindow::initializeScene()
 		spm.linkAllPrograms();
 
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
+		TextureManager::getInstance().loadTexture2D("diamond", "data/textures/diamond.png");
+		TextureManager::getInstance().loadTexture2D("metal", "data/textures/metal.png");
+		TextureManager::getInstance().loadTexture2D("ice", "data/textures/ice.png");
+
+		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, false);
+		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, false);
+		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, false);
 	}
 	catch (const std::runtime_error& ex)
 	{
@@ -95,15 +88,41 @@ void OpenGLWindow::renderScene()
 	mm.setOrthoProjectionMatrix(getOrthoProjectionMatrix());
 	mm.setViewMatrix(camera.getViewMatrix());
 
-	// Render all houses
+	// Set up some common properties in the main shader program
 	auto& mainProgram = spm.getShaderProgram("main");
 	mainProgram.useProgram();
 	SamplerManager::getInstance().getSampler("main").bind();
 	mainProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
 	mainProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
+	mainProgram[ShaderConstants::modelMatrix()] = glm::mat4(1.0f);
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 
+	// Render icy ground
+	TextureManager::getInstance().getTexture("ice").bind(0);
+	plainGround->render();
+
+	for (const auto& position : objectPositions)
+	{
+		// Render diamond pyramid on bottom
+		const auto pyramidSize = 10.0f;
+		auto posModelMatrix = glm::translate(glm::mat4(1.0f), position);
+		auto model = glm::translate(posModelMatrix, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
+		mainProgram[ShaderConstants::modelMatrix()] = model;
+
+		TextureManager::getInstance().getTexture("diamond").bind(0);
+		pyramid->render();
+
+		// Render metal torus on top of the pyramid
+		const auto torusOffset = pyramidSize + torus->getMainRadius() + torus->getTubeRadius();
+		model = glm::translate(posModelMatrix, glm::vec3(0.0f, torusOffset, 0.0f));
+		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		mainProgram[ShaderConstants::modelMatrix()] = model;
+
+		TextureManager::getInstance().getTexture("metal").bind(0);
+		torus->render();
+	}
 
 	// Update window title
 	std::string windowTitleWithFPS = std::string("011.) Indexed Rendering of Torus - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
@@ -111,6 +130,9 @@ void OpenGLWindow::renderScene()
 		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
 
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+	
+	// Update rotation angle
+	rotationAngleRad += sof(glm::radians(135.0f));
 }
 
 void OpenGLWindow::releaseScene()
@@ -119,6 +141,10 @@ void OpenGLWindow::releaseScene()
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
 	TextureManager::getInstance().clearTextureCache();
 	SamplerManager::getInstance().clearSamplerCache();
+
+	pyramid.reset();
+	torus.reset();
+	plainGround.reset();
 }
 
 void OpenGLWindow::handleInput()

@@ -97,6 +97,12 @@
       <Filter>Source Files\common_classes\static_meshes_3D</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp">
       <Filter>Source Files\common_classes\static_meshes_3D</Filter>
     </ClCompile>
   </ItemGroup>
@@ -156,6 +162,12 @@
       <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h">
+      <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h">
       <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
     </ClInclude>
   </ItemGroup>
