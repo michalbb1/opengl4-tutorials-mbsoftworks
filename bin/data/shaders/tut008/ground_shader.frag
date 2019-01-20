@@ -2,7 +2,6 @@
 
 layout(location = 0) out vec4 outputColor;
 
-smooth in vec3 ioVertexColor;
 smooth in vec2 ioVertexTexCoord;
 
 uniform sampler2D snowSampler;
