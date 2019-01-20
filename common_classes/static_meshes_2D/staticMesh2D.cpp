@@ -53,11 +53,11 @@ int StaticMesh2D::getVertexByteSize() const
 
 void StaticMesh2D::setVertexAttributesPointers(int numVertices)
 {
-	uint32_t offset = 0;
+	uint64_t offset = 0;
 	if (hasPositions())
 	{
 		glEnableVertexAttribArray(POSITION_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(POSITION_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)offset);
+		glVertexAttribPointer(POSITION_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), reinterpret_cast<void*>(offset));
 
 		offset += sizeof(glm::vec2)*numVertices;
 	}
@@ -65,7 +65,7 @@ void StaticMesh2D::setVertexAttributesPointers(int numVertices)
 	if (hasTextureCoordinates())
 	{
 		glEnableVertexAttribArray(TEXTURE_COORDINATE_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(TEXTURE_COORDINATE_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)offset);
+		glVertexAttribPointer(TEXTURE_COORDINATE_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), reinterpret_cast<void*>(offset));
 
 		offset += sizeof(glm::vec2)*numVertices;
 	}

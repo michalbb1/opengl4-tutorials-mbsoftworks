@@ -27,7 +27,7 @@ public:
 	*   \param dataSize Size of the added data (in bytes)
 	*   \param repeat How many times to repeat same data in the buffers (default is 1)
 	*/
-	void addData(void* ptrData, uint32_t dataSizeBytes, int repeat = 1);
+	void addData(const void* ptrData, uint32_t dataSizeBytes, int repeat = 1);
 
 	/** \brief Gets pointer to the data from in-memory buffer (only before uploading them).
 	*   \return Pointer to the raw data.

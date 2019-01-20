@@ -63,11 +63,11 @@ int StaticMesh3D::getVertexByteSize() const
 
 void StaticMesh3D::setVertexAttributesPointers(int numVertices)
 {
-	uint32_t offset = 0;
+	uint64_t offset = 0;
 	if (hasPositions())
 	{
 		glEnableVertexAttribArray(POSITION_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(POSITION_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)offset);
+		glVertexAttribPointer(POSITION_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), reinterpret_cast<void*>(offset));
 
 		offset += sizeof(glm::vec3)*numVertices;
 	}
@@ -75,7 +75,7 @@ void StaticMesh3D::setVertexAttributesPointers(int numVertices)
 	if (hasTextureCoordinates())
 	{
 		glEnableVertexAttribArray(TEXTURE_COORDINATE_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(TEXTURE_COORDINATE_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)offset);
+		glVertexAttribPointer(TEXTURE_COORDINATE_ATTRIBUTE_INDEX, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), reinterpret_cast<void*>(offset));
 
 		offset += sizeof(glm::vec2)*numVertices;
 	}
@@ -83,7 +83,7 @@ void StaticMesh3D::setVertexAttributesPointers(int numVertices)
 	if (hasNormals())
 	{
 		glEnableVertexAttribArray(NORMAL_ATTRIBUTE_INDEX);
-		glVertexAttribPointer(NORMAL_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)offset);
+		glVertexAttribPointer(NORMAL_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), reinterpret_cast<void*>(offset));
 
 		offset += sizeof(glm::vec3)*numVertices;
 	}

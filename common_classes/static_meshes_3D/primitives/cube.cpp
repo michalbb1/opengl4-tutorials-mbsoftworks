@@ -111,7 +111,7 @@ void Cube::initializeData()
 	{
 		for (auto i = 0; i < 6; i++)
 		{
-			_vbo.addData(normals, sizeof(glm::vec3)*6);
+			_vbo.addData(&normals[i], sizeof(glm::vec3), 6);
 		}
 	}
 
