@@ -6,8 +6,10 @@
 #include "shaderProgramManager.h"
 #include "samplerManager.h"
 
+
 #include <glm/gtc/matrix_transform.hpp>
 
+const std::string HUD::DEFAULT_FONT_KEY = "default";
 const std::string HUD::ORTHO_2D_PROGRAM_KEY = "ortho_2D";
 const std::string HUD::HUD_SAMPLER_KEY = "HUD";
 
@@ -35,14 +37,14 @@ HUD::HUD(const OpenGLWindow& window)
 int HUD::getWidth() const
 {
 	int width, height;
-	glfwGetWindowSize(_window.getWindow(), &width, &height);
+	glfwGetFramebufferSize(_window.getWindow(), &width, &height);
 	return width;
 }
 
 int HUD::getHeight() const
 {
 	int width, height;
-	glfwGetWindowSize(_window.getWindow(), &width, &height);
+	glfwGetFramebufferSize(_window.getWindow(), &width, &height);
 	return height;
 }
 
