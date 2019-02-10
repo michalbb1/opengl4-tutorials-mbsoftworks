@@ -27,8 +27,8 @@ FreeTypeFont::FreeTypeFont()
 	std::call_once(prepareOnceFlag, []()
 	{
 		auto& sm = ShaderManager::getInstance();
-		sm.loadVertexShader(FREETYPE_FONT_PROGRAM_KEY, "data/shaders/tut009/ortho2D.vert");
-		sm.loadFragmentShader(FREETYPE_FONT_PROGRAM_KEY, "data/shaders/tut009/ortho2D.frag");
+		sm.loadVertexShader(FREETYPE_FONT_PROGRAM_KEY, "data/shaders/tut012/font2D.vert");
+		sm.loadFragmentShader(FREETYPE_FONT_PROGRAM_KEY, "data/shaders/tut012/font2D.frag");
 
 		auto& spm = ShaderProgramManager::getInstance();
 		auto& shaderProgram = spm.createShaderProgram(FREETYPE_FONT_PROGRAM_KEY);
