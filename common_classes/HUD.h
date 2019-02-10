@@ -2,8 +2,9 @@
 
 #include <string>
 
-#include "stringUtils.h"
+#include <glm/glm.hpp>
 
+#include "stringUtils.h"
 #include "OpenGLWindow.h"
 #include "static_meshes_2D/primitives/quad.h"
 #include "shaderProgram.h"
@@ -84,6 +85,11 @@ protected:
 			return *this;
 		}
 
+		PrintBuilder& withColor(const glm::vec4& color) {
+			_color = color;
+			return *this;
+		}
+
 		//* \brief  Prints text at given position with all parameters. */
 		template <typename... Args>
 		void print(int x, int y, const std::string& text, const Args&... args) const
@@ -94,7 +100,7 @@ protected:
 	private:
 		void printInternal(int x, int y, const std::string& text) const
 		{
-			const auto& font = FreeTypeFontManager::getInstance().getFreeTypeFont(_fontKey);
+			auto& font = FreeTypeFontManager::getInstance().getFreeTypeFont(_fontKey);
 			const auto textWidth = font.getTextWidth(text, _pixelSize);
 			const auto textHeight = font.getTextHeight(_pixelSize);
 			if (_fromRight) {
@@ -104,6 +110,7 @@ protected:
 				y = _hud.getHeight() - y - textHeight;
 			}
 
+			font.setTextColor(_color);
 			font.print(x, y, text);
 		}
 
@@ -111,6 +118,7 @@ protected:
 		bool _fromRight = false;
 		bool _fromTop = true;
 		int _pixelSize = -1;
+		glm::vec4 _color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		std::string _fontKey = HUD::DEFAULT_FONT_KEY;
 	};
 

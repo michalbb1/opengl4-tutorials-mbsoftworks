@@ -31,7 +31,7 @@ void FreeTypeFontManager::loadSystemFreeTypeFont(const std::string& key, const s
 	loadFreeTypeFontFromFile(key, getSystemFontDirectory()+fontName, pixelSize);
 }
 
-const FreeTypeFont& FreeTypeFontManager::getFreeTypeFont(const std::string& key) const
+FreeTypeFont& FreeTypeFontManager::getFreeTypeFont(const std::string& key) const
 {
 	if (!containsFreeTypeFont(key))
 	{

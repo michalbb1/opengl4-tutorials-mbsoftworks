@@ -50,6 +50,11 @@ public:
 	*/
 	int getTextHeight(int pixelSize = -1) const;
 
+	/** \brief  Sets the color of printed text.
+	*   \param  color Desired color of text
+	*/
+	void setTextColor(const glm::vec4& color);
+
 	//* \brief  Prints text at given position with default (loaded) pixel size. */
 	template <typename... Args>
 	void print(int x, int y, const std::string& text, const Args&... args) const
@@ -123,6 +128,7 @@ private:
 	bool _isLoaded = false; //!< Flag saying, if the font is loaded already
 	std::vector<CharacterRange> _characterRanges; //!< List of unicode ranges to load characters from
 	int _pixelSize; //!< Loaded pixel size of characters
+	glm::vec4 _color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	std::vector<std::unique_ptr<Texture>> _textures; //!< Vector holding all texture atlases
 	std::map<int, CharacterProperties> _characterProperties; //!< Map holding properties of each loaded character

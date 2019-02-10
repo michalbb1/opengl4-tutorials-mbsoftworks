@@ -224,7 +224,7 @@ void FreeTypeFont::printInternal(int x, int y, const std::string& text, int pixe
 	auto& shaderProgram = getFreetypeFontShaderProgram();
 	shaderProgram.useProgram();
 	shaderProgram[ShaderConstants::projectionMatrix()] = MatrixManager::getInstance().getOrthoProjectionMatrix();
-	shaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	shaderProgram[ShaderConstants::color()] = _color;
 
 	getFreetypeFontSampler().bind();
 	shaderProgram[ShaderConstants::sampler()] = 0;
@@ -310,6 +310,11 @@ int FreeTypeFont::getTextHeight(int pixelSize) const
 	const auto scale = float(usedPixelSize) / float(_pixelSize);
 
 	return ceil(usedPixelSize*scale);
+}
+
+void FreeTypeFont::setTextColor(const glm::vec4& color)
+{
+	_color = color;
 }
 
 ShaderProgram& FreeTypeFont::getFreetypeFontShaderProgram() const

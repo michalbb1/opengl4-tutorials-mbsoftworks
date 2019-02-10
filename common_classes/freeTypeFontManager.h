@@ -35,7 +35,7 @@ public:
 	*   \param  key Key to restore FreeType font from
 	*   \return FreeType font instance from a specified key.
 	*/
-	const FreeTypeFont& getFreeTypeFont(const std::string& key) const;
+	FreeTypeFont& getFreeTypeFont(const std::string& key) const;
 
 	/** \brief  Deletes all the loaded FreeType fonts and clears the FreeType fonts cache. */
 	void clearFreeTypeFontCache();
