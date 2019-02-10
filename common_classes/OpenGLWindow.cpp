@@ -33,8 +33,16 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	glfwSetWindowSizeCallback(_window, onWindowSizeChangedStatic);
-	glfwMaximizeWindow(_window);
 
+	if (!showFullscreen)
+	{
+		glfwMaximizeWindow(_window);
+		// After calling glfwMaximizeWindow, the onWindowSizeChanged somehow does not get called
+		// Therefore I call it manually
+		int width, height;
+		glfwGetWindowSize(_window, &width, &height);
+		onWindowSizeChanged(_window, width, height);
+	}
 	_windows[_window] = this;
 
 	return true;
@@ -147,7 +155,7 @@ void OpenGLWindow::setVerticalSynchronization(bool enable)
 	_isVerticalSynchronizationEnabled = enable;
 }
 
-bool OpenGLWindow::isVerticalSynchronizationEnabled()
+bool OpenGLWindow::isVerticalSynchronizationEnabled() const
 {
 	return _isVerticalSynchronizationEnabled;
 }
