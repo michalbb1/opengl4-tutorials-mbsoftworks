@@ -18,11 +18,14 @@
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
+#include "HUD012.h"
+
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
 std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
+std::unique_ptr<HUD012> hud;
 
 float rotationAngleRad = 0.0f;
 std::vector<glm::vec3> objectPositions
@@ -55,9 +58,9 @@ void OpenGLWindow::initializeScene()
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut007_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut007_main"));
-		
-		spm.linkAllPrograms();
 
+		hud = std::make_unique<HUD012>(*this);
+		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
 		TextureManager::getInstance().loadTexture2D("diamond", "data/textures/diamond.png");
 		TextureManager::getInstance().loadTexture2D("metal", "data/textures/metal.png");
@@ -67,7 +70,7 @@ void OpenGLWindow::initializeScene()
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, false);
 		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, false);
 
-		FreeTypeFontManager::getInstance().loadSystemFreeTypeFont("main", "arial.ttf", 48);
+		spm.linkAllPrograms();
 	}
 	catch (const std::runtime_error& ex)
 	{
@@ -128,21 +131,8 @@ void OpenGLWindow::renderScene()
 		torus->render();
 	}
 
-	// Update window title
-	std::string windowTitleWithFPS = std::string("012.) Freetype Fonts pt. 1 - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
-		+ "FPS: " + std::to_string(getFPS())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
-	
-	int width, height;
-	glfwGetWindowSize(getWindow(), &width, &height);
-
-	const auto& font = FreeTypeFontManager::getInstance().getFreeTypeFont("main");
-	const auto& text1 = "Let me try to output some multiline text.\nThis is second line";
-	const auto& text2 = "X position : {17}, Y position : {99}";
-	font.printWithDefaultSize(width - font.getTextWidthDefaultSize(text1), 120, text1);
-	font.printWithDefaultSize(width - font.getTextWidthDefaultSize(text2), 200, text2);
+	// Render HUD
+	hud->renderHUD();
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(135.0f));
@@ -174,7 +164,7 @@ void OpenGLWindow::handleInput()
 	glfwGetWindowPos(getWindow(), &posX, &posY);
 	glfwGetWindowSize(getWindow(), &width, &height);
 	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-
+	
 	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
 		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
