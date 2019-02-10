@@ -45,7 +45,7 @@ protected:
 	void renderTexturedQuad2D(int x, int y, int renderedWidth, int renderedHeight, bool fromRight = false, bool fromTop = false) const;
 
 	/** \brief  Gets shader program for 2D rendering.
-	*   \return Shader programfor 2D rendering.
+	*   \return Shader program for 2D rendering.
 	*/
 	ShaderProgram& getOrtho2DShaderProgram() const;
 
