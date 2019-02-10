@@ -12,6 +12,8 @@ class Texture
 public:
 	~Texture();
 
+	bool createFromData(const unsigned char* data, int width, int height, int bytesPerPixel, bool generateMipmaps = false);
+
 	/** \brief  Loads image file as 2D OpenGL texture.
 	*   \param  fileName        path to an image file
 	*   \param  generateMipmaps true, if mipmaps should be generated automatically
