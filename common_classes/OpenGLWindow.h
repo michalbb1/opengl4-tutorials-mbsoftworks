@@ -124,7 +124,7 @@ public:
 	/** \brief  Checks, if vertical synchronization is on or off.
 	*   \return True, if vertical synchronization is enabled, or false otherwise.
 	*/
-	bool isVerticalSynchronizationEnabled();
+	bool isVerticalSynchronizationEnabled() const;
 
 private:
 	GLFWwindow* _window = nullptr; //!< Pointer to GLFWwindow, nullptr by default

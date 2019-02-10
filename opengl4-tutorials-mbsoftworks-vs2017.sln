@@ -25,6 +25,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "010-first-great-refactoring
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "011-indexed-rendering-torus", "011-indexed-rendering-torus\011-indexed-rendering-torus.vcxproj", "{66A370BE-96E1-4B59-AFEC-BB95EBF989BB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "012-freetype-fonts-pt1", "012-freetype-fonts-pt1\012-freetype-fonts-pt1.vcxproj", "{260EE0B2-F704-4F5D-AC37-124E7EB770EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3} = {EF78FA6C-1F0E-46D6-8B12-29223591BBF3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "build-freetype2-vs2017", "dependencies\build-freetype2-vs2017\build-freetype2-vs2017.vcxproj", "{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -121,6 +128,22 @@ Global
 		{66A370BE-96E1-4B59-AFEC-BB95EBF989BB}.Release|x64.Build.0 = Release|x64
 		{66A370BE-96E1-4B59-AFEC-BB95EBF989BB}.Release|x86.ActiveCfg = Release|Win32
 		{66A370BE-96E1-4B59-AFEC-BB95EBF989BB}.Release|x86.Build.0 = Release|Win32
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Debug|x64.ActiveCfg = Debug|x64
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Debug|x64.Build.0 = Debug|x64
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Debug|x86.ActiveCfg = Debug|Win32
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Debug|x86.Build.0 = Debug|Win32
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x64.ActiveCfg = Release|x64
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x64.Build.0 = Release|x64
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x86.ActiveCfg = Release|Win32
+		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x86.Build.0 = Release|Win32
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x64.ActiveCfg = Debug|x64
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x64.Build.0 = Debug|x64
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x86.ActiveCfg = Debug|Win32
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x86.Build.0 = Debug|Win32
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x64.ActiveCfg = Release|x64
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x64.Build.0 = Release|x64
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.ActiveCfg = Release|Win32
+		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
