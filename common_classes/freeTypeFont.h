@@ -11,6 +11,9 @@
 #include "shaderProgram.h"
 #include "stringUtils.h"
 
+/**
+  Class maintaining TrueType font and its rendering using OpenGL.
+*/
 class FreeTypeFont
 {
 public:
@@ -34,49 +37,31 @@ public:
 	*/
 	bool loadFont(const std::string& fontFilePath, int pixelSize);
 
-	/** \brief  Gets text width using loaded pixel size.
+	/** \brief  Gets width of a given text and given pixel size.
 	*   \param  text Text to get width of
+	*   \param  pixelSize Used pixel size. If -1, the loaded pixel size is used instead
 	*   \return Text width rounded to next integer (ceiling).
 	*/
-	int getTextWidthDefaultSize(const std::string& text) const
-	{
-		return getTextWidthInternal(text, -1);
-	}
+	int getTextWidth(const std::string& text, int pixelSize = -1) const;
 
-	/** \brief  Gets text width using custom pixel size.
-	*   \param  text Text to get width of
+	/** \brief  Gets height of text with given pixel size.
 	*   \param  pixelSize Used pixel size
-	*   \return Text width rounded to next integer (ceiling).
+	*   \return Text height rounded to next integer (ceiling).
 	*/
-	int getTextWidthCustomSize(const std::string& text, int pixelSize) const
-	{
-		return getTextWidthInternal(text, pixelSize);
-	}
+	int getTextHeight(int pixelSize = -1) const;
 
 	//* \brief  Prints text at given position with default (loaded) pixel size. */
-	void printWithDefaultSize(int x, int y, const std::string& text) const
+	template <typename... Args>
+	void print(int x, int y, const std::string& text, const Args&... args) const
 	{
-		print(x, y, text, -1);
+		printInternal(x, y, string_utils::formatString(text.c_str(), args...), -1);
 	}
 
 	//* \brief  Prints text at given position with given pixel size. */
-	void printWithCustomSize(int x, int y, int pixelSize, const std::string& text) const
-	{
-		print(x, y, text, pixelSize);
-	}
-
-	//* \brief  Prints formatted text at given position with given pixel size. */
 	template <typename... Args>
-	inline void printFormattedWithDefaultSize(int x, int y, const std::string& text, const Args&... args) const
+	void printWithCustomSize(int x, int y, int pixelSize, const std::string& text, const Args&... args) const
 	{
-		print(x, y, string_utils::formatString(text.c_str(), args...), -1);
-	}
-
-	//* \brief  Prints text at given position with default (loaded) pixel size. */
-	template <typename... Args>
-	inline void printFormattedWithCustomSize(int x, int y, int pixelSize, const std::string& text, const Args&... args) const
-	{
-		print(x, y, string_utils::formatString(text.c_str(), args...), pixelSize);
+		print(x, y, text, pixelSize, string_utils::formatString(text.c_str(), args...));
 	}
 
 	//* \brief Deletes font with all of its data. */
@@ -89,19 +74,12 @@ private:
 	*   \param  x text Text to print
 	*   \param  pixelSize Used pixel size. If -1, the loaded pixel size is used instead
 	*/
-	void print(int x, int y, const std::string& text, int pixelSize) const;
-
-	/** \brief  Gets width of a give text and given pixel size.
-	*   \param  text Text to get width of
-	*   \param  pixelSize Used pixel size. If -1, the loaded pixel size is used instead
-	*   \return Text width rounded to next integer (ceiling).
-	*/
-	int getTextWidthInternal(const std::string& text, int pixelSize) const;
+	void printInternal(int x, int y, const std::string& text, int pixelSize) const;
 
 	/** \brief  Gets shader program for FreeType fonts.
 	*   \return Shader program for FreeType fonts.
 	*/
-	ShaderProgram& getFreetypeFontShaderProgram() const;\
+	ShaderProgram& getFreetypeFontShaderProgram() const;
 
 	/** \brief  Gets sampler for FreeType fonts.
 	*   \return FreeType fonts sampler.

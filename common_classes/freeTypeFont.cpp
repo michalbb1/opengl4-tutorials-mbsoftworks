@@ -209,39 +209,7 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
 	return true;
 }
 
-int FreeTypeFont::getTextWidthInternal(const std::string& text, int pixelSize) const
-{
-	float result = 0.0f;
-	float rowWidth = 0.0f;
-	const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
-	const auto scale = float(usedPixelSize) / float(_pixelSize);
-
-	// TODO: would be nice to handle invalid characters here as well
-	for (int i = 0; i < text.length(); i++)
-	{
-		if (text[i] == '\n' || text[i] == '\r') {
-			continue;
-		}
-
-		bool lastCharacterInRow = i == text.length() - 1 || text[i + 1] == '\n' || text[i + 1] == '\r';
-		const auto& props = _characterProperties.at(text[i]);
-		if (!lastCharacterInRow)
-		{
-			rowWidth += props.advanceX*scale;
-			continue;
-		}
-
-		// Handle last character in a row in a special way + update the result
-		rowWidth += (props.bearingX + props.width)*scale;
-		result = std::max(result, rowWidth);
-		rowWidth = 0.0f;
-	}
-
-	// Return ceiling of result
-	return ceil(result);
-}
-
-void FreeTypeFont::print(int x, int y, const std::string& text, int pixelSize) const
+void FreeTypeFont::printInternal(int x, int y, const std::string& text, int pixelSize) const
 {
 	// Don't print, if the font hasn't been loaded successfully
 	if (!_isLoaded) {
@@ -302,6 +270,46 @@ void FreeTypeFont::print(int x, int y, const std::string& text, int pixelSize) c
 	glDisable(GL_BLEND);
 	glDepthMask(1);
 	glEnable(GL_DEPTH_TEST);
+}
+
+int FreeTypeFont::getTextWidth(const std::string& text, int pixelSize) const
+{
+	float result = 0.0f;
+	float rowWidth = 0.0f;
+	const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
+	const auto scale = float(usedPixelSize) / float(_pixelSize);
+
+	// TODO: would be nice to handle invalid characters here as well
+	for (int i = 0; i < text.length(); i++)
+	{
+		if (text[i] == '\n' || text[i] == '\r') {
+			continue;
+		}
+
+		bool lastCharacterInRow = i == text.length() - 1 || text[i + 1] == '\n' || text[i + 1] == '\r';
+		const auto& props = _characterProperties.at(text[i]);
+		if (!lastCharacterInRow)
+		{
+			rowWidth += props.advanceX*scale;
+			continue;
+		}
+
+		// Handle last character in a row in a special way + update the result
+		rowWidth += (props.bearingX + props.width)*scale;
+		result = std::max(result, rowWidth);
+		rowWidth = 0.0f;
+	}
+
+	// Return ceiling of result
+	return ceil(result);
+}
+
+int FreeTypeFont::getTextHeight(int pixelSize) const
+{
+	const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
+	const auto scale = float(usedPixelSize) / float(_pixelSize);
+
+	return ceil(usedPixelSize*scale);
 }
 
 ShaderProgram& FreeTypeFont::getFreetypeFontShaderProgram() const
