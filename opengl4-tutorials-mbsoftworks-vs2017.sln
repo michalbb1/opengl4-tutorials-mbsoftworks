@@ -32,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "012-freetype-fonts-pt1", "0
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "build-freetype2-vs2017", "dependencies\build-freetype2-vs2017\build-freetype2-vs2017.vcxproj", "{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "013-blending-pt1", "013-blending-pt1\013-blending-pt1.vcxproj", "{E306D078-0361-4983-9DC4-6E6330C7DFC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -144,6 +146,14 @@ Global
 		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x64.Build.0 = Release|x64
 		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.ActiveCfg = Release|Win32
 		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.Build.0 = Release|Win32
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x64.ActiveCfg = Debug|x64
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x64.Build.0 = Debug|x64
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x86.ActiveCfg = Debug|Win32
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x86.Build.0 = Debug|Win32
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Release|x64.ActiveCfg = Release|x64
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Release|x64.Build.0 = Release|x64
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Release|x86.ActiveCfg = Release|Win32
+		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

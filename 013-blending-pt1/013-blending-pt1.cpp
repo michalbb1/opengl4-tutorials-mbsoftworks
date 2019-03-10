@@ -15,37 +15,47 @@
 #include "../common_classes/matrixManager.h"
 
 #include "../common_classes/static_meshes_3D/plainGround.h"
+#include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
-#include "../common_classes/static_meshes_3D/primitives/torus.h"
 
-#include "HUD012.h"
+#include "HUD013.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
+std::unique_ptr<static_meshes_3D::Cube> cube;
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
-std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
-std::unique_ptr<HUD012> hud;
+std::unique_ptr<HUD013> hud;
 
+bool turnDepthMaskOff = true;
 float rotationAngleRad = 0.0f;
-std::vector<glm::vec3> objectPositions
+std::vector<glm::vec3> pyramidPositions
 {
-	glm::vec3(-30.0f, 0.0f, -50.0f),
-	glm::vec3(-30.0f, 0.0f, -25.0f),
+	glm::vec3(0.0f, 0.0f, -100.0f),
+	glm::vec3(0.0f, 0.0f, -60.0f),
+	glm::vec3(0.0f, 0.0f, -20.0f),
+	glm::vec3(0.0f, 0.0f, 20.0f),
+	glm::vec3(0.0f, 0.0f, 60.0f),
+};
+
+std::vector<glm::vec3> cubePositions
+{
+	glm::vec3(-30.0f, 0.0f, -80.0f),
+	glm::vec3(-30.0f, 0.0f, -40.0f),
 	glm::vec3(-30.0f, 0.0f, 0.0f),
-	glm::vec3(-30.0f, 0.0f, 25.0f),
-	glm::vec3(-30.0f, 0.0f, 50.0f),
-	glm::vec3(30.0f, 0.0f, -50.0f),
-	glm::vec3(30.0f, 0.0f, -25.0f),
+	glm::vec3(-30.0f, 0.0f, 40.0f),
+	glm::vec3(-30.0f, 0.0f, 80.0f),
+	glm::vec3(30.0f, 0.0f, -80.0f),
+	glm::vec3(30.0f, 0.0f, -40.0f),
 	glm::vec3(30.0f, 0.0f, 0.0f),
-	glm::vec3(30.0f, 0.0f, 25.0f),
-	glm::vec3(30.0f, 0.0f, 50.0f)
+	glm::vec3(30.0f, 0.0f, 40.0f),
+	glm::vec3(30.0f, 0.0f, 80.0f)
 };
 
 
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0.18f, 0.0f, 0.356f, 1.0f);
+	glClearColor(0.02f, 0.682f, 1.0f, 1.0f);
 	try
 	{
 		auto& sm = ShaderManager::getInstance();
@@ -59,15 +69,15 @@ void OpenGLWindow::initializeScene()
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut007_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut007_main"));
 
-		hud = std::make_unique<HUD012>(*this);
+		hud = std::make_unique<HUD013>(*this);
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
+		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
+		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
 		TextureManager::getInstance().loadTexture2D("diamond", "data/textures/diamond.png");
-		TextureManager::getInstance().loadTexture2D("metal", "data/textures/metal.png");
-		TextureManager::getInstance().loadTexture2D("ice", "data/textures/ice.png");
-
+		
+		cube = std::make_unique<static_meshes_3D::Cube>(true, true, false);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, false);
-		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, false);
 		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, false);
 
 		spm.linkAllPrograms();
@@ -106,36 +116,54 @@ void OpenGLWindow::renderScene()
 	mainProgram[ShaderConstants::sampler()] = 0;
 
 	// Render icy ground
-	TextureManager::getInstance().getTexture("ice").bind(0);
+	TextureManager::getInstance().getTexture("grass").bind(0);
 	plainGround->render();
 
-	for (const auto& position : objectPositions)
+	for (const auto& position : cubePositions)
 	{
 		// Render diamond pyramid on bottom
+		const auto cubeSize = 8.0f;
+		auto model = glm::translate(glm::mat4(1.0f), position);
+		model = glm::translate(model, glm::vec3(0.0f, cubeSize / 2.0f + 3.0f, 0.0f));
+		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(cubeSize, cubeSize, cubeSize));
+		mainProgram[ShaderConstants::modelMatrix()] = model;
+
+		TextureManager::getInstance().getTexture("crate").bind(0);
+		cube->render();
+	}
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (turnDepthMaskOff) {
+		glDepthMask(0);
+	}
+	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
+	for (const auto& position : pyramidPositions)
+	{
 		const auto pyramidSize = 10.0f;
-		auto posModelMatrix = glm::translate(glm::mat4(1.0f), position);
-		auto model = glm::translate(posModelMatrix, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
+		auto model = glm::translate(glm::mat4(1.0f), position);
+		model = glm::translate(model, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
+		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
+		
 		mainProgram[ShaderConstants::modelMatrix()] = model;
 
 		TextureManager::getInstance().getTexture("diamond").bind(0);
 		pyramid->render();
-
-		// Render metal torus on top of the pyramid
-		const auto torusOffset = pyramidSize + torus->getMainRadius() + torus->getTubeRadius();
-		model = glm::translate(posModelMatrix, glm::vec3(0.0f, torusOffset, 0.0f));
-		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
-		mainProgram[ShaderConstants::modelMatrix()] = model;
-
-		TextureManager::getInstance().getTexture("metal").bind(0);
-		torus->render();
 	}
+	if (turnDepthMaskOff) {
+		glDepthMask(1);
+	}
+	glDisable(GL_BLEND);
 
 	// Render HUD
-	hud->renderHUD();
+	hud->renderHUD(turnDepthMaskOff);
 
 	// Update rotation angle
-	rotationAngleRad += sof(glm::radians(135.0f));
+	rotationAngleRad += sof(glm::radians(45.0f));
 }
 
 void OpenGLWindow::releaseScene()
@@ -147,7 +175,7 @@ void OpenGLWindow::releaseScene()
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
 	pyramid.reset();
-	torus.reset();
+	cube.reset();
 	plainGround.reset();
 }
 
@@ -159,6 +187,10 @@ void OpenGLWindow::handleInput()
 
 	if (keyPressedOnce(GLFW_KEY_F3)) {
 		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+	}
+
+	if (keyPressedOnce(GLFW_KEY_F4)) {
+		turnDepthMaskOff = !turnDepthMaskOff;
 	}
 
 	int posX, posY, width, height;

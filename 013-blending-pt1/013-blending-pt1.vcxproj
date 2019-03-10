@@ -20,37 +20,36 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}</ProjectGuid>
-    <RootNamespace>buildfreetype2</RootNamespace>
+    <ProjectGuid>{E306D078-0361-4983-9DC4-6E6330C7DFC2}</ProjectGuid>
+    <RootNamespace>My013blendingpt1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>build-freetype2-vs2017</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -59,47 +58,32 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="freetype2_vs2017_debug.props" />
+    <Import Project="..\properties_debug.props" />
+    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="freetype2_vs2017_release.props" />
+    <Import Project="..\properties_release.props" />
+    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_release.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\properties_debug64.props" />
-    <Import Project="freetype2_vs2017_debug64.props" />
+    <Import Project="..\properties_debug64.props" />
+    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_debug64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="freetype2_vs2017_release64.props" />
+    <Import Project="..\properties_release64.props" />
+    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_release64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)dependencies\build-freetype2-vs2017\lib\</OutDir>
-    <TargetName>freetype2_d</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)dependencies\build-freetype2-vs2017\lib\</OutDir>
-    <TargetName>freetype2_d64</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)dependencies\build-freetype2-vs2017\lib\</OutDir>
-    <TargetName>freetype2</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)dependencies\build-freetype2-vs2017\lib\</OutDir>
-    <TargetName>freetype2_64</TargetName>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level1</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,7 +92,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,7 +102,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -134,7 +116,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>FT2_BUILD_LIBRARY;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -142,38 +123,63 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\freetype2\src\autofit\autofit.c" />
-    <ClCompile Include="..\freetype2\src\base\ftbase.c" />
-    <ClCompile Include="..\freetype2\src\base\ftbbox.c" />
-    <ClCompile Include="..\freetype2\src\base\ftbdf.c" />
-    <ClCompile Include="..\freetype2\src\base\ftbitmap.c" />
-    <ClCompile Include="..\freetype2\src\base\ftcid.c" />
-    <ClCompile Include="..\freetype2\src\base\ftdebug.c" />
-    <ClCompile Include="..\freetype2\src\base\ftfstype.c" />
-    <ClCompile Include="..\freetype2\src\base\ftgasp.c" />
-    <ClCompile Include="..\freetype2\src\base\ftglyph.c" />
-    <ClCompile Include="..\freetype2\src\base\ftgxval.c" />
-    <ClCompile Include="..\freetype2\src\base\ftinit.c" />
-    <ClCompile Include="..\freetype2\src\base\ftmm.c" />
-    <ClCompile Include="..\freetype2\src\base\ftsystem.c" />
-    <ClCompile Include="..\freetype2\src\bdf\bdf.c" />
-    <ClCompile Include="..\freetype2\src\cff\cff.c" />
-    <ClCompile Include="..\freetype2\src\cid\type1cid.c" />
-    <ClCompile Include="..\freetype2\src\gzip\ftgzip.c" />
-    <ClCompile Include="..\freetype2\src\lzw\ftlzw.c" />
-    <ClCompile Include="..\freetype2\src\pcf\pcf.c" />
-    <ClCompile Include="..\freetype2\src\pfr\pfr.c" />
-    <ClCompile Include="..\freetype2\src\psaux\psaux.c" />
-    <ClCompile Include="..\freetype2\src\pshinter\pshinter.c" />
-    <ClCompile Include="..\freetype2\src\psnames\psnames.c" />
-    <ClCompile Include="..\freetype2\src\raster\raster.c" />
-    <ClCompile Include="..\freetype2\src\sfnt\sfnt.c" />
-    <ClCompile Include="..\freetype2\src\smooth\ftgrays.c" />
-    <ClCompile Include="..\freetype2\src\smooth\ftsmooth.c" />
-    <ClCompile Include="..\freetype2\src\truetype\truetype.c" />
-    <ClCompile Include="..\freetype2\src\type1\type1.c" />
-    <ClCompile Include="..\freetype2\src\type42\type42.c" />
-    <ClCompile Include="..\freetype2\src\winfonts\winfnt.c" />
+    <ClCompile Include="..\common_classes\flyingCamera.cpp" />
+    <ClCompile Include="..\common_classes\freeTypeFont.cpp" />
+    <ClCompile Include="..\common_classes\freeTypeFontManager.cpp" />
+    <ClCompile Include="..\common_classes\HUD.cpp" />
+    <ClCompile Include="..\common_classes\matrixManager.cpp" />
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\sampler.cpp" />
+    <ClCompile Include="..\common_classes\samplerManager.cpp" />
+    <ClCompile Include="..\common_classes\shader.cpp" />
+    <ClCompile Include="..\common_classes\shaderManager.cpp" />
+    <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\shaderProgramManager.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.cpp" />
+    <ClCompile Include="..\common_classes\texture.cpp" />
+    <ClCompile Include="..\common_classes\textureManager.cpp" />
+    <ClCompile Include="..\common_classes\uniform.cpp" />
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
+    <ClCompile Include="..\dependencies\glad\src\glad.c" />
+    <ClCompile Include="013-blending-pt1.cpp" />
+    <ClCompile Include="HUD013.cpp" />
+    <ClCompile Include="main_windows.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\flyingCamera.h" />
+    <ClInclude Include="..\common_classes\freeTypeFont.h" />
+    <ClInclude Include="..\common_classes\freeTypeFontManager.h" />
+    <ClInclude Include="..\common_classes\HUD.h" />
+    <ClInclude Include="..\common_classes\matrixManager.h" />
+    <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\sampler.h" />
+    <ClInclude Include="..\common_classes\samplerManager.h" />
+    <ClInclude Include="..\common_classes\shader.h" />
+    <ClInclude Include="..\common_classes\shaderManager.h" />
+    <ClInclude Include="..\common_classes\shaderProgram.h" />
+    <ClInclude Include="..\common_classes\shaderProgramManager.h" />
+    <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h" />
+    <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.h" />
+    <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\texture.h" />
+    <ClInclude Include="..\common_classes\textureManager.h" />
+    <ClInclude Include="..\common_classes\uniform.h" />
+    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
+    <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="HUD013.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
