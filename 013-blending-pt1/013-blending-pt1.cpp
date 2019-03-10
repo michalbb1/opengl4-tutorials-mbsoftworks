@@ -38,7 +38,7 @@ std::vector<glm::vec3> pyramidPositions
 	glm::vec3(0.0f, 0.0f, 60.0f),
 };
 
-std::vector<glm::vec3> cubePositions
+std::vector<glm::vec3> cratePositions
 {
 	glm::vec3(-30.0f, 0.0f, -80.0f),
 	glm::vec3(-30.0f, 0.0f, -40.0f),
@@ -115,20 +115,20 @@ void OpenGLWindow::renderScene()
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 
-	// Render icy ground
+	// Render grass ground
 	TextureManager::getInstance().getTexture("grass").bind(0);
 	plainGround->render();
 
-	for (const auto& position : cubePositions)
+	// Render all the crates (as simple cubes)
+	for (const auto& position : cratePositions)
 	{
-		// Render diamond pyramid on bottom
-		const auto cubeSize = 8.0f;
+		const auto crateSize = 8.0f;
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::translate(model, glm::vec3(0.0f, cubeSize / 2.0f + 3.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, crateSize / 2.0f + 3.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::scale(model, glm::vec3(cubeSize, cubeSize, cubeSize));
+		model = glm::scale(model, glm::vec3(crateSize, crateSize, crateSize));
 		mainProgram[ShaderConstants::modelMatrix()] = model;
 
 		TextureManager::getInstance().getTexture("crate").bind(0);
@@ -137,10 +137,16 @@ void OpenGLWindow::renderScene()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Turn also depth mask back off, if it's desired
 	if (turnDepthMaskOff) {
 		glDepthMask(0);
 	}
+	
+	// Change the color of diamond pyramids to white with 50% transparency (alpha is 0.5)
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 0.5f);
+
+	// Proceed with rendering diamond pyramids
 	for (const auto& position : pyramidPositions)
 	{
 		const auto pyramidSize = 10.0f;
@@ -154,6 +160,8 @@ void OpenGLWindow::renderScene()
 		TextureManager::getInstance().getTexture("diamond").bind(0);
 		pyramid->render();
 	}
+
+	// Turn depth mask back on, if it has been turned off
 	if (turnDepthMaskOff) {
 		glDepthMask(1);
 	}
