@@ -140,7 +140,6 @@
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp" />
-    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.cpp" />
     <ClCompile Include="..\common_classes\texture.cpp" />
@@ -169,7 +168,6 @@
     <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h" />
-    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
