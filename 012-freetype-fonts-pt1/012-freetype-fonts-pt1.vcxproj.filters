@@ -40,6 +40,12 @@
     <Filter Include="Source Files\glad">
       <UniqueIdentifier>{8352fd91-4869-4ce7-af63-dff539dfd585}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D">
+      <UniqueIdentifier>{9f541caf-e92b-4c9a-9032-bed25a87ea7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D\primitives">
+      <UniqueIdentifier>{915a7891-36e1-4c11-9a56-2d2b24594f69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
@@ -199,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="HUD012.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h">
+      <Filter>Header Files\common_classes\static_meshes_2D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h">
+      <Filter>Header Files\common_classes\static_meshes_2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
