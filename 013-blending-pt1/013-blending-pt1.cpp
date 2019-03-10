@@ -17,7 +17,6 @@
 #include "../common_classes/static_meshes_3D/plainGround.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
-#include "../common_classes/static_meshes_3D/primitives/torus.h"
 
 #include "HUD013.h"
 
@@ -25,7 +24,6 @@ FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0
 
 std::unique_ptr<static_meshes_3D::Cube> cube;
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
-std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
 std::unique_ptr<HUD013> hud;
 
@@ -81,7 +79,6 @@ void OpenGLWindow::initializeScene()
 		
 		cube = std::make_unique<static_meshes_3D::Cube>(true, true, false);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, false);
-		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, false);
 		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, false);
 
 		spm.linkAllPrograms();
@@ -127,8 +124,8 @@ void OpenGLWindow::renderScene()
 	{
 		// Render diamond pyramid on bottom
 		const auto cubeSize = 8.0f;
-		auto posModelMatrix = glm::translate(glm::mat4(1.0f), position);
-		auto model = glm::translate(posModelMatrix, glm::vec3(0.0f, cubeSize / 2.0f + 3.0f, 0.0f));
+		auto model = glm::translate(glm::mat4(1.0f), position);
+		model = glm::translate(model, glm::vec3(0.0f, cubeSize / 2.0f + 3.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -148,8 +145,8 @@ void OpenGLWindow::renderScene()
 	for (const auto& position : pyramidPositions)
 	{
 		const auto pyramidSize = 10.0f;
-		auto posModelMatrix = glm::translate(glm::mat4(1.0f), position);
-		auto model = glm::translate(posModelMatrix, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
+		auto model = glm::translate(glm::mat4(1.0f), position);
+		model = glm::translate(model, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
 		
@@ -176,9 +173,10 @@ void OpenGLWindow::releaseScene()
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
 	TextureManager::getInstance().clearTextureCache();
 	SamplerManager::getInstance().clearSamplerCache();
+	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
 	pyramid.reset();
-	torus.reset();
+	cube.reset();
 	plainGround.reset();
 }
 
