@@ -144,6 +144,7 @@ void OpenGLWindow::releaseScene()
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
 	TextureManager::getInstance().clearTextureCache();
 	SamplerManager::getInstance().clearSamplerCache();
+	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
 	pyramid.reset();
 	torus.reset();
