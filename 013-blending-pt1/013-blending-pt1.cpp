@@ -75,7 +75,6 @@ void OpenGLWindow::initializeScene()
 		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
 		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
 		TextureManager::getInstance().loadTexture2D("diamond", "data/textures/diamond.png");
-		TextureManager::getInstance().loadTexture2D("metal", "data/textures/metal.png");
 		
 		cube = std::make_unique<static_meshes_3D::Cube>(true, true, false);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, false);
