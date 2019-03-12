@@ -49,7 +49,7 @@ public:
 	Uniform& operator[](const std::string& varName);
 
 	// Model and normal matrix setting is pretty common, that's why this convenience function
-	void setModelAndNormalMatrix(const std::string& modelMatrixName, const std::string& normalMatrixName, const glm::mat4& modelMatrix);
+	void setModelAndNormalMatrix(const glm::mat4& modelMatrix);
 
 private:
 

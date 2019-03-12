@@ -108,6 +108,28 @@ void Uniform::set(const int* integerValues, int count)
 	glUniform1iv(_location, count, (GLint*)integerValues);
 }
 
+Uniform& Uniform::operator=(const bool boolValue)
+{
+	set(boolValue);
+	return *this;
+}
+
+void Uniform::set(const bool boolValue)
+{
+	set(boolValue ? 1 : 0);
+}
+
+void Uniform::set(const bool* boolValue, int count)
+{
+	std::vector<int> integerValues;
+	for (auto i = 0; i < count; i++)
+	{
+		integerValues[i] = boolValue[i] ? 1 : 0;
+	}
+
+	set(integerValues.data(), count);
+}
+
 // Family of functions setting 3x3 matrices uniforms
 
 Uniform& Uniform::operator=(const glm::mat3 & matrix)
