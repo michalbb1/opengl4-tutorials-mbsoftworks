@@ -1,7 +1,7 @@
 #version 440 core
 
-#include "../common/ambientLight.frag"
-#include "../common/diffuseLight.frag"
+#include "../lighting/ambientLight.frag"
+#include "../lighting/diffuseLight.frag"
 #include "../common/utility.frag"
 
 layout(location = 0) out vec4 outputColor;

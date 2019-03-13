@@ -19,6 +19,9 @@
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
+#include "../common_classes/shader_structs/ambientLight.h"
+#include "../common_classes/shader_structs/diffuseLight.h"
+
 #include "HUD014.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
@@ -29,9 +32,10 @@ std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
 std::unique_ptr<HUD014> hud;
 
-float ambientColorComponent = 0.25f;
-float diffuseFactor = 0.75f;
 float rotationAngleRad = 0.0f;
+
+shader_structs::AmbientLight ambientLight(glm::vec3(0.25f, 0.25f, 0.25f));
+shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0.75f);
 
 std::vector<glm::vec3> pyramidPositions
 {
@@ -62,7 +66,6 @@ std::vector<glm::vec3> torusPositions
 
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0.02f, 0.682f, 1.0f, 1.0f);
 	try
 	{
 		auto& sm = ShaderManager::getInstance();
@@ -71,8 +74,8 @@ void OpenGLWindow::initializeScene()
 
 		sm.loadVertexShader("tut014_main", "data/shaders/tut014-diffuse-lighting/shader.vert");
 		sm.loadFragmentShader("tut014_main", "data/shaders/tut014-diffuse-lighting/shader.frag");
-		sm.loadFragmentShader("ambientLight", "data/shaders/common/ambientLight.frag");
-		sm.loadFragmentShader("diffuseLight", "data/shaders/common/diffuseLight.frag");
+		sm.loadFragmentShader("ambientLight", "data/shaders/lighting/ambientLight.frag");
+		sm.loadFragmentShader("diffuseLight", "data/shaders/lighting/diffuseLight.frag");
 		sm.loadFragmentShader("utility", "data/shaders/common/utility.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
@@ -114,8 +117,8 @@ void OpenGLWindow::renderScene()
 	const auto& tm = TextureManager::getInstance();
 	auto& mm = MatrixManager::getInstance();
 
-	auto ambientColor = glm::vec3(ambientColorComponent, ambientColorComponent, ambientColorComponent);
-	glClearColor(0.02f*ambientColorComponent, 0.682f*ambientColorComponent, 1.0f*ambientColorComponent, 1.0f);
+	auto clearColor = glm::vec4(0.02f, 0.682f, 1.0f, 1.0f)*glm::vec4(ambientLight.getColor(), 1.0f);
+	glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Set matrices in matrix manager
@@ -133,18 +136,17 @@ void OpenGLWindow::renderScene()
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 
-	mainProgram["ambientLight.color"] = ambientColor;
-	mainProgram["ambientLight.isOn"] = true;
-	mainProgram["diffuseLight.isOn"] = false;
+	ambientLight.setUniform(mainProgram, "ambientLight");
+	diffuseLight.setDirection(glm::normalize(camera.getViewPoint() - camera.getEye()));
+	diffuseLight.setOn(false);
+	diffuseLight.setUniform(mainProgram, "diffuseLight");
 
 	// Render grass ground
 	TextureManager::getInstance().getTexture("grass").bind(0);
 	plainGround->render();
 
-	mainProgram["diffuseLight.color"] = glm::vec3(1.0f, 1.0f, 1.0f);
-	mainProgram["diffuseLight.direction"] = glm::normalize(camera.getViewPoint() - camera.getEye());
-	mainProgram["diffuseLight.isOn"] = true;
-	mainProgram["diffuseLight.factor"] = diffuseFactor;
+	diffuseLight.setOn(true);
+	diffuseLight.setUniform(mainProgram, "diffuseLight");
 
 	// Render all the crates (as simple cubes)
 	for (const auto& position : cratePositions)
@@ -188,7 +190,7 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Render HUD
-	hud->renderHUD(ambientColor, diffuseFactor);
+	hud->renderHUD(ambientLight.getColor(), diffuseLight.getFactor());
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(45.0f));
@@ -219,19 +221,23 @@ void OpenGLWindow::handleInput()
 	}
 
 	if (keyPressed(GLFW_KEY_1)) {
-		diffuseFactor -= sof(0.25f);
+		diffuseLight.setFactor(diffuseLight.getFactor() - sof(0.25f));
 	}
 
 	if (keyPressed(GLFW_KEY_2)) {
-		diffuseFactor += sof(0.25f);
+		diffuseLight.setFactor(diffuseLight.getFactor() + sof(0.25f));
 	}
 
 	if (keyPressed(GLFW_KEY_3)) {
-		ambientColorComponent -= sof(0.25f);
+		float ambientColorChange = sof(0.25f);
+		glm::vec3 newColor = ambientLight.getColor() - glm::vec3(ambientColorChange, ambientColorChange, ambientColorChange);
+		ambientLight.setColor(newColor);
 	}
 
 	if (keyPressed(GLFW_KEY_4)) {
-		ambientColorComponent += sof(0.25f);
+		float ambientColorChange = sof(0.25f);
+		glm::vec3 newColor = ambientLight.getColor() + glm::vec3(ambientColorChange, ambientColorChange, ambientColorChange);
+		ambientLight.setColor(newColor);
 	}
 
 	int posX, posY, width, height;
