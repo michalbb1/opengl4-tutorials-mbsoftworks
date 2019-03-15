@@ -43,6 +43,11 @@ public:
 	void set(const int integerValue);
 	void set(const int* integerValues, int count = 1);
 
+	// Family of functions setting boolean uniforms
+	Uniform& operator=(const bool boolValue);
+	void set(const bool boolValue);
+	void set(const bool* boolValue, int count = 1);
+
 	// Family of functions setting 3x3 matrices uniforms
 	Uniform& operator=(const glm::mat3& matrix);
 	void set(const glm::mat3& matrix);

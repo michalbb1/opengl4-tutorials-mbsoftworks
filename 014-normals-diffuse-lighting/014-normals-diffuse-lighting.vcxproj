@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{E306D078-0361-4983-9DC4-6E6330C7DFC2}</ProjectGuid>
-    <RootNamespace>My013blendingpt1</RootNamespace>
+    <ProjectGuid>{7CA4F9FD-5AD0-4B7E-9631-0313AA3E3E9F}</ProjectGuid>
+    <RootNamespace>My014normalsdiffuselighting</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -29,27 +29,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -135,11 +135,15 @@
     <ClCompile Include="..\common_classes\shaderManager.cpp" />
     <ClCompile Include="..\common_classes\shaderProgram.cpp" />
     <ClCompile Include="..\common_classes\shaderProgramManager.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\ambientLight.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\diffuseLight.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\shaderStruct.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.cpp" />
     <ClCompile Include="..\common_classes\texture.cpp" />
@@ -147,8 +151,8 @@
     <ClCompile Include="..\common_classes\uniform.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
-    <ClCompile Include="013-blending-pt1.cpp" />
-    <ClCompile Include="HUD013.cpp" />
+    <ClCompile Include="014-normals-diffuse-lighting.cpp" />
+    <ClCompile Include="HUD014.cpp" />
     <ClCompile Include="main_windows.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,16 +162,21 @@
     <ClInclude Include="..\common_classes\HUD.h" />
     <ClInclude Include="..\common_classes\matrixManager.h" />
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\ostreamUtils.h" />
     <ClInclude Include="..\common_classes\sampler.h" />
     <ClInclude Include="..\common_classes\samplerManager.h" />
     <ClInclude Include="..\common_classes\shader.h" />
     <ClInclude Include="..\common_classes\shaderManager.h" />
     <ClInclude Include="..\common_classes\shaderProgram.h" />
     <ClInclude Include="..\common_classes\shaderProgramManager.h" />
+    <ClInclude Include="..\common_classes\shader_structs\ambientLight.h" />
+    <ClInclude Include="..\common_classes\shader_structs\diffuseLight.h" />
+    <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.h" />
     <ClInclude Include="..\common_classes\stringUtils.h" />
@@ -177,7 +186,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
-    <ClInclude Include="HUD013.h" />
+    <ClInclude Include="HUD014.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
