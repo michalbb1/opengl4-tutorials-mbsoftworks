@@ -182,6 +182,7 @@ void OpenGLWindow::releaseScene()
 	SamplerManager::getInstance().clearSamplerCache();
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
+	hud.reset();
 	pyramid.reset();
 	cube.reset();
 	plainGround.reset();
