@@ -24,6 +24,9 @@ public:
 
 	DEFINE_SHADER_CONSTANT(color, "color");
 	DEFINE_SHADER_CONSTANT(sampler, "sampler");
+
+	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
+	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
 };
 
 /**
