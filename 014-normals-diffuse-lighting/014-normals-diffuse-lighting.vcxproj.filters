@@ -155,9 +155,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HUD014.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common_classes\flyingCamera.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
@@ -244,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h">
       <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD014.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\ostreamUtils.h">
+      <Filter>Header Files\common_classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

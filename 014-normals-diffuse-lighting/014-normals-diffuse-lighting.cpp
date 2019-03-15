@@ -33,7 +33,7 @@ std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
 std::unique_ptr<HUD014> hud;
 
 float rotationAngleRad = 0.0f;
-
+bool isDirectionLocked = false;
 shader_structs::AmbientLight ambientLight(glm::vec3(0.25f, 0.25f, 0.25f));
 shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0.75f);
 
@@ -55,7 +55,7 @@ std::vector<glm::vec3> cratePositions
 	glm::vec3(-30.0f, 0.0f, 80.0f),
 };
 
-std::vector<glm::vec3> torusPositions
+std::vector<glm::vec3> toriPositions
 {
 	glm::vec3(30.0f, 5.0f, -80.0f),
 	glm::vec3(-30.0f, 5.0f, -40.0f),
@@ -117,7 +117,7 @@ void OpenGLWindow::renderScene()
 	const auto& tm = TextureManager::getInstance();
 	auto& mm = MatrixManager::getInstance();
 
-	auto clearColor = glm::vec4(0.02f, 0.682f, 1.0f, 1.0f)*glm::vec4(ambientLight.getColor(), 1.0f);
+	const auto clearColor = glm::vec4(0.02f, 0.682f, 1.0f, 1.0f)*glm::vec4(ambientLight.getColorContribution(), 1.0f);
 	glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -135,18 +135,19 @@ void OpenGLWindow::renderScene()
 	mainProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
+	
+	// Set up ambient light in the shader programs
+	ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
 
-	ambientLight.setUniform(mainProgram, "ambientLight");
-	diffuseLight.setDirection(glm::normalize(camera.getViewPoint() - camera.getEye()));
-	diffuseLight.setOn(false);
-	diffuseLight.setUniform(mainProgram, "diffuseLight");
+	// Set up diffuse light and set the light's direction to the camera direction
+	if (!isDirectionLocked) {
+		diffuseLight.direction = glm::normalize(camera.getViewPoint() - camera.getEye());
+	}
+	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
 
 	// Render grass ground
 	TextureManager::getInstance().getTexture("grass").bind(0);
 	plainGround->render();
-
-	diffuseLight.setOn(true);
-	diffuseLight.setUniform(mainProgram, "diffuseLight");
 
 	// Render all the crates (as simple cubes)
 	for (const auto& position : cratePositions)
@@ -178,11 +179,10 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Finally render tori
-	for (const auto& position : torusPositions)
+	for (const auto& position : toriPositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::rotate(model, rotationAngleRad+90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-
 		mainProgram.setModelAndNormalMatrix(model);
 
 		TextureManager::getInstance().getTexture("white_marble").bind(0);
@@ -190,7 +190,7 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Render HUD
-	hud->renderHUD(ambientLight.getColor(), diffuseLight.getFactor());
+	hud->renderHUD(ambientLight, diffuseLight);
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(45.0f));
@@ -204,6 +204,7 @@ void OpenGLWindow::releaseScene()
 	SamplerManager::getInstance().clearSamplerCache();
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
+	hud.reset();
 	pyramid.reset();
 	cube.reset();
 	torus.reset();
@@ -221,23 +222,43 @@ void OpenGLWindow::handleInput()
 	}
 
 	if (keyPressed(GLFW_KEY_1)) {
-		diffuseLight.setFactor(diffuseLight.getFactor() - sof(0.25f));
+		ambientLight.color -= glm::vec3(sof(0.25f));
+		if (ambientLight.color.r < 0.0f) {
+			ambientLight.color = glm::vec3(0.0f);
+		}
 	}
 
 	if (keyPressed(GLFW_KEY_2)) {
-		diffuseLight.setFactor(diffuseLight.getFactor() + sof(0.25f));
+		ambientLight.color += glm::vec3(sof(0.25f));
+		if (ambientLight.color.r > 1.0f) {
+			ambientLight.color = glm::vec3(1.0f);
+		}
 	}
 
 	if (keyPressed(GLFW_KEY_3)) {
-		float ambientColorChange = sof(0.25f);
-		glm::vec3 newColor = ambientLight.getColor() - glm::vec3(ambientColorChange, ambientColorChange, ambientColorChange);
-		ambientLight.setColor(newColor);
+		diffuseLight.factor -= sof(0.25f);
+		if (diffuseLight.factor < 0.0f) {
+			diffuseLight.factor = 0.0f;
+		}
 	}
 
 	if (keyPressed(GLFW_KEY_4)) {
-		float ambientColorChange = sof(0.25f);
-		glm::vec3 newColor = ambientLight.getColor() + glm::vec3(ambientColorChange, ambientColorChange, ambientColorChange);
-		ambientLight.setColor(newColor);
+		diffuseLight.factor += sof(0.25f);
+		if (diffuseLight.factor > 1.0f) {
+			diffuseLight.factor = 1.0f;
+		}
+	}
+
+	if (keyPressedOnce(GLFW_KEY_Z)) {
+		ambientLight.isOn = !ambientLight.isOn;
+	}
+
+	if (keyPressedOnce(GLFW_KEY_X)) {
+		diffuseLight.isOn = !diffuseLight.isOn;
+	}
+
+	if (keyPressedOnce(GLFW_KEY_L)) {
+		isDirectionLocked = !isDirectionLocked;
 	}
 
 	int posX, posY, width, height;

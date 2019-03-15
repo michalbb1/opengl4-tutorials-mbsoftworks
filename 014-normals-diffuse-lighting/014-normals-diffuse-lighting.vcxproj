@@ -156,6 +156,7 @@
     <ClInclude Include="..\common_classes\HUD.h" />
     <ClInclude Include="..\common_classes\matrixManager.h" />
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\ostreamUtils.h" />
     <ClInclude Include="..\common_classes\sampler.h" />
     <ClInclude Include="..\common_classes\samplerManager.h" />
     <ClInclude Include="..\common_classes\shader.h" />
