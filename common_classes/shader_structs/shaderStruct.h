@@ -4,7 +4,7 @@
 
 namespace shader_structs {
 
-class ShaderStruct
+struct ShaderStruct
 {
 public:
 	virtual void setUniform(ShaderProgram& shaderProgram, const std::string& uniformName) const = 0;

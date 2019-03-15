@@ -3,35 +3,20 @@
 namespace shader_structs {
 
 AmbientLight::AmbientLight(const glm::vec3& color, const bool isOn)
-	: _color(color)
-	, _isOn(isOn)
+	: color(color)
+	, isOn(isOn)
 {
 }
 
 void AmbientLight::setUniform(ShaderProgram& shaderProgram, const std::string& uniformName) const
 {
-	shaderProgram[constructAttributeName(uniformName, "color")] = _color;
-	shaderProgram[constructAttributeName(uniformName, "isOn")] = _isOn;
+	shaderProgram[constructAttributeName(uniformName, "color")] = color;
+	shaderProgram[constructAttributeName(uniformName, "isOn")] = isOn;
 }
 
-glm::vec3 AmbientLight::getColor() const
+glm::vec3 AmbientLight::getColorContribution() const
 {
-	return _color;
-}
-
-void AmbientLight::setColor(const glm::vec3& color)
-{
-	_color = color;
-}
-
-bool AmbientLight::isOn() const
-{
-	return _isOn;
-}
-
-void AmbientLight::setOn(const bool isOn)
-{
-	_isOn = isOn;
+	return isOn ? color : glm::vec3(0.0f);
 }
 
 } // namespace shader_structs
