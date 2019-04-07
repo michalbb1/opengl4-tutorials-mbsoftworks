@@ -34,6 +34,8 @@ std::unique_ptr<HUD015> hud;
 
 float rotationAngleRad = 0.0f;
 bool isDirectionLocked = false;
+bool displayNormals = true;
+float normalLength = 1.0f;
 shader_structs::AmbientLight ambientLight(glm::vec3(0.25f, 0.25f, 0.25f));
 shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0.75f);
 
@@ -78,12 +80,21 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader("diffuseLight", "data/shaders/lighting/diffuseLight.frag");
 		sm.loadFragmentShader("utility", "data/shaders/common/utility.frag");
 
+		sm.loadVertexShader("normals", "data/shaders/normals/normals.vert");
+		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
+		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
+
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
+
+		auto& normalsShaderProgram = spm.createShaderProgram("normals");
+		normalsShaderProgram.addShaderToProgram(sm.getVertexShader("normals"));
+		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
+		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
 
 		hud = std::make_unique<HUD015>(*this);
 		
@@ -150,6 +161,7 @@ void OpenGLWindow::renderScene()
 	plainGround->render();
 
 	// Render all the crates (as simple cubes)
+	std::vector<glm::mat4> crateModelMatrices;
 	for (const auto& position : cratePositions)
 	{
 		const auto crateSize = 8.0f;
@@ -159,6 +171,7 @@ void OpenGLWindow::renderScene()
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(crateSize, crateSize, crateSize));
+		crateModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
 
 		TextureManager::getInstance().getTexture("crate").bind(0);
@@ -166,12 +179,14 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Proceed with rendering rocky pyramids
+	std::vector<glm::mat4> pyramidModelMatrices;
 	for (const auto& position : pyramidPositions)
 	{
 		const auto pyramidSize = 10.0f;
 		auto model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::translate(model, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
+		pyramidModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
 
 		TextureManager::getInstance().getTexture("rocky_terrain").bind(0);
@@ -179,61 +194,55 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Finally render tori
+	std::vector<glm::mat4> torusModelMatrices;
 	for (const auto& position : toriPositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::rotate(model, rotationAngleRad+90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		pyramidModelMatrices.push_back(model);
+		torusModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
 
 		TextureManager::getInstance().getTexture("white_marble").bind(0);
 		torus->render();
 	}
 
-	// Set up some common properties in the main shader program
-	auto& normalsProgram = spm.getShaderProgram("normals");
-	normalsProgram.useProgram();
-	normalsProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
-	normalsProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
-
-	// Render all the crates (as simple cubes)
-	for (const auto& position : cratePositions)
+	if (displayNormals)
 	{
-		const auto crateSize = 8.0f;
-		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::translate(model, glm::vec3(0.0f, crateSize / 2.0f + 3.0f, 0.0f));
-		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::scale(model, glm::vec3(crateSize, crateSize, crateSize));
-		normalsProgram.setModelAndNormalMatrix(model);
+		// Set up some common properties in the normals shader program
+		auto& normalsShaderProgram = spm.getShaderProgram("normals");
+		normalsShaderProgram.useProgram();
+		normalsShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
+		normalsShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
+		normalsShaderProgram[ShaderConstants::normalLength()] = normalLength;
 
-		cube->render();
-	}
+		// Render all the crates points
+		auto matrixIt = crateModelMatrices.cbegin();
+		for (const auto& position : cratePositions)
+		{
+			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
+			cube->renderPoints();
+		}
 
-	// Proceed with rendering rocky pyramids
-	for (const auto& position : pyramidPositions)
-	{
-		const auto pyramidSize = 10.0f;
-		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::translate(model, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
-		normalsProgram.setModelAndNormalMatrix(model);
+		// Proceed with rendering pyramids points
+		matrixIt = pyramidModelMatrices.cbegin();
+		for (const auto& position : pyramidPositions)
+		{
+			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
+			pyramid->renderPoints();
+		}
 
-		pyramid->render();
-	}
-
-	// Finally render tori
-	for (const auto& position : toriPositions)
-	{
-		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::rotate(model, rotationAngleRad + 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		normalsProgram.setModelAndNormalMatrix(model);
-
-		torus->render();
+		// Finally render tori points
+		matrixIt = torusModelMatrices.cbegin();
+		for (const auto& position : toriPositions)
+		{
+			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
+			torus->renderPoints();
+		}
 	}
 
 	// Render HUD
-	hud->renderHUD(ambientLight, diffuseLight);
+	hud->renderHUD(ambientLight, diffuseLight, displayNormals, normalLength);
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(45.0f));
@@ -262,6 +271,18 @@ void OpenGLWindow::handleInput()
 
 	if (keyPressedOnce(GLFW_KEY_F3)) {
 		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+	}
+
+	if (keyPressedOnce(GLFW_KEY_N)) {
+		displayNormals = !displayNormals;
+	}
+
+	if (keyPressed(GLFW_KEY_KP_ADD)) {
+		normalLength += sof(2.0f);
+	}
+
+	if (keyPressed(GLFW_KEY_KP_SUBTRACT)) {
+		normalLength -= sof(2.0f);
 	}
 
 	if (keyPressed(GLFW_KEY_1)) {

@@ -18,7 +18,7 @@ HUD015::HUD015(const OpenGLWindow& window)
 	});
 }
 
-void HUD015::renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::DiffuseLight& diffuseLight) const
+void HUD015::renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::DiffuseLight& diffuseLight, const bool displayNormals, const float normalLength) const
 {
 	printBuilder().print(10, 10, "FPS: {}", _window.getFPS());
 	printBuilder().print(10, 40, "Vertical Synchronization: {} (Press F3 to toggle)", _window.isVerticalSynchronizationEnabled() ? "On" : "Off");
@@ -31,6 +31,10 @@ void HUD015::renderHUD(const shader_structs::AmbientLight& ambientLight, const s
 	printBuilder().print(10, 130, "Diffuse light: {} (Press 'X' to toggle)", diffuseLight.isOn ? "On" : "Off");
 	printBuilder().print(10, 160, " - factor: {} (Press '3' and '4' to change)", diffuseLight.factor);
 	printBuilder().print(10, 190, " - direction: {} (Press 'L' to lock)", diffuseLight.direction);
+	
+	// Print information about displaying normals
+	printBuilder().fromBottom().print(10, 40, "Display Normals: {} (Press 'N' to toggle)", displayNormals ? "On" : "Off");
+	printBuilder().fromBottom().print(10, 10, "Normal length: {} (Press '+' and '-' to change)", normalLength);
 
 	printBuilder()
 		.fromRight()
