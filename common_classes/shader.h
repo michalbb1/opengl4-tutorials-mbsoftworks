@@ -27,6 +27,7 @@ public:
 
 	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
 	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
+	DEFINE_SHADER_CONSTANT(normalLength, "normalLength");
 };
 
 /**
