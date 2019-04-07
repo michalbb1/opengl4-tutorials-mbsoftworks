@@ -23,14 +23,14 @@ void Torus::initializeData()
 	}
 
 	// Calculate and cache counts of vertices and indices
-	const auto numVertices = (_mainSegments+1)*(_tubeSegments+1);
-	_primitiveRestartIndex = numVertices;
+	_numVertices = (_mainSegments+1)*(_tubeSegments+1);
+	_primitiveRestartIndex = _numVertices;
 	_numIndices = (_mainSegments * 2 * (_tubeSegments + 1)) + _mainSegments - 1;
 
 	// Generate VAO and VBOs for vertex attributes and indices
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
-	_vbo.createVBO(getVertexByteSize() * numVertices);
+	_vbo.createVBO(getVertexByteSize() * _numVertices);
 	_indicesVBO.createVBO(sizeof(GLuint)*_numIndices);
 
 	// Precalculate steps in radians for main segment and tube segment
@@ -146,7 +146,7 @@ void Torus::initializeData()
 
 	_vbo.bindVBO();
 	_vbo.uploadDataToGPU(GL_STATIC_DRAW);
-	setVertexAttributesPointers(numVertices);
+	setVertexAttributesPointers(_numVertices);
 
 	_indicesVBO.bindVBO(GL_ELEMENT_ARRAY_BUFFER);
 	_indicesVBO.uploadDataToGPU(GL_STATIC_DRAW);
@@ -170,6 +170,18 @@ void Torus::render() const
 
 	// Disable primitive restart, we won't need it now
 	glDisable(GL_PRIMITIVE_RESTART);
+}
+
+void Torus::renderPoints() const
+{
+	if (!_isInitialized) {
+		return;
+	}
+
+	glBindVertexArray(_vao);
+
+	// Render torus points only
+	glDrawArrays(GL_POINTS, 0, _numVertices);
 }
 
 float Torus::getMainRadius() const

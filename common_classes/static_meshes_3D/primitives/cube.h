@@ -24,6 +24,7 @@ public:
 	Cube(bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
 	void render() const override;
+	void renderPoints() const override;
 	void renderFaces(int facesBitmask) const;
 
 	static glm::vec3 vertices[36]; //!< Array of mesh vertices

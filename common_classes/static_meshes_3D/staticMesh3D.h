@@ -20,6 +20,9 @@ public:
 	/** \brief  Renders static mesh. */
 	virtual void render() const = 0;
 
+	/** \brief  Renders static mesh as points only. */
+	virtual void renderPoints() const {}
+
 	/** \brief  Deletes static mesh data. */
 	void deleteMesh();
 

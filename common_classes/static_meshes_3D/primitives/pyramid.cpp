@@ -29,8 +29,22 @@ Pyramid::Pyramid(bool withPositions, bool withTextureCoordinates, bool withNorma
 
 void Pyramid::render() const
 {
+	if (!_isInitialized) {
+		return;
+	}
+
 	glBindVertexArray(_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 12);
+}
+
+void Pyramid::renderPoints() const
+{
+	if (!_isInitialized) {
+		return;
+	}
+
+	glBindVertexArray(_vao);
+	glDrawArrays(GL_POINTS, 0, 12);
 }
 
 void Pyramid::initializeData()
