@@ -25,7 +25,7 @@ ShaderProgram& ShaderProgramManager::getShaderProgram(const std::string& key) co
 {
 	if (!containsShaderProgram(key))
 	{
-		auto msg = "Attempting to get non-existing texture with key '" + key + "'!";
+		auto msg = "Attempting to get non-existing shader program with key '" + key + "'!";
 		throw std::runtime_error(msg.c_str());
 	}
 

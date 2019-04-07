@@ -42,6 +42,24 @@ void ShaderManager::loadFragmentShader(const std::string& key, const std::string
 	_fragmentShaderCache[key] = std::move(fragmentShader);
 }
 
+void ShaderManager::loadGeometryShader(const std::string & key, const std::string & filePath)
+{
+	if (containsGeometryShader(key))
+	{
+		auto msg = "Geometry shader with key '" + key + "' already exists!";
+		throw std::runtime_error(msg.c_str());
+	}
+
+	auto geometryShader = std::make_unique<Shader>();
+	if (!geometryShader->loadShaderFromFile(filePath, GL_GEOMETRY_SHADER))
+	{
+		auto msg = "Could not load geometry shader '" + filePath + "'!";
+		throw std::runtime_error(msg);
+	}
+
+	_geometryShaderCache[key] = std::move(geometryShader);
+}
+
 const Shader& ShaderManager::getVertexShader(const std::string& key) const
 {
 	if (!containsVertexShader(key))
@@ -64,10 +82,22 @@ const Shader& ShaderManager::getFragmentShader(const std::string& key) const
 	return *_fragmentShaderCache.at(key);
 }
 
+const Shader& ShaderManager::getGeometryShader(const std::string & key) const
+{
+	if (!containsGeometryShader(key))
+	{
+		auto msg = "Attempting to get non-existing geometry shader with key '" + key + "'!";
+		throw std::runtime_error(msg.c_str());
+	}
+
+	return *_geometryShaderCache.at(key);
+}
+
 void ShaderManager::clearShaderCache()
 {
 	_vertexShaderCache.clear();
 	_fragmentShaderCache.clear();
+	_geometryShaderCache.clear();
 }
 
 bool ShaderManager::containsVertexShader(const std::string& key) const
@@ -78,4 +108,9 @@ bool ShaderManager::containsVertexShader(const std::string& key) const
 bool ShaderManager::containsFragmentShader(const std::string& key) const
 {
 	return _fragmentShaderCache.count(key) > 0;
+}
+
+bool ShaderManager::containsGeometryShader(const std::string & key) const
+{
+	return _geometryShaderCache.count(key) > 0;
 }

@@ -248,5 +248,8 @@
     <ClInclude Include="..\common_classes\ostreamUtils.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

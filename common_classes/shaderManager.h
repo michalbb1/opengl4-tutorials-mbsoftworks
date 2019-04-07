@@ -30,6 +30,11 @@ public:
 	*/
 	void loadFragmentShader(const std::string& key, const std::string &filePath);
 
+	/** \brief  Creates new geometry shader and stores it with specified key.
+	*   \param  key Key to store geometry shader with
+	*/
+	void loadGeometryShader(const std::string& key, const std::string &filePath);
+
 	/** \brief  Retrieves vertex shader with a specified key.
 	*   \param  key Key to restore vertex shader from
 	*   \return Vertex shader instance from a specified key.
@@ -41,6 +46,12 @@ public:
 	*   \return Fragment shader instance from a specified key.
 	*/
 	const Shader& getFragmentShader(const std::string& key) const;
+
+	/** \brief  Retrieves geometry shader with a specified key.
+	*   \param  key Key to restore geometry shader from
+	*   \return Geometry shader instance from a specified key.
+	*/
+	const Shader& getGeometryShader(const std::string& key) const;
 
 	/** \brief  Deletes all the shaders loaded and clears the shaders cache. */
 	void clearShaderCache();
@@ -60,6 +71,13 @@ private:
 	*/
 	bool containsFragmentShader(const std::string& key) const;
 
+	/** \brief  Checks, if geometry shader with specified key exists.
+	*   \param  key Geometry shader key to check existence of
+	*   \return True if geometry shader exists, or false otherwise.
+	*/
+	bool containsGeometryShader(const std::string& key) const;
+
 	std::map<std::string, std::unique_ptr<Shader>> _vertexShaderCache; //!< Vertex shader cache - stores vertex shaders within their keys in std::map
 	std::map<std::string, std::unique_ptr<Shader>> _fragmentShaderCache; //!< Fragment shader cache - stores fragment shaders within their keys in std::map
+	std::map<std::string, std::unique_ptr<Shader>> _geometryShaderCache; //!< Gemetry shader cache - stores geometry shaders within their keys in std::map
 };

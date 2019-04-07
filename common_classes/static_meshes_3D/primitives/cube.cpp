@@ -52,6 +52,16 @@ void Cube::render() const
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
+void Cube::renderPoints() const
+{
+	if (!_isInitialized) {
+		return;
+	}
+
+	glBindVertexArray(_vao);
+	glDrawArrays(GL_POINTS, 0, 36);
+}
+
 void Cube::renderFaces(int facesBitmask) const
 {
 	if (!_isInitialized) {

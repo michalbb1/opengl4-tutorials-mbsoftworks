@@ -18,6 +18,7 @@ public:
 	Pyramid(bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
 	void render() const override;
+	void renderPoints() const override;
 
 	static glm::vec3 vertices[12]; //!< Array of mesh vertices
 	static glm::vec2 textureCoordinates[3]; //!< Array of mesh texture coordinates
