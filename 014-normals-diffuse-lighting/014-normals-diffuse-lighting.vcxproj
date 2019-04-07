@@ -174,6 +174,7 @@
     <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h" />
