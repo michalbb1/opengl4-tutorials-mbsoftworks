@@ -14,7 +14,7 @@
 #include "../common_classes/freeTypeFontManager.h"
 #include "../common_classes/matrixManager.h"
 
-#include "../common_classes/static_meshes_3D/plainGround.h"
+#include "../common_classes/static_meshes_3D/heightmap.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
@@ -29,7 +29,7 @@ FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0
 std::unique_ptr<static_meshes_3D::Cube> cube;
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
 std::unique_ptr<static_meshes_3D::Torus> torus;
-std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
+std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
 std::unique_ptr<HUD016> hud;
 
 float rotationAngleRad = 0.0f;
@@ -84,6 +84,9 @@ void OpenGLWindow::initializeScene()
 		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
 		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
 
+		sm.loadVertexShader("heightmap_basic", "data/shaders/heightmap/basic.vert");
+		sm.loadFragmentShader("heightmap_basic", "data/shaders/heightmap/basic.frag");
+
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
@@ -96,6 +99,10 @@ void OpenGLWindow::initializeScene()
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
 
+		auto& heightmapShaderProgram = spm.createShaderProgram("heightmap_basic");
+		heightmapShaderProgram.addShaderToProgram(sm.getVertexShader("heightmap_basic"));
+		heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("heightmap_basic"));
+
 		hud = std::make_unique<HUD016>(*this);
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
@@ -107,7 +114,16 @@ void OpenGLWindow::initializeScene()
 		cube = std::make_unique<static_meshes_3D::Cube>(true, true, true);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, true);
-		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, true);
+
+		static_meshes_3D::Heightmap::GeneratorParameters genParams;
+		genParams.rows = 200;
+		genParams.cols = 200;
+		genParams.numHills = 100;
+		genParams.hillRadiusMin = 10;
+		genParams.hillRadiusMax = 41;
+		genParams.hillMinHeight = 0.1f;
+		genParams.hillMaxHeight = 0.2f;
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>(genParams, true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -155,10 +171,6 @@ void OpenGLWindow::renderScene()
 		diffuseLight.direction = glm::normalize(camera.getViewPoint() - camera.getEye());
 	}
 	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
-
-	// Render grass ground
-	TextureManager::getInstance().getTexture("grass").bind(0);
-	plainGround->render();
 
 	// Render all the crates (as simple cubes)
 	std::vector<glm::mat4> crateModelMatrices;
@@ -241,6 +253,17 @@ void OpenGLWindow::renderScene()
 		}
 	}
 
+	// Render grass ground
+	auto& heightmapShaderProgram = spm.getShaderProgram("heightmap_basic");
+	heightmapShaderProgram.useProgram();
+	heightmapShaderProgram["sampler"] = 0;
+	heightmapShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
+	heightmapShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
+	heightmapShaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	heightmapShaderProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
+	TextureManager::getInstance().getTexture("grass").bind(0);
+	heightmap->render();
+
 	// Render HUD
 	hud->renderHUD(ambientLight, diffuseLight, displayNormals, normalLength);
 
@@ -260,7 +283,7 @@ void OpenGLWindow::releaseScene()
 	pyramid.reset();
 	cube.reset();
 	torus.reset();
-	plainGround.reset();
+	heightmap.reset();
 }
 
 void OpenGLWindow::handleInput()

@@ -56,7 +56,7 @@ protected:
 	VertexBufferObject _vbo; //!< Our VBO wrapper class holding static mesh data
 
 	/** \brief  Initializes vertex data. */
-	virtual void initializeData() = 0;
+	virtual void initializeData() {};
 
 	/** \brief  Sets vertex attribute pointers in a standard way. */
 	void setVertexAttributesPointers(int numVertices);

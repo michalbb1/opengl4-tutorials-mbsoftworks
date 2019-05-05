@@ -153,6 +153,9 @@
     <ClCompile Include="main_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\heightmap.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="HUD016.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\heightmap.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
