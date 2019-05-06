@@ -13,6 +13,8 @@ public:
 	StaticMeshIndexed3D(bool withPositions, bool withTextureCoordinates, bool withNormals);
 	virtual ~StaticMeshIndexed3D();
 
+	void deleteMesh() override;
+
 protected:
 	VertexBufferObject _indicesVBO; //!< Our VBO wrapper class holding indices data
 };

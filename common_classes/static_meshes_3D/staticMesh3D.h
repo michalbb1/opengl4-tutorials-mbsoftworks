@@ -24,7 +24,7 @@ public:
 	virtual void renderPoints() const {}
 
 	/** \brief  Deletes static mesh data. */
-	void deleteMesh();
+	virtual void deleteMesh();
 
 	/** \brief  Checks, if static mesh has vertex positions.
 	*   \return True if it has or false otherwise.
