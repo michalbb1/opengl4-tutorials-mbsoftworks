@@ -10,14 +10,14 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 
 /**
-  HUD for tutorial 015 (geometry shaders).
+  HUD for tutorial 016 (heightmap pt.1 - random terrain).
 */
-class HUD015 : public HUD
+class HUD016 : public HUD
 {
 public:
-	HUD015(const OpenGLWindow& window);
+	HUD016(const OpenGLWindow& window);
 
 	/** \brief  Renders HUD. */
 	void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
-	void renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::DiffuseLight& diffuseLight, const bool displayNormals, const float normalLength) const;
+	void renderHUD(const bool displayNormals) const;
 };

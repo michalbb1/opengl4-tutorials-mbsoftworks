@@ -24,7 +24,7 @@ public:
 	virtual void renderPoints() const {}
 
 	/** \brief  Deletes static mesh data. */
-	void deleteMesh();
+	virtual void deleteMesh();
 
 	/** \brief  Checks, if static mesh has vertex positions.
 	*   \return True if it has or false otherwise.
@@ -56,7 +56,7 @@ protected:
 	VertexBufferObject _vbo; //!< Our VBO wrapper class holding static mesh data
 
 	/** \brief  Initializes vertex data. */
-	virtual void initializeData() = 0;
+	virtual void initializeData() {};
 
 	/** \brief  Sets vertex attribute pointers in a standard way. */
 	void setVertexAttributesPointers(int numVertices);

@@ -14,7 +14,7 @@
 #include "../common_classes/freeTypeFontManager.h"
 #include "../common_classes/matrixManager.h"
 
-#include "../common_classes/static_meshes_3D/plainGround.h"
+#include "../common_classes/static_meshes_3D/heightmap.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
@@ -22,31 +22,29 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 
-#include "HUD015.h"
+#include "HUD016.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
 std::unique_ptr<static_meshes_3D::Cube> cube;
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
 std::unique_ptr<static_meshes_3D::Torus> torus;
-std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
-std::unique_ptr<HUD015> hud;
+std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
+std::unique_ptr<HUD016> hud;
 
 float rotationAngleRad = 0.0f;
-bool isDirectionLocked = false;
-bool displayNormals = true;
-float normalLength = 1.0f;
-shader_structs::AmbientLight ambientLight(glm::vec3(0.25f, 0.25f, 0.25f));
-shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0.75f);
-
-std::vector<glm::vec3> pyramidPositions
-{
-	glm::vec3(0.0f, 0.0f, -100.0f),
-	glm::vec3(0.0f, 0.0f, -60.0f),
-	glm::vec3(0.0f, 0.0f, -20.0f),
-	glm::vec3(0.0f, 0.0f, 20.0f),
-	glm::vec3(0.0f, 0.0f, 60.0f),
-};
+bool displayNormals = false;
+shader_structs::AmbientLight ambientLight(glm::vec3(0.5f, 0.5f, 0.5f));
+shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)), 0.5f);
+static_meshes_3D::Heightmap::HillAlgorithmParameters hillAlgorithmParams(
+	200,  // Number of rows
+	200,  // Number of columns
+	250,  // Number of generated hills
+	10,   // Minimal hill radius
+	20,   // Maximal hill radius
+	0.1f, // Minimal hill height
+	0.2f  // Maximal hill height
+);
 
 std::vector<glm::vec3> cratePositions
 {
@@ -59,11 +57,11 @@ std::vector<glm::vec3> cratePositions
 
 std::vector<glm::vec3> toriPositions
 {
-	glm::vec3(30.0f, 5.0f, -80.0f),
-	glm::vec3(-30.0f, 5.0f, -40.0f),
-	glm::vec3(30.0f, 5.0f, 0.0f),
-	glm::vec3(-30.0f, 5.0f, 40.0f),
-	glm::vec3(30.0f, 5.0f, 80.0f)
+	glm::vec3(30.0f, 0.0f, -80.0f),
+	glm::vec3(-30.0f, 0.0f, -40.0f),
+	glm::vec3(30.0f, 0.0f, 0.0f),
+	glm::vec3(-30.0f, 0.0f, 40.0f),
+	glm::vec3(30.0f, 0.0f, 80.0f)
 };
 
 void OpenGLWindow::initializeScene()
@@ -96,18 +94,18 @@ void OpenGLWindow::initializeScene()
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
 
-		hud = std::make_unique<HUD015>(*this);
+		hud = std::make_unique<HUD016>(*this);
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
-		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
+		TextureManager::getInstance().loadTexture2D("clay", "data/textures/clay.png");
 		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
-		TextureManager::getInstance().loadTexture2D("rocky_terrain", "data/textures/rocky_terrain.jpg");
 		TextureManager::getInstance().loadTexture2D("white_marble", "data/textures/white_marble.jpg");
 		
 		cube = std::make_unique<static_meshes_3D::Cube>(true, true, true);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, true);
-		plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, true);
+
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -120,6 +118,17 @@ void OpenGLWindow::initializeScene()
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
+}
+
+const glm::vec3 heightMapSize(200.0f, 10.0f, 200.0f);
+
+void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
+{
+	const auto halfWidth = heightMapSize.x / 2.0f;
+	const auto halfDepth = heightMapSize.z / 2.0f;
+
+	row = int(heightmap->getRows() * (position.z + halfDepth) / heightMapSize.z);
+	column = int(heightmap->getColumns() * (position.x + halfWidth) / heightMapSize.x);
 }
 
 void OpenGLWindow::renderScene()
@@ -147,18 +156,16 @@ void OpenGLWindow::renderScene()
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 	
-	// Set up ambient light in the shader programs
+	// Set up ambient light in the shader program
 	ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
-
-	// Set up diffuse light and set the light's direction to the camera direction
-	if (!isDirectionLocked) {
-		diffuseLight.direction = glm::normalize(camera.getViewPoint() - camera.getEye());
-	}
+	// Set up diffuse light
 	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
 
-	// Render grass ground
-	TextureManager::getInstance().getTexture("grass").bind(0);
-	plainGround->render();
+	// Render heightmap
+	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
+	mainProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+	TextureManager::getInstance().getTexture("clay").bind(0);
+	heightmap->render();
 
 	// Render all the crates (as simple cubes)
 	std::vector<glm::mat4> crateModelMatrices;
@@ -166,7 +173,9 @@ void OpenGLWindow::renderScene()
 	{
 		const auto crateSize = 8.0f;
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::translate(model, glm::vec3(0.0f, crateSize / 2.0f + 3.0f, 0.0f));
+		int row = 0, column = 0;
+		getHeightmapRowAndColumn(position, row, column);
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f + crateSize / 2.0f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -178,27 +187,15 @@ void OpenGLWindow::renderScene()
 		cube->render();
 	}
 
-	// Proceed with rendering rocky pyramids
-	std::vector<glm::mat4> pyramidModelMatrices;
-	for (const auto& position : pyramidPositions)
-	{
-		const auto pyramidSize = 10.0f;
-		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::translate(model, glm::vec3(0.0f, pyramidSize / 2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(pyramidSize, pyramidSize, pyramidSize));
-		pyramidModelMatrices.push_back(model);
-		mainProgram.setModelAndNormalMatrix(model);
-
-		TextureManager::getInstance().getTexture("rocky_terrain").bind(0);
-		pyramid->render();
-	}
-
-	// Finally render tori
+	// Render tori
 	std::vector<glm::mat4> torusModelMatrices;
 	for (const auto& position : toriPositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		model = glm::rotate(model, rotationAngleRad+90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		int row = 0, column = 0;
+		getHeightmapRowAndColumn(position, row, column);
+		model = glm::translate(model, glm::vec3(0.0f, 4.5f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+		model = glm::rotate(model, rotationAngleRad + 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		torusModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
 
@@ -213,7 +210,7 @@ void OpenGLWindow::renderScene()
 		normalsShaderProgram.useProgram();
 		normalsShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
 		normalsShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
-		normalsShaderProgram[ShaderConstants::normalLength()] = normalLength;
+		normalsShaderProgram[ShaderConstants::normalLength()] = 0.5f;
 
 		// Render all the crates points
 		auto matrixIt = crateModelMatrices.cbegin();
@@ -223,14 +220,6 @@ void OpenGLWindow::renderScene()
 			cube->renderPoints();
 		}
 
-		// Proceed with rendering pyramids points
-		matrixIt = pyramidModelMatrices.cbegin();
-		for (const auto& position : pyramidPositions)
-		{
-			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
-			pyramid->renderPoints();
-		}
-
 		// Finally render tori points
 		matrixIt = torusModelMatrices.cbegin();
 		for (const auto& position : toriPositions)
@@ -238,10 +227,13 @@ void OpenGLWindow::renderScene()
 			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
 			torus->renderPoints();
 		}
+
+		normalsShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+		heightmap->renderPoints();
 	}
 
 	// Render HUD
-	hud->renderHUD(ambientLight, diffuseLight, displayNormals, normalLength);
+	hud->renderHUD(displayNormals);
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(45.0f));
@@ -259,7 +251,7 @@ void OpenGLWindow::releaseScene()
 	pyramid.reset();
 	cube.reset();
 	torus.reset();
-	plainGround.reset();
+	heightmap.reset();
 }
 
 void OpenGLWindow::handleInput()
@@ -276,52 +268,8 @@ void OpenGLWindow::handleInput()
 		displayNormals = !displayNormals;
 	}
 
-	if (keyPressed(GLFW_KEY_KP_ADD)) {
-		normalLength += sof(2.0f);
-	}
-
-	if (keyPressed(GLFW_KEY_KP_SUBTRACT)) {
-		normalLength -= sof(2.0f);
-	}
-
-	if (keyPressed(GLFW_KEY_1)) {
-		ambientLight.color -= glm::vec3(sof(0.25f));
-		if (ambientLight.color.r < 0.0f) {
-			ambientLight.color = glm::vec3(0.0f);
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_2)) {
-		ambientLight.color += glm::vec3(sof(0.25f));
-		if (ambientLight.color.r > 1.0f) {
-			ambientLight.color = glm::vec3(1.0f);
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_3)) {
-		diffuseLight.factor -= sof(0.25f);
-		if (diffuseLight.factor < 0.0f) {
-			diffuseLight.factor = 0.0f;
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_4)) {
-		diffuseLight.factor += sof(0.25f);
-		if (diffuseLight.factor > 1.0f) {
-			diffuseLight.factor = 1.0f;
-		}
-	}
-
-	if (keyPressedOnce(GLFW_KEY_Z)) {
-		ambientLight.isOn = !ambientLight.isOn;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		diffuseLight.isOn = !diffuseLight.isOn;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_L)) {
-		isDirectionLocked = !isDirectionLocked;
+	if (keyPressedOnce(GLFW_KEY_R)) {
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
 	}
 
 	int posX, posY, width, height;

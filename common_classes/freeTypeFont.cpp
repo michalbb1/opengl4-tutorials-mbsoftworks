@@ -180,7 +180,7 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
 			}
 
 			charProps.renderIndex = currentRenderIndex;
-			charProps.textureIndex = _textures.size();
+			charProps.textureIndex = int(_textures.size());
 			currentPixelPositionCol += bmpWidth + 1;
 			currentRenderIndex += 4;
 			c++;
@@ -301,7 +301,7 @@ int FreeTypeFont::getTextWidth(const std::string& text, int pixelSize) const
 	}
 
 	// Return ceiling of result
-	return ceil(result);
+	return int(ceil(result));
 }
 
 int FreeTypeFont::getTextHeight(int pixelSize) const
@@ -309,7 +309,7 @@ int FreeTypeFont::getTextHeight(int pixelSize) const
 	const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
 	const auto scale = float(usedPixelSize) / float(_pixelSize);
 
-	return ceil(usedPixelSize*scale);
+	return int(ceil(usedPixelSize*scale));
 }
 
 void FreeTypeFont::setTextColor(const glm::vec4& color)
