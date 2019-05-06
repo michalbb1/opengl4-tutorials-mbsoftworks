@@ -33,14 +33,21 @@ public:
 
 	Heightmap(const GeneratorParameters& genParams, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
-	void generateRandomHeightmap(const GeneratorParameters& genParams);
-
+	void generateFromHeightData(const std::vector<std::vector<float>>& heightData);
 	void render() const override;
 
 private:
 	static std::vector<std::vector<float>> generateRandomHeightData(const GeneratorParameters& genParams);
 
-	int _numIndices;
+	void setUpVertices();
+	void setUpTextureCoordinates();
+	void setUpNormals();
+
+	std::vector<std::vector<float>> _heightData;
+	std::vector<std::vector<glm::vec3>> _vertices;
+	std::vector<std::vector<glm::vec2>> _textureCoordinates;
+	std::vector<std::vector<glm::vec3>> _normals;
+	int _numIndices = 0;
 	int _rows = 0;
 	int _cols = 0;
 };
