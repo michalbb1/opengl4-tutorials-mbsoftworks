@@ -199,7 +199,6 @@ void OpenGLWindow::renderScene()
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::rotate(model, rotationAngleRad+90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		pyramidModelMatrices.push_back(model);
 		torusModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
 
