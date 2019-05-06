@@ -20,36 +20,67 @@ namespace static_meshes_3D {
 class Heightmap : public StaticMeshIndexed3D
 {
 public:
-	struct GeneratorParameters
+
+	/**
+		Struct holding all parameters to generate random height data using hill generation algorithm.
+	*/
+	struct HillAlgorithmParameters
 	{
-		int rows;
-		int cols;
-		int numHills;
-		int hillRadiusMin;
-		int hillRadiusMax;
-		float hillMinHeight;
-		float hillMaxHeight;
+		HillAlgorithmParameters(int rows, int columns, int numHills, int hillRadiusMin, int hillRadiusMax, float hillMinHeight, float hillMaxHeight)
+		{
+			this->rows = rows;
+			this->columns = columns;
+			this->numHills = numHills;
+			this->hillRadiusMin = hillRadiusMin;
+			this->hillRadiusMax = hillRadiusMax;
+			this->hillMinHeight = hillMinHeight;
+			this->hillMaxHeight = hillMaxHeight;
+		}
+
+		int rows; //!< Number of desired heightmap rows
+		int columns; //!< Number of desired heightmap columns
+		int numHills; //!< Number of generated hills
+		int hillRadiusMin; //!< Minimal radius of generated hill (in terms of number of heightmap rows / columns)
+		int hillRadiusMax; //!< Maximal radius of generated hill (in terms of number of heightmap rows / columns)
+		float hillMinHeight; //!< Minimal height of generated hill
+		float hillMaxHeight; //!< Maximal height of generated hill
 	};
 
-	Heightmap(const GeneratorParameters& genParams, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
+	Heightmap(const HillAlgorithmParameters& params, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
-	void generateFromHeightData(const std::vector<std::vector<float>>& heightData);
+	/** \brief  Generates heightmap from the provided height data.
+	*   \param  heightData 2D float vector containing height data - each value should be between 0.0 (lowest point) and 1.0 (highest point)
+	*/
+	void createFromHeightData(const std::vector<std::vector<float>>& heightData);
+
+	/** \brief Renders heightmap. */
 	void render() const override;
 
-private:
-	static std::vector<std::vector<float>> generateRandomHeightData(const GeneratorParameters& genParams);
+	/** \brief  Renders heightmap as points only. */
+	void renderPoints() const override;
 
+	/** \brief  Generates random height data using hill algorithm.
+	*   \param  params Parameters for hill algorithm generator
+	*   \return Generated height data in a 2D float vector with random values from 0.0 to 1.0.
+	*/
+	static std::vector<std::vector<float>> generateRandomHeightData(const HillAlgorithmParameters& params);
+
+private:
+	/** \brief Sets up heightmap vertices. */
 	void setUpVertices();
+
+	/** \brief Sets up heightmap texture coordinates. */
 	void setUpTextureCoordinates();
+
+	/** \brief Sets up heightmap normals. */
 	void setUpNormals();
 
-	std::vector<std::vector<float>> _heightData;
-	std::vector<std::vector<glm::vec3>> _vertices;
-	std::vector<std::vector<glm::vec2>> _textureCoordinates;
-	std::vector<std::vector<glm::vec3>> _normals;
-	int _numIndices = 0;
-	int _rows = 0;
-	int _cols = 0;
+	std::vector<std::vector<float>> _heightData;  //!< Height data representing the current heightmap
+	std::vector<std::vector<glm::vec3>> _vertices; //!< Vertices data heightmap is generated with (only valid during creation phase)
+	std::vector<std::vector<glm::vec2>> _textureCoordinates; //!< Texture coordinates data heightmap is generated with (only valid during creation phase)
+	std::vector<std::vector<glm::vec3>> _normals; //!< Normals data heightmap is generated with (only valid during creation phase)
+	int _rows = 0; //!< Number of heightmap rows
+	int _columns = 0; //!< Number of heightmap columns
 };
 
 } // namespace static_meshes_3D
