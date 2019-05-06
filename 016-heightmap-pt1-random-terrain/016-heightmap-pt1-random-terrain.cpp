@@ -33,11 +33,18 @@ std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
 std::unique_ptr<HUD016> hud;
 
 float rotationAngleRad = 0.0f;
-bool isDirectionLocked = false;
-bool displayNormals = true;
-float normalLength = 1.0f;
-shader_structs::AmbientLight ambientLight(glm::vec3(0.25f, 0.25f, 0.25f));
-shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0.75f);
+bool displayNormals = false;
+shader_structs::AmbientLight ambientLight(glm::vec3(0.5f, 0.5f, 0.5f));
+shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)), 0.5f);
+static_meshes_3D::Heightmap::HillAlgorithmParameters hillAlgorithmParams(
+	200,  // Number of rows
+	200,  // Number of columns
+	100,  // Number of generated hills
+	10,   // Minimal hill radius
+	40,   // Maximal hill radius
+	0.1f, // Minimal hill height
+	0.2f  // Maximal hill height
+);
 
 std::vector<glm::vec3> pyramidPositions
 {
@@ -84,9 +91,6 @@ void OpenGLWindow::initializeScene()
 		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
 		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
 
-		sm.loadVertexShader("heightmap_basic", "data/shaders/heightmap/basic.vert");
-		sm.loadFragmentShader("heightmap_basic", "data/shaders/heightmap/basic.frag");
-
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
@@ -98,10 +102,6 @@ void OpenGLWindow::initializeScene()
 		normalsShaderProgram.addShaderToProgram(sm.getVertexShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
-
-		auto& heightmapShaderProgram = spm.createShaderProgram("heightmap_basic");
-		heightmapShaderProgram.addShaderToProgram(sm.getVertexShader("heightmap_basic"));
-		heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("heightmap_basic"));
 
 		hud = std::make_unique<HUD016>(*this);
 		
@@ -115,15 +115,7 @@ void OpenGLWindow::initializeScene()
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, true);
 
-		static_meshes_3D::Heightmap::GeneratorParameters genParams;
-		genParams.rows = 200;
-		genParams.cols = 200;
-		genParams.numHills = 100;
-		genParams.hillRadiusMin = 10;
-		genParams.hillRadiusMax = 41;
-		genParams.hillMinHeight = 0.1f;
-		genParams.hillMaxHeight = 0.2f;
-		heightmap = std::make_unique<static_meshes_3D::Heightmap>(genParams, true, true, true);
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -163,14 +155,15 @@ void OpenGLWindow::renderScene()
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 	
-	// Set up ambient light in the shader programs
+	// Set up ambient light in the shader program
 	ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
-
-	// Set up diffuse light and set the light's direction to the camera direction
-	if (!isDirectionLocked) {
-		diffuseLight.direction = glm::normalize(camera.getViewPoint() - camera.getEye());
-	}
+	// Set up diffuse light
 	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
+
+	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(200.0f, 10.0f, 200.0f));
+	mainProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+	TextureManager::getInstance().getTexture("grass").bind(0);
+	heightmap->render();
 
 	// Render all the crates (as simple cubes)
 	std::vector<glm::mat4> crateModelMatrices;
@@ -226,7 +219,7 @@ void OpenGLWindow::renderScene()
 		normalsShaderProgram.useProgram();
 		normalsShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
 		normalsShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
-		normalsShaderProgram[ShaderConstants::normalLength()] = normalLength;
+		normalsShaderProgram[ShaderConstants::normalLength()] = 0.5f;
 
 		// Render all the crates points
 		auto matrixIt = crateModelMatrices.cbegin();
@@ -251,21 +244,13 @@ void OpenGLWindow::renderScene()
 			normalsShaderProgram.setModelAndNormalMatrix(*matrixIt++);
 			torus->renderPoints();
 		}
+
+		normalsShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+		heightmap->renderPoints();
 	}
 
-	// Render grass ground
-	auto& heightmapShaderProgram = spm.getShaderProgram("heightmap_basic");
-	heightmapShaderProgram.useProgram();
-	heightmapShaderProgram["sampler"] = 0;
-	heightmapShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
-	heightmapShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
-	heightmapShaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	heightmapShaderProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
-	TextureManager::getInstance().getTexture("grass").bind(0);
-	heightmap->render();
-
 	// Render HUD
-	hud->renderHUD(ambientLight, diffuseLight, displayNormals, normalLength);
+	hud->renderHUD(displayNormals);
 
 	// Update rotation angle
 	rotationAngleRad += sof(glm::radians(45.0f));
@@ -300,52 +285,8 @@ void OpenGLWindow::handleInput()
 		displayNormals = !displayNormals;
 	}
 
-	if (keyPressed(GLFW_KEY_KP_ADD)) {
-		normalLength += sof(2.0f);
-	}
-
-	if (keyPressed(GLFW_KEY_KP_SUBTRACT)) {
-		normalLength -= sof(2.0f);
-	}
-
-	if (keyPressed(GLFW_KEY_1)) {
-		ambientLight.color -= glm::vec3(sof(0.25f));
-		if (ambientLight.color.r < 0.0f) {
-			ambientLight.color = glm::vec3(0.0f);
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_2)) {
-		ambientLight.color += glm::vec3(sof(0.25f));
-		if (ambientLight.color.r > 1.0f) {
-			ambientLight.color = glm::vec3(1.0f);
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_3)) {
-		diffuseLight.factor -= sof(0.25f);
-		if (diffuseLight.factor < 0.0f) {
-			diffuseLight.factor = 0.0f;
-		}
-	}
-
-	if (keyPressed(GLFW_KEY_4)) {
-		diffuseLight.factor += sof(0.25f);
-		if (diffuseLight.factor > 1.0f) {
-			diffuseLight.factor = 1.0f;
-		}
-	}
-
-	if (keyPressedOnce(GLFW_KEY_Z)) {
-		ambientLight.isOn = !ambientLight.isOn;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		diffuseLight.isOn = !diffuseLight.isOn;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_L)) {
-		isDirectionLocked = !isDirectionLocked;
+	if (keyPressedOnce(GLFW_KEY_R)) {
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
 	}
 
 	int posX, posY, width, height;
