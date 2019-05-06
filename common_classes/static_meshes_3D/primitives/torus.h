@@ -32,10 +32,6 @@ private:
 	float _mainRadius; //!< Radius of torus (distance from center of torus to the center of tube)
 	float _tubeRadius; //!< Radius of tube
 
-	int _numVertices = 0; //!< Holds the total number of generated vertices
-	int _numIndices = 0; //!< Holds the number of generated indices used for rendering of the torus
-	int _primitiveRestartIndex = 0; //!< Index of primitive restart
-
 	void initializeData() override;
 };
 
