@@ -59,6 +59,23 @@ public:
 	/** \brief  Renders heightmap as points only. */
 	void renderPoints() const override;
 
+	/** \brief  Gets number of heightmap rows.
+	*   \return Number of heightmap rows.
+	*/
+	int getRows() const;
+
+	/** \brief  Gets number of heightmap columns.
+	*   \return Number of heightmap columns.
+	*/
+	int getColumns() const;
+
+	/** \brief  Gets height value on specified row and column position.
+	*   \param  row Row to get height at
+	*   \param  column Column to get height at
+	*   \return Height at the specified point or 0.0, if parameters are out of bounds
+	*/
+	float getHeight(const int row, const int column) const;
+
 	/** \brief  Generates random height data using hill algorithm.
 	*   \param  params Parameters for hill algorithm generator
 	*   \return Generated height data in a 2D float vector with random values from 0.0 to 1.0.

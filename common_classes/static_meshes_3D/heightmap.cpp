@@ -113,6 +113,25 @@ void Heightmap::renderPoints() const
 	glDrawArrays(GL_POINTS, 0, _numVertices);
 }
 
+int Heightmap::getRows() const
+{
+	return _rows;
+}
+
+int Heightmap::getColumns() const
+{
+	return _columns;
+}
+
+float Heightmap::getHeight(const int row, const int column) const
+{
+	if (row < 0 || row >= _rows || column < 0 || column >= _columns) {
+		return 0.0f;
+	}
+
+	return _heightData[row][column];
+}
+
 std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAlgorithmParameters& params)
 {
 	std::vector<std::vector<float>> heightData(params.rows, std::vector<float>(params.columns, 0.0f));
@@ -121,12 +140,13 @@ std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAl
 	std::mt19937 generator(rd());
 	std::uniform_int_distribution<int> hillRadiusDistribution(params.hillRadiusMin, params.hillRadiusMax);
 	std::uniform_real_distribution<float> hillHeightDistribution(params.hillMinHeight, params.hillMaxHeight);
-	std::uniform_int_distribution<int> intDistribution(0, params.rows - 1);
+	std::uniform_int_distribution<int> hillCenterRowIntDistribution(0, params.rows - 1);
+	std::uniform_int_distribution<int> hillCenterColIntDistribution(0, params.columns - 1);
 
 	for (int i = 0; i < params.numHills; i++)
 	{
-		const auto hillCenterRow = intDistribution(generator);
-		const auto hillCenterCol = intDistribution(generator);
+		const auto hillCenterRow = hillCenterRowIntDistribution(generator);
+		const auto hillCenterCol = hillCenterColIntDistribution(generator);
 		const auto hillRadius = hillRadiusDistribution(generator);
 		const auto hillHeight = hillHeightDistribution(generator);
 
@@ -139,7 +159,7 @@ std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAl
 				}
 				const auto r2 = hillRadius * hillRadius; // r*r term
 				const auto x2x1 = hillCenterCol - c; // (x2-x1) term
-				const auto y2y1 = hillCenterRow - r;// (y2-y1) term
+				const auto y2y1 = hillCenterRow - r; // (y2-y1) term
 				const auto height = float(r2 - x2x1 * x2x1 - y2y1 * y2y1);
 				if (height < 0.0f) {
 					continue;
