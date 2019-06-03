@@ -50,31 +50,8 @@ void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heig
 	_vbo.uploadDataToGPU(GL_STATIC_DRAW);
 	setVertexAttributesPointers(_numVertices);
 
-	// Now create a VBO with heightmap indices
-	_indicesVBO.createVBO();
-	_indicesVBO.bindVBO(GL_ELEMENT_ARRAY_BUFFER);
-	_primitiveRestartIndex = _numVertices;
-
-	for (auto i = 0; i < _rows - 1; i++)
-	{
-		for (auto j = 0; j < _columns; j++)
-		{
-			for (auto k = 0; k < 2; k++)
-			{
-				const auto row = i + k;
-				const auto index = row * _columns + j;
-				_indicesVBO.addData(&index, sizeof(int));
-			}
-		}
-		// Restart triangle strips
-		_indicesVBO.addData(&_primitiveRestartIndex, sizeof(int));
-	}
-
-	// Send indices to GPU
-	_indicesVBO.uploadDataToGPU(GL_STATIC_DRAW);
-
-	// Calculate total count of indices
-	_numIndices = (_rows - 1)*_columns*2 + _rows - 1;
+	// Vertex data are in, set up the index buffer
+	setUpIndexBuffer();
 
 	// Clear the data, we won't need it anymore
 	_vertices.clear();
@@ -276,6 +253,35 @@ void Heightmap::setUpNormals()
 		}
 		_vbo.addData(_normals[i].data(), _columns * sizeof(glm::vec3));
 	}
+}
+
+void Heightmap::setUpIndexBuffer()
+{
+	// Create a VBO with heightmap indices
+	_indicesVBO.createVBO();
+	_indicesVBO.bindVBO(GL_ELEMENT_ARRAY_BUFFER);
+	_primitiveRestartIndex = _numVertices;
+
+	for (auto i = 0; i < _rows - 1; i++)
+	{
+		for (auto j = 0; j < _columns; j++)
+		{
+			for (auto k = 0; k < 2; k++)
+			{
+				const auto row = i + k;
+				const auto index = row * _columns + j;
+				_indicesVBO.addData(&index, sizeof(int));
+			}
+		}
+		// Restart triangle strips
+		_indicesVBO.addData(&_primitiveRestartIndex, sizeof(int));
+	}
+
+	// Send indices to GPU
+	_indicesVBO.uploadDataToGPU(GL_STATIC_DRAW);
+
+	// Calculate total count of indices
+	_numIndices = (_rows - 1)*_columns * 2 + _rows - 1;
 }
 
 } // namespace static_meshes_3D

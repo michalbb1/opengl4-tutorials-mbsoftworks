@@ -92,6 +92,9 @@ private:
 	/** \brief Sets up heightmap normals. */
 	void setUpNormals();
 
+	/** \brief Sets up index buffer. */
+	void setUpIndexBuffer();
+
 	std::vector<std::vector<float>> _heightData;  //!< Height data representing the current heightmap
 	std::vector<std::vector<glm::vec3>> _vertices; //!< Vertices data heightmap is generated with (only valid during creation phase)
 	std::vector<std::vector<glm::vec2>> _textureCoordinates; //!< Texture coordinates data heightmap is generated with (only valid during creation phase)
