@@ -2,23 +2,36 @@
 # CPPDAQ CONFIGURATION
 #-------------------------------
 
-project(001-creating-opengl4-window) # Project's name
+project(005-camera-pt1-simple-walking-camera) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
-file(GLOB TUTORIAL_001_SOURCE_FILES *.cpp)
+file(GLOB TUTORIAL_005_SOURCE_FILES *.cpp)
 
 set(COMMON_CLASSES_SOURCE_FILES
 "${COMMON_CLASSES_ROOT}/OpenGLWindow.cpp"
+"${COMMON_CLASSES_ROOT}/shader.cpp"
+"${COMMON_CLASSES_ROOT}/shaderProgram.cpp"
+"${COMMON_CLASSES_ROOT}/simpleWalkingCamera.cpp"
+"${COMMON_CLASSES_ROOT}/staticGeometry.cpp"
+"${COMMON_CLASSES_ROOT}/uniform.cpp"
+"${COMMON_CLASSES_ROOT}/vertexBufferObject.cpp"
 )
 
 set(COMMON_CLASSES_HEADER_FILES
 "${COMMON_CLASSES_ROOT}/OpenGLWindow.h"
+"${COMMON_CLASSES_ROOT}/shader.h"
+"${COMMON_CLASSES_ROOT}/shaderProgram.h"
+"${COMMON_CLASSES_ROOT}/simpleWalkingCamera.h"
+"${COMMON_CLASSES_ROOT}/staticGeometry.h"
+"${COMMON_CLASSES_ROOT}/stringUtils.h"
+"${COMMON_CLASSES_ROOT}/uniform.h"
+"${COMMON_CLASSES_ROOT}/vertexBufferObject.h"
 )
 
 # Need to add header files as well in order for source grouping to work
 set(ALL_SOURCE_FILES
-${TUTORIAL_001_SOURCE_FILES}
+${TUTORIAL_005_SOURCE_FILES}
 ${GLAD_SOURCE_FILES}
 ${GLAD_HEADER_FILES}
 ${COMMON_CLASSES_SOURCE_FILES}
@@ -31,25 +44,25 @@ include_directories("${GLAD_INCLUDE_DIRS}")
 include_directories("${GLM_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(001-creating-opengl4-window ${ALL_SOURCE_FILES})
-target_link_libraries(001-creating-opengl4-window ${GLFW_STATIC_LIBRARIES})
+add_executable(005-camera-pt1-simple-walking-camera ${ALL_SOURCE_FILES})
+target_link_libraries(005-camera-pt1-simple-walking-camera ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(001-creating-opengl4-window
+set_target_properties(005-camera-pt1-simple-walking-camera
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
 if(IS_64BIT_BUILD)
-	set_target_properties(001-creating-opengl4-window
+	set_target_properties(005-camera-pt1-simple-walking-camera
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 001-creating-opengl4-window_d64
-		OUTPUT_NAME_RELEASE 001-creating-opengl4-window64
+		OUTPUT_NAME_DEBUG 005-camera-pt1-simple-walking-camera_d64
+		OUTPUT_NAME_RELEASE 005-camera-pt1-simple-walking-camera64
 	)
 else()
-	set_target_properties(001-creating-opengl4-window
+	set_target_properties(005-camera-pt1-simple-walking-camera
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 001-creating-opengl4-window_d
-		OUTPUT_NAME_RELEASE 001-creating-opengl4-window
+		OUTPUT_NAME_DEBUG 005-camera-pt1-simple-walking-camera_d
+		OUTPUT_NAME_RELEASE 005-camera-pt1-simple-walking-camera
 	)
 endif()
 
