@@ -49,10 +49,10 @@ ${STB_HEADER_FILES}
 )
 
 # Setup include directories of the tutorial
-include_directories("${GLFW_INCLUDE_DIRS}")
-include_directories("${GLAD_INCLUDE_DIRS}")
-include_directories("${GLM_INCLUDE_DIRS}")
-include_directories("${STB_INCLUDE_DIRS}")
+include_directories(${GLFW_INCLUDE_DIRS})
+include_directories(${GLAD_INCLUDE_DIRS})
+include_directories(${GLM_INCLUDE_DIRS})
+include_directories(${STB_INCLUDE_DIRS})
 
 # Add executable and link with libraries
 add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})

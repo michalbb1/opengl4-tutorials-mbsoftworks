@@ -7,23 +7,30 @@ set (CMAKE_CXX_STANDARD 14)
 
 project(opengl4-tutorials-mbsoftworks) # "Solution" name
 
+#-------------------------------
+# GLOBAL VARIABLES
+#-------------------------------
+
+# Specify, where should the tutorials be built
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
+
 if(CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "My multi config types" FORCE)
+    set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configuration types" FORCE)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
-
-#-------------------------------
-# ADDITIONAL LIBRARIES USED
-#-------------------------------
-
-# GLFW
+# Find, if it's 64 bit build
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	set(IS_64BIT_BUILD TRUE)
 else()
 	set(IS_64BIT_BUILD FALSE)
 endif()
 
+#-------------------------------
+# ADDITIONAL LIBRARIES USED
+#-------------------------------
+
+# GLFW
 if(UNIX)
 	find_package(PkgConfig REQUIRED)
 	pkg_search_module(GLFW REQUIRED glfw3)
@@ -50,6 +57,7 @@ set(STB_INCLUDE_DIRS "${STB_ROOT}")
 
 # glm
 set(GLM_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/glm")
+
 # common_classes
 set(COMMON_CLASSES_ROOT "${CMAKE_SOURCE_DIR}/common_classes")
 set(COMMON_CLASSES_STATIC_MESHES_2D_ROOT "${COMMON_CLASSES_ROOT}/static_meshes_2D")
@@ -58,23 +66,8 @@ set(COMMON_CLASSES_STATIC_MESHES_3D_ROOT "${COMMON_CLASSES_ROOT}/static_meshes_3
 set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/primitives")
 
 #-------------------------------
-# GLOBAL VARIABLES
+# TUTORIALS SUBDIRECTORIES
 #-------------------------------
-
-# Linkage type - Static or Dynamic
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-
-if(MSVC)
-  set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-endif()
-
-#-------------------------------
-# SHARED SOURCES VARIABLES
-#-------------------------------
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
 
 add_subdirectory(001-creating-opengl4-window)
 add_subdirectory(002-first-shader)
