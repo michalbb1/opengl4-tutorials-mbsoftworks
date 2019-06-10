@@ -1,8 +1,9 @@
 #-------------------------------
-# CPPDAQ CONFIGURATION
+# TUTORIAL CONFIGURATION
 #-------------------------------
 
-project(003-adding-colors) # Project's name
+set(PROJECT_NAME "003-adding-colors")
+project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
@@ -40,25 +41,26 @@ include_directories("${GLAD_INCLUDE_DIRS}")
 include_directories("${GLM_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(003-adding-colors ${ALL_SOURCE_FILES})
-target_link_libraries(003-adding-colors ${GLFW_STATIC_LIBRARIES})
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(003-adding-colors
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
+
 if(IS_64BIT_BUILD)
-	set_target_properties(003-adding-colors
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 003-adding-colors_d64
-		OUTPUT_NAME_RELEASE 003-adding-colors64
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
 	)
 else()
-	set_target_properties(003-adding-colors
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 003-adding-colors_d
-		OUTPUT_NAME_RELEASE 003-adding-colors
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
 	)
 endif()
 

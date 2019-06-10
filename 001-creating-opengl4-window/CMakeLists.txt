@@ -1,8 +1,9 @@
 #-------------------------------
-# CPPDAQ CONFIGURATION
+# TUTORIAL CONFIGURATION
 #-------------------------------
 
-project(001-creating-opengl4-window) # Project's name
+set(PROJECT_NAME "001-creating-opengl4-window")
+project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
@@ -31,25 +32,26 @@ include_directories("${GLAD_INCLUDE_DIRS}")
 include_directories("${GLM_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(001-creating-opengl4-window ${ALL_SOURCE_FILES})
-target_link_libraries(001-creating-opengl4-window ${GLFW_STATIC_LIBRARIES})
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(001-creating-opengl4-window
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
+
 if(IS_64BIT_BUILD)
-	set_target_properties(001-creating-opengl4-window
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 001-creating-opengl4-window_d64
-		OUTPUT_NAME_RELEASE 001-creating-opengl4-window64
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
 	)
 else()
-	set_target_properties(001-creating-opengl4-window
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 001-creating-opengl4-window_d
-		OUTPUT_NAME_RELEASE 001-creating-opengl4-window
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
 	)
 endif()
 

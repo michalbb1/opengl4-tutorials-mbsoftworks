@@ -86,6 +86,7 @@ add_subdirectory(007-textures-pt1-single-texture)
 add_subdirectory(008-textures-pt2-multitexturing)
 add_subdirectory(009-orthographic-2D-projection)
 add_subdirectory(010-first-great-refactoring)
+add_subdirectory(011-indexed-rendering-torus)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})

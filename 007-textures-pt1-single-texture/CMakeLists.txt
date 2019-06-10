@@ -1,8 +1,9 @@
 #-------------------------------
-# CPPDAQ CONFIGURATION
+# TUTORIAL CONFIGURATION
 #-------------------------------
 
-project(007-textures-pt1-single-texture) # Project's name
+set(PROJECT_NAME "007-textures-pt1-single-texture")
+project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
@@ -54,25 +55,26 @@ include_directories("${GLM_INCLUDE_DIRS}")
 include_directories("${STB_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(007-textures-pt1-single-texture ${ALL_SOURCE_FILES})
-target_link_libraries(007-textures-pt1-single-texture ${GLFW_STATIC_LIBRARIES})
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(007-textures-pt1-single-texture
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
+
 if(IS_64BIT_BUILD)
-	set_target_properties(007-textures-pt1-single-texture
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 007-textures-pt1-single-texture_d64
-		OUTPUT_NAME_RELEASE 007-textures-pt1-single-texture64
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
 	)
 else()
-	set_target_properties(007-textures-pt1-single-texture
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 007-textures-pt1-single-texture_d
-		OUTPUT_NAME_RELEASE 007-textures-pt1-single-texture
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
 	)
 endif()
 

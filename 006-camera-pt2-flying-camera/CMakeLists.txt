@@ -1,8 +1,9 @@
 #-------------------------------
-# CPPDAQ CONFIGURATION
+# TUTORIAL CONFIGURATION
 #-------------------------------
 
-project(006-camera-pt2-flying-camera) # Project's name
+set(PROJECT_NAME "006-camera-pt2-flying-camera")
+project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
@@ -44,25 +45,26 @@ include_directories("${GLAD_INCLUDE_DIRS}")
 include_directories("${GLM_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(006-camera-pt2-flying-camera ${ALL_SOURCE_FILES})
-target_link_libraries(006-camera-pt2-flying-camera ${GLFW_STATIC_LIBRARIES})
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(006-camera-pt2-flying-camera
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
+
 if(IS_64BIT_BUILD)
-	set_target_properties(006-camera-pt2-flying-camera
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 006-camera-pt2-flying-camera_d64
-		OUTPUT_NAME_RELEASE 006-camera-pt2-flying-camera64
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
 	)
 else()
-	set_target_properties(006-camera-pt2-flying-camera
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 006-camera-pt2-flying-camera_d
-		OUTPUT_NAME_RELEASE 006-camera-pt2-flying-camera
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
 	)
 endif()
 

@@ -1,8 +1,9 @@
 #-------------------------------
-# CPPDAQ CONFIGURATION
+# TUTORIAL CONFIGURATION
 #-------------------------------
 
-project(002-first-shader) # Project's name
+set(PROJECT_NAME "002-first-shader")
+project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
@@ -39,25 +40,26 @@ include_directories("${GLAD_INCLUDE_DIRS}")
 include_directories("${GLM_INCLUDE_DIRS}")
 
 # Add executable and link with libraries
-add_executable(002-first-shader ${ALL_SOURCE_FILES})
-target_link_libraries(002-first-shader ${GLFW_STATIC_LIBRARIES})
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
 
-set_target_properties(002-first-shader
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
 )
+
 if(IS_64BIT_BUILD)
-	set_target_properties(002-first-shader
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 002-first-shader_d64
-		OUTPUT_NAME_RELEASE 002-first-shader64
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
 	)
 else()
-	set_target_properties(002-first-shader
+	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
-		OUTPUT_NAME_DEBUG 002-first-shader_d
-		OUTPUT_NAME_RELEASE 002-first-shader
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
 	)
 endif()
 
