@@ -34,8 +34,8 @@ void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heig
 	}
 
 	_heightData = heightData;
-	_rows = _heightData.size();
-	_columns = _heightData[0].size();
+	_rows = int(_heightData.size());
+	_columns = int(_heightData[0].size());
 	_numVertices = _rows * _columns;
 
 	// First, prepare VAO and VBO for vertex data

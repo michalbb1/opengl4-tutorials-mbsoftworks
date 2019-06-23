@@ -238,6 +238,8 @@ void OpenGLWindow::renderScene()
 
 void OpenGLWindow::releaseScene()
 {
+	skybox.reset();
+
 	ShaderManager::getInstance().clearShaderCache();
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
 	TextureManager::getInstance().clearTextureCache();
