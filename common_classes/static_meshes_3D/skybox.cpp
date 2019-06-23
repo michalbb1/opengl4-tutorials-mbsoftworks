@@ -33,6 +33,17 @@ Skybox::Skybox(const std::string& baseDirectory, const std::string& imageExtensi
 	});
 }
 
+Skybox::~Skybox()
+{
+	auto& tm = TextureManager::getInstance();
+	tm.deleteTexture(getTextureKey(CUBE_FRONT_FACE));
+	tm.deleteTexture(getTextureKey(CUBE_BACK_FACE));
+	tm.deleteTexture(getTextureKey(CUBE_LEFT_FACE));
+	tm.deleteTexture(getTextureKey(CUBE_RIGHT_FACE));
+	tm.deleteTexture(getTextureKey(CUBE_TOP_FACE));
+	tm.deleteTexture(getTextureKey(CUBE_BOTTOM_FACE));
+}
+
 void Skybox::render(const glm::vec3& cameraPosition, ShaderProgram& shaderProgram) const
 {
 	// Get all texture keys

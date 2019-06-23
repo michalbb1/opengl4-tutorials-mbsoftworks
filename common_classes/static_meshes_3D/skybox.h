@@ -18,6 +18,7 @@ public:
 	static const std::string SAMPLER_KEY; //!< Key to store skybox sampler within
 
 	Skybox(const std::string& baseDirectory, const std::string& imageExtension, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
+	~Skybox();
 
 	/** \brief Renders skybox around camera.
 	*   \param cameraPosition Position to render around (usually around player, thus camera)
