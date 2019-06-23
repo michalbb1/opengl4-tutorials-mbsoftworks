@@ -32,17 +32,17 @@ public:
 	*/
 	const Texture& getTexture(const std::string& key) const;
 
-	/** \brief  Deletes all the textures loaded and clears the texture cache. */
-	void clearTextureCache();
-
-private:
-	TextureManager() {}
-
 	/** \brief  Checks, if texture with specified key exists.
 	*   \param  key Texture key to check existence of
 	*   \return True if texture exists, or false otherwise.
 	*/
 	bool containsTexture(const std::string& key) const;
+
+	/** \brief  Deletes all the textures loaded and clears the texture cache. */
+	void clearTextureCache();
+
+private:
+	TextureManager() {}
 
 	std::map<std::string, std::unique_ptr<Texture>> _textureCache; //!< Texture cache - stores textures within their keys in std::map
 };
