@@ -14,6 +14,7 @@
 #include "../common_classes/freeTypeFontManager.h"
 #include "../common_classes/matrixManager.h"
 
+#include "../common_classes/static_meshes_3D/skybox.h"
 #include "../common_classes/static_meshes_3D/heightmap.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
@@ -24,27 +25,19 @@
 
 #include "HUD017.h"
 
-FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
+FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
 std::unique_ptr<static_meshes_3D::Cube> cube;
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
 std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
+std::unique_ptr<static_meshes_3D::Skybox> skybox;
 std::unique_ptr<HUD017> hud;
 
 float rotationAngleRad = 0.0f;
 bool displayNormals = false;
-shader_structs::AmbientLight ambientLight(glm::vec3(0.5f, 0.5f, 0.5f));
-shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)), 0.5f);
-static_meshes_3D::Heightmap::HillAlgorithmParameters hillAlgorithmParams(
-	200,  // Number of rows
-	200,  // Number of columns
-	250,  // Number of generated hills
-	10,   // Minimal hill radius
-	20,   // Maximal hill radius
-	0.1f, // Minimal hill height
-	0.2f  // Maximal hill height
-);
+shader_structs::AmbientLight ambientLight(glm::vec3(0.6f, 0.6f, 0.6f));
+shader_structs::DiffuseLight diffuseLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)), 0.4f);
 
 std::vector<glm::vec3> cratePositions
 {
@@ -94,10 +87,11 @@ void OpenGLWindow::initializeScene()
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
 
+		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/desert", "png");
 		hud = std::make_unique<HUD017>(*this);
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
-		TextureManager::getInstance().loadTexture2D("clay", "data/textures/clay.png");
+		TextureManager::getInstance().loadTexture2D("sand", "data/textures/sand.png");
 		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
 		TextureManager::getInstance().loadTexture2D("white_marble", "data/textures/white_marble.jpg");
 		
@@ -105,7 +99,7 @@ void OpenGLWindow::initializeScene()
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, true);
 
-		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>("data\\heightmaps\\tut017.png", true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -118,9 +112,10 @@ void OpenGLWindow::initializeScene()
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-const glm::vec3 heightMapSize(200.0f, 10.0f, 200.0f);
+const glm::vec3 heightMapSize(200.0f, 20.0f, 200.0f);
 
 void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
 {
@@ -136,9 +131,7 @@ void OpenGLWindow::renderScene()
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
 	auto& mm = MatrixManager::getInstance();
-
-	const auto clearColor = glm::vec4(0.02f, 0.682f, 1.0f, 1.0f)*glm::vec4(ambientLight.getColorContribution(), 1.0f);
-	glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Set matrices in matrix manager
@@ -149,22 +142,26 @@ void OpenGLWindow::renderScene()
 	// Set up some common properties in the main shader program
 	auto& mainProgram = spm.getShaderProgram("main");
 	mainProgram.useProgram();
-	SamplerManager::getInstance().getSampler("main").bind();
 	mainProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
 	mainProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
 	mainProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 	
-	// Set up ambient light in the shader program
+	// Render skybox first with only ambient light
+	shader_structs::AmbientLight(glm::vec3(0.8f, 0.8f, 0.8f), true).setUniform(mainProgram, ShaderConstants::ambientLight());
+	shader_structs::DiffuseLight::none().setUniform(mainProgram, ShaderConstants::diffuseLight());
+	skybox->render(camera.getEye(), mainProgram);
+
+	// Set up ambient and diffuse light in the shader program
+	SamplerManager::getInstance().getSampler("main").bind();
 	ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
-	// Set up diffuse light
 	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
 
 	// Render heightmap
 	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
 	mainProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-	TextureManager::getInstance().getTexture("clay").bind(0);
+	TextureManager::getInstance().getTexture("sand").bind(0);
 	heightmap->render();
 
 	// Render all the crates (as simple cubes)
@@ -266,10 +263,6 @@ void OpenGLWindow::handleInput()
 
 	if (keyPressedOnce(GLFW_KEY_N)) {
 		displayNormals = !displayNormals;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_R)) {
-		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
 	}
 
 	int posX, posY, width, height;

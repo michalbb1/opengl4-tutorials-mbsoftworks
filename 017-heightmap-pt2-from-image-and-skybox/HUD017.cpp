@@ -25,7 +25,6 @@ void HUD017::renderHUD(const bool displayNormals) const
 	
 	// Print information about displaying normals
 	printBuilder().print(10, 70, "Display Normals: {} (Press 'N' to toggle)", displayNormals ? "On" : "Off");
-	printBuilder().print(10, 100, "Press 'R' to generate new random heightmap");
 
 	printBuilder()
 		.fromRight()

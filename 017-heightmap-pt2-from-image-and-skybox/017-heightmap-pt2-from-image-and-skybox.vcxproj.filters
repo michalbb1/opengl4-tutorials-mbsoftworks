@@ -156,6 +156,9 @@
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\skybox.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HUD017.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Header Files\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\skybox.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
