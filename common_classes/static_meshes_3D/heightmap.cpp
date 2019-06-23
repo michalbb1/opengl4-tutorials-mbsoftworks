@@ -1,9 +1,12 @@
 #include "heightmap.h"
-
 #include "../../common_classes/shaderProgramManager.h"
+
+#include <iostream>
 #include <random>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <stb_image.h>
 
 namespace static_meshes_3D {
 
@@ -11,6 +14,17 @@ Heightmap::Heightmap(const HillAlgorithmParameters& params, bool withPositions, 
 	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
 {
 	createFromHeightData(generateRandomHeightData(params));
+}
+
+Heightmap::Heightmap(const std::string& fileName, bool withPositions, bool withTextureCoordinates, bool withNormals)
+	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
+{
+	const auto heightData = getHeightDataFromImage(fileName);
+	if (heightData.size() == 0) {
+		return;
+	}
+
+	createFromHeightData(heightData);
 }
 
 void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heightData)
@@ -68,10 +82,9 @@ void Heightmap::render() const
 		return;
 	}
 
-	// Now we're ready to render - we are drawing set of triangle strips using one call, but we g otta enable primitive restart
 	glBindVertexArray(_vao);
 	glEnable(GL_PRIMITIVE_RESTART);
-	glPrimitiveRestartIndex(_rows*_columns);
+	glPrimitiveRestartIndex(_primitiveRestartIndex);
 
 	glDrawElements(GL_TRIANGLE_STRIP, _numIndices, GL_UNSIGNED_INT, 0);
 	glDisable(GL_PRIMITIVE_RESTART);
@@ -83,7 +96,6 @@ void Heightmap::renderPoints() const
 		return;
 	}
 
-	// Now we're ready to render - we are drawing set of triangle strips using one call, but we g otta enable primitive restart
 	glBindVertexArray(_vao);
 
 	// Render points only
@@ -150,6 +162,33 @@ std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAl
 		}
 	}
 	return heightData;
+}
+
+std::vector<std::vector<float>> Heightmap::getHeightDataFromImage(const std::string& fileName)
+{
+	stbi_set_flip_vertically_on_load(1);
+	int width, height, bytesPerPixel;
+	const auto imageData = stbi_load(fileName.c_str(), &width, &height, &bytesPerPixel, 0);
+	if (imageData == nullptr)
+	{
+		// Return empty vector in case of failure
+		std::cout << "Failed to load heightmap image " << fileName << "!" << std::endl;
+		return std::vector<std::vector<float>>();
+	}
+
+	std::vector<std::vector<float>> result(height, std::vector<float>(width));
+	auto pixelPtr = &imageData[0];
+	for (auto i = 0; i < height; i++)
+	{
+		for (auto j = 0; j < width; j++)
+		{
+			result[i][j] = float(*pixelPtr) / 255.0f;
+			pixelPtr += bytesPerPixel;
+		}
+	}
+
+	stbi_image_free(imageData);
+	return result;
 }
 
 void Heightmap::setUpVertices()
