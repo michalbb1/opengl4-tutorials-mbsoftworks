@@ -32,6 +32,17 @@ const Texture& TextureManager::getTexture(const std::string& key) const
 	return *_textureCache.at(key).get();
 }
 
+bool TextureManager::deleteTexture(const std::string& key)
+{
+	if (containsTexture(key))
+	{
+		_textureCache.erase(key);
+		return true;
+	}
+
+	return false;
+}
+
 void TextureManager::clearTextureCache()
 {
 	_textureCache.clear();

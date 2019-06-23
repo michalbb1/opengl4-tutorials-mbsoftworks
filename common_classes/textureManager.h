@@ -34,9 +34,15 @@ public:
 
 	/** \brief  Checks, if texture with specified key exists.
 	*   \param  key Texture key to check existence of
-	*   \return True if texture exists, or false otherwise.
+	*   \return True if texture exists or false otherwise.
 	*/
 	bool containsTexture(const std::string& key) const;
+
+	/** \brief  Deletes a texture from the manager. If it does not exist, does not do anything.
+	*   \param  key Texture key to delete
+	*   \return True if texture exists and has been deleted or false otherwise.
+	*/
+	bool deleteTexture(const std::string& key);
 
 	/** \brief  Deletes all the textures loaded and clears the texture cache. */
 	void clearTextureCache();
