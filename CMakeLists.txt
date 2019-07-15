@@ -13,7 +13,9 @@ project(opengl4-tutorials-mbsoftworks) # "Solution" name
 
 # Specify, where should the tutorials be built
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH})
 
 if(CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configuration types" FORCE)
@@ -69,6 +71,8 @@ set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT "${COMMON_CLASSES_STATIC_MES
 # TUTORIALS SUBDIRECTORIES
 #-------------------------------
 
+add_subdirectory(dependencies/windows-freetype2-custom-cmake)
+
 add_subdirectory(001-creating-opengl4-window)
 add_subdirectory(002-first-shader)
 add_subdirectory(003-adding-colors)
@@ -80,6 +84,7 @@ add_subdirectory(008-textures-pt2-multitexturing)
 add_subdirectory(009-orthographic-2D-projection)
 add_subdirectory(010-first-great-refactoring)
 add_subdirectory(011-indexed-rendering-torus)
+add_subdirectory(012-freetype-fonts-pt1)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
