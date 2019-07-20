@@ -10,7 +10,7 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 
 /**
-  HUD for tutorial 016 (heightmap pt.1 - random terrain).
+  HUD for tutorial 017 (heightmap pt.8 - terrain from image and skybox).
 */
 class HUD017 : public HUD
 {
