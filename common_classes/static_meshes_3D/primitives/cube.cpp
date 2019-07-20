@@ -79,7 +79,7 @@ void Cube::renderFaces(int facesBitmask) const
 	if (facesBitmask & CUBE_LEFT_FACE) {
 		glDrawArrays(GL_TRIANGLES, 12, 6);
 	}
-	if (facesBitmask & CUBE_BACK_FACE) {
+	if (facesBitmask & CUBE_RIGHT_FACE) {
 		glDrawArrays(GL_TRIANGLES, 18, 6);
 	}
 	if (facesBitmask & CUBE_TOP_FACE) {

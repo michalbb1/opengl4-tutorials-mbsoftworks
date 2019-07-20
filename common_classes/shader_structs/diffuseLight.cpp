@@ -18,4 +18,10 @@ void DiffuseLight::setUniform(ShaderProgram& shaderProgram, const std::string& u
 	shaderProgram[constructAttributeName(uniformName, "isOn")] = isOn;
 }
 
+const DiffuseLight& DiffuseLight::none()
+{
+	static DiffuseLight noneDiffuseLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, false);
+	return noneDiffuseLight;
+}
+
 } // namespace shader_structs
