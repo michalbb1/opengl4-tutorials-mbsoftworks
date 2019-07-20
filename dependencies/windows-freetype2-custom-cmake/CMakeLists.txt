@@ -45,10 +45,8 @@ set(FREETYPE_CUSTOM_CMAKE_CPP_FILES
 "${FREETYPE_SRC_ROOT}/winfonts/winfnt.c"
 )
 
-
 add_definitions(-DFT2_BUILD_LIBRARY)
 set(FREETYPE_INCLUDE_DIRS "${FREETYPE_ROOT}/include" CACHE STRING "Freetype2 include directories")
-MESSAGE(STATUS "DIRS ARE ${FREETYPE_INCLUDE_DIRS}")
 
 # Setup include directories of the FreeType
 include_directories("${FREETYPE_INCLUDE_DIRS}")

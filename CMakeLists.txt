@@ -62,6 +62,7 @@ set(GLM_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/glm")
 
 # common_classes
 set(COMMON_CLASSES_ROOT "${CMAKE_SOURCE_DIR}/common_classes")
+set(COMMON_CLASSES_SHADER_STRUCTS_ROOT "${COMMON_CLASSES_ROOT}/shader_structs")
 set(COMMON_CLASSES_STATIC_MESHES_2D_ROOT "${COMMON_CLASSES_ROOT}/static_meshes_2D")
 set(COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_ROOT "${COMMON_CLASSES_STATIC_MESHES_2D_ROOT}/primitives")
 set(COMMON_CLASSES_STATIC_MESHES_3D_ROOT "${COMMON_CLASSES_ROOT}/static_meshes_3D")
@@ -85,6 +86,10 @@ add_subdirectory(009-orthographic-2D-projection)
 add_subdirectory(010-first-great-refactoring)
 add_subdirectory(011-indexed-rendering-torus)
 add_subdirectory(012-freetype-fonts-pt1)
+add_subdirectory(013-blending-pt1)
+add_subdirectory(014-normals-diffuse-lighting)
+add_subdirectory(015-geometry-shaders)
+add_subdirectory(016-heightmap-pt1-random-terrain)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
