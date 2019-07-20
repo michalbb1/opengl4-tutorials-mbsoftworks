@@ -47,6 +47,7 @@ public:
 	};
 
 	Heightmap(const HillAlgorithmParameters& params, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
+	Heightmap(const std::string& fileName, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
 	/** \brief  Generates heightmap from the provided height data.
 	*   \param  heightData 2D float vector containing height data - each value should be between 0.0 (lowest point) and 1.0 (highest point)
@@ -81,6 +82,12 @@ public:
 	*   \return Generated height data in a 2D float vector with random values from 0.0 to 1.0.
 	*/
 	static std::vector<std::vector<float>> generateRandomHeightData(const HillAlgorithmParameters& params);
+
+	/** \brief  Gets height data from image - converts grayscale data to height data.
+	*   \param  fileName Filename to load heightmap from
+	*   \return Converted height data as a 2D float vector with values from 0.0 to 1.0.
+	*/
+	static std::vector<std::vector<float>> getHeightDataFromImage(const std::string& fileName);
 
 private:
 	/** \brief Sets up heightmap vertices. */
