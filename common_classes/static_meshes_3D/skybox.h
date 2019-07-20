@@ -45,7 +45,7 @@ private:
 	/** \brief  Tries to load the texture of a specified skybox side. If suceeeds, texture is stored in manager.
 	*   \param  sideBit Bit that represents the cube side (from cube.h)
 	*/
-	void tryLoadTexture(const int sideBit);
+	void tryLoadTexture(const int sideBit) const;
 };
 
 } // namespace static_meshes_3D

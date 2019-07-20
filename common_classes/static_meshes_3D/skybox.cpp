@@ -137,7 +137,7 @@ std::string Skybox::getTextureKey(const int sideBit) const
 	return _baseDirectory + "/" + getSideFileName(sideBit);
 }
 
-void Skybox::tryLoadTexture(const int sideBit)
+void Skybox::tryLoadTexture(const int sideBit) const
 {
 	const auto key = getTextureKey(sideBit);
 	const auto fileName = key + "." + _imageExtension;
