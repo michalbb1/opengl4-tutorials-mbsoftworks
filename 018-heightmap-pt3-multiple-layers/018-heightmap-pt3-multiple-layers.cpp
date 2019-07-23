@@ -75,17 +75,27 @@ void OpenGLWindow::initializeScene()
 		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
 		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
 
+		sm.loadVertexShader("multilayer_heightmap", "data/shaders/heightmap/multilayer.vert");
+		sm.loadFragmentShader("multilayer_heightmap", "data/shaders/heightmap/multilayer.frag");
+
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
-
+		 
 		auto& normalsShaderProgram = spm.createShaderProgram("normals");
 		normalsShaderProgram.addShaderToProgram(sm.getVertexShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
+
+		auto& multiLayerHeightmapShaderProgram = spm.createShaderProgram("multilayer_heightmap");
+		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader("multilayer_heightmap"));
+		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("multilayer_heightmap"));
+		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
+		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
+		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
 
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/desert", "png");
 		hud = std::make_unique<HUD018>(*this);
@@ -94,6 +104,9 @@ void OpenGLWindow::initializeScene()
 		TextureManager::getInstance().loadTexture2D("sand", "data/textures/sand.png");
 		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
 		TextureManager::getInstance().loadTexture2D("white_marble", "data/textures/white_marble.jpg");
+		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
+		TextureManager::getInstance().loadTexture2D("rocky_terrain", "data/textures/rocky_terrain.jpg");
+		TextureManager::getInstance().loadTexture2D("snow", "data/textures/snow.png");
 		
 		cube = std::make_unique<static_meshes_3D::Cube>(true, true, true);
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
@@ -115,7 +128,7 @@ void OpenGLWindow::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-const glm::vec3 heightMapSize(200.0f, 20.0f, 200.0f);
+const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
 
 void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
 {
@@ -158,12 +171,6 @@ void OpenGLWindow::renderScene()
 	ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
 	diffuseLight.setUniform(mainProgram, ShaderConstants::diffuseLight());
 
-	// Render heightmap
-	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
-	mainProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-	TextureManager::getInstance().getTexture("sand").bind(0);
-	heightmap->render();
-
 	// Render all the crates (as simple cubes)
 	std::vector<glm::mat4> crateModelMatrices;
 	for (const auto& position : cratePositions)
@@ -199,6 +206,32 @@ void OpenGLWindow::renderScene()
 		TextureManager::getInstance().getTexture("white_marble").bind(0);
 		torus->render();
 	}
+
+	// Render heightmap
+
+	auto& heightmapShaderProgram = spm.getShaderProgram("multilayer_heightmap");
+	heightmapShaderProgram.useProgram();
+	heightmapShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
+	heightmapShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
+	heightmapShaderProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
+	heightmapShaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	TextureManager::getInstance().getTexture("grass").bind(0);
+	TextureManager::getInstance().getTexture("rocky_terrain").bind(1);
+	TextureManager::getInstance().getTexture("snow").bind(2);
+	heightmapShaderProgram["terrainSampler[0]"] = 0;
+	heightmapShaderProgram["terrainSampler[1]"] = 1;
+	heightmapShaderProgram["terrainSampler[2]"] = 2;
+	heightmapShaderProgram["levels[0]"] = 0.25f;
+	heightmapShaderProgram["levels[1]"] = 0.35f;
+	heightmapShaderProgram["levels[2]"] = 0.65f;
+	heightmapShaderProgram["levels[3]"] = 0.75f;
+	heightmapShaderProgram["numLevels"] = 4;
+	ambientLight.setUniform(heightmapShaderProgram, ShaderConstants::ambientLight());
+	diffuseLight.setUniform(heightmapShaderProgram, ShaderConstants::diffuseLight());
+
+	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
+	heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+	heightmap->render();
 
 	if (displayNormals)
 	{
