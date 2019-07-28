@@ -20,6 +20,7 @@ void main()
 {
 	mat4 mvpMatrix = matrices.projectionMatrix * matrices.viewMatrix * matrices.modelMatrix;
 	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
+	
 	ioVertexTexCoord = vertexTexCoord;
 	ioVertexNormal = matrices.normalMatrix*vertexNormal;
 	ioHeight = vertexPosition.y;

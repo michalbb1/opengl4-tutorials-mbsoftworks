@@ -33,10 +33,10 @@ void main()
 			continue; // Not yet in between the right level
 		}
 
+		// This is the index of current sampler that we're using (texture in current layer)
 		int currentSamplerIndex = i / 2;
 
-		if(i % 2 == 0)
-		{
+		if(i % 2 == 0) {
 			// Here there is nothing special, just take the color of current texture
 			textureColor = texture(terrainSampler[currentSamplerIndex], ioVertexTexCoord);
 		}
