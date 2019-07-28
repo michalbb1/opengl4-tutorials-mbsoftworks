@@ -75,27 +75,17 @@ void OpenGLWindow::initializeScene()
 		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
 		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
 
-		sm.loadVertexShader("multilayer_heightmap", "data/shaders/heightmap/multilayer.vert");
-		sm.loadFragmentShader("multilayer_heightmap", "data/shaders/heightmap/multilayer.frag");
-
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
 		 
 		auto& normalsShaderProgram = spm.createShaderProgram("normals");
 		normalsShaderProgram.addShaderToProgram(sm.getVertexShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getGeometryShader("normals"));
 		normalsShaderProgram.addShaderToProgram(sm.getFragmentShader("normals"));
-
-		auto& multiLayerHeightmapShaderProgram = spm.createShaderProgram("multilayer_heightmap");
-		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader("multilayer_heightmap"));
-		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("multilayer_heightmap"));
-		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
-		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
-		multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
 
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/desert", "png");
 		hud = std::make_unique<HUD018>(*this);
@@ -112,7 +102,8 @@ void OpenGLWindow::initializeScene()
 		pyramid = std::make_unique<static_meshes_3D::Pyramid>(true, true, true);
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 3.0f, 1.5f, true, true, true);
 
-		heightmap = std::make_unique<static_meshes_3D::Heightmap>("data\\heightmaps\\tut017.png", true, true, true);
+		static_meshes_3D::Heightmap::prepareMultiLayerShaderProgram();
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>("data\\heightmaps\\tut018.png", true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -208,30 +199,18 @@ void OpenGLWindow::renderScene()
 	}
 
 	// Render heightmap
-
-	auto& heightmapShaderProgram = spm.getShaderProgram("multilayer_heightmap");
+	auto& heightmapShaderProgram = static_meshes_3D::Heightmap::getMultiLayerShaderProgram();
 	heightmapShaderProgram.useProgram();
 	heightmapShaderProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
 	heightmapShaderProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
 	heightmapShaderProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
 	heightmapShaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	TextureManager::getInstance().getTexture("grass").bind(0);
-	TextureManager::getInstance().getTexture("rocky_terrain").bind(1);
-	TextureManager::getInstance().getTexture("snow").bind(2);
-	heightmapShaderProgram["terrainSampler[0]"] = 0;
-	heightmapShaderProgram["terrainSampler[1]"] = 1;
-	heightmapShaderProgram["terrainSampler[2]"] = 2;
-	heightmapShaderProgram["levels[0]"] = 0.25f;
-	heightmapShaderProgram["levels[1]"] = 0.35f;
-	heightmapShaderProgram["levels[2]"] = 0.65f;
-	heightmapShaderProgram["levels[3]"] = 0.75f;
-	heightmapShaderProgram["numLevels"] = 4;
 	ambientLight.setUniform(heightmapShaderProgram, ShaderConstants::ambientLight());
 	diffuseLight.setUniform(heightmapShaderProgram, ShaderConstants::diffuseLight());
 
 	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
 	heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-	heightmap->render();
+	heightmap->renderMultilayered({"rocky_terrain", "grass", "snow"}, {0.2f, 0.3f, 0.55f, 0.7f});
 
 	if (displayNormals)
 	{
