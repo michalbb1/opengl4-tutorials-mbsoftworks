@@ -82,7 +82,7 @@ Uniform& Uniform::operator=(const float floatValue)
 
 Uniform& Uniform::operator=(const std::vector<float>& floatValues)
 {
-	set(floatValues.data(), floatValues.size());
+	set(floatValues.data(), int(floatValues.size()));
 	return *this;
 }
 
