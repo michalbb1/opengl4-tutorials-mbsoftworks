@@ -12,6 +12,21 @@ static const std::string constantName()                     \
 	return value;                                           \
 }
 
+#define DEFINE_SHADER_CONSTANT_INDEX(constantName, constantValue)          \
+DEFINE_SHADER_CONSTANT(constantName, constantValue)                        \
+static const std::string constantName(const int index)                     \
+{                                                                          \
+	return std::string(constantValue) + "[" + std::to_string(index) + "]"; \
+}
+
+class ShaderKeys
+{
+public:
+	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
+	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
+	DEFINE_SHADER_CONSTANT(utility, "utility");
+};
+
 /**
   Storage of all commonly used constants in shader programs.
 */
