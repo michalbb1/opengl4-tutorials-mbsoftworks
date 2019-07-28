@@ -53,12 +53,6 @@ public:
 	*/
 	const Shader& getGeometryShader(const std::string& key) const;
 
-	/** \brief  Deletes all the shaders loaded and clears the shaders cache. */
-	void clearShaderCache();
-
-private:
-	ShaderManager() {}
-
 	/** \brief  Checks, if vertex shader with specified key exists.
 	*   \param  key Vertex shader key to check existence of
 	*   \return True if vertex shader exists, or false otherwise.
@@ -76,6 +70,12 @@ private:
 	*   \return True if geometry shader exists, or false otherwise.
 	*/
 	bool containsGeometryShader(const std::string& key) const;
+
+	/** \brief  Deletes all the shaders loaded and clears the shaders cache. */
+	void clearShaderCache();
+
+private:
+	ShaderManager() {}
 
 	std::map<std::string, std::unique_ptr<Shader>> _vertexShaderCache; //!< Vertex shader cache - stores vertex shaders within their keys in std::map
 	std::map<std::string, std::unique_ptr<Shader>> _fragmentShaderCache; //!< Fragment shader cache - stores fragment shaders within their keys in std::map
