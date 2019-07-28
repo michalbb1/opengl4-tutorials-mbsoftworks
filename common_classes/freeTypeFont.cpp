@@ -280,7 +280,7 @@ int FreeTypeFont::getTextWidth(const std::string& text, int pixelSize) const
 	const auto scale = float(usedPixelSize) / float(_pixelSize);
 
 	// TODO: would be nice to handle invalid characters here as well
-	for (int i = 0; i < text.length(); i++)
+	for (int i = 0; i < int(text.length()); i++)
 	{
 		if (text[i] == '\n' || text[i] == '\r') {
 			continue;
