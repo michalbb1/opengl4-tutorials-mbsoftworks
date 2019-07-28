@@ -10,12 +10,12 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 
 /**
-  HUD for tutorial 017 (heightmap pt.8 - terrain from image and skybox).
+  HUD for tutorial 018 (heightmap pt.1 - random terrain).
 */
-class HUD017 : public HUD
+class HUD018 : public HUD
 {
 public:
-	HUD017(const OpenGLWindow& window);
+	HUD018(const OpenGLWindow& window);
 
 	/** \brief  Renders HUD. */
 	void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract

@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
+#include "../shaderProgram.h"
 #include "../vertexBufferObject.h"
 #include "../texture.h"
 
@@ -20,6 +21,14 @@ namespace static_meshes_3D {
 class Heightmap : public StaticMeshIndexed3D
 {
 public:
+	static const std::string MULTILAYER_SHADER_PROGRAM_KEY; // Holds a key for multilayer heightmap shader program (used as shaders key too)
+
+	struct ShaderConstants
+	{
+		DEFINE_SHADER_CONSTANT_INDEX(terrainSampler, "terrainSampler")
+		DEFINE_SHADER_CONSTANT_INDEX(levels, "levels")
+		DEFINE_SHADER_CONSTANT(numLevels, "numLevels")
+	};
 
 	/**
 		Struct holding all parameters to generate random height data using hill generation algorithm.
@@ -49,6 +58,9 @@ public:
 	Heightmap(const HillAlgorithmParameters& params, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 	Heightmap(const std::string& fileName, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
+	static void prepareMultiLayerShaderProgram();
+	static ShaderProgram& getMultiLayerShaderProgram();
+
 	/** \brief  Generates heightmap from the provided height data.
 	*   \param  heightData 2D float vector containing height data - each value should be between 0.0 (lowest point) and 1.0 (highest point)
 	*/
@@ -56,6 +68,12 @@ public:
 
 	/** \brief Renders heightmap. */
 	void render() const override;
+
+	/** \brief  Renders heightmap with multiple layers.
+	*   \param  textureKeys Contains which textures should be used (ordered from bottom-most to top-most layer)
+	*   \param  levels      Contains where within the heightmap should layer transitions start / stop
+	*/
+	void renderMultilayered(const std::vector<std::string>& textureKeys, const std::vector<float> levels) const;
 
 	/** \brief  Renders heightmap as points only. */
 	void renderPoints() const override;

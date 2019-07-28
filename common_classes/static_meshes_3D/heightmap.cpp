@@ -1,4 +1,6 @@
 #include "heightmap.h"
+#include "../../common_classes/textureManager.h"
+#include "../../common_classes/shaderManager.h"
 #include "../../common_classes/shaderProgramManager.h"
 
 #include <iostream>
@@ -9,6 +11,8 @@
 #include <stb_image.h>
 
 namespace static_meshes_3D {
+
+const std::string Heightmap::MULTILAYER_SHADER_PROGRAM_KEY = "multilayer_heightmap";
 
 Heightmap::Heightmap(const HillAlgorithmParameters& params, bool withPositions, bool withTextureCoordinates, bool withNormals)
 	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
@@ -25,6 +29,34 @@ Heightmap::Heightmap(const std::string& fileName, bool withPositions, bool withT
 	}
 
 	createFromHeightData(heightData);
+}
+
+void Heightmap::prepareMultiLayerShaderProgram()
+{
+	auto& sm = ShaderManager::getInstance();
+	
+	if (!sm.containsFragmentShader(ShaderKeys::ambientLight())
+		|| !sm.containsFragmentShader(ShaderKeys::diffuseLight())
+		|| !sm.containsFragmentShader(ShaderKeys::utility())) {
+		throw std::runtime_error("Please load fragment shaders for ambient light, diffuse light and utility before calling this method!");
+	}
+	
+	sm.loadVertexShader(MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/heightmap/multilayer.vert");
+	sm.loadFragmentShader(MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/heightmap/multilayer.frag");
+
+	auto& spm = ShaderProgramManager::getInstance();
+	auto& multiLayerHeightmapShaderProgram = spm.createShaderProgram(MULTILAYER_SHADER_PROGRAM_KEY);
+	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader(MULTILAYER_SHADER_PROGRAM_KEY));
+	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(MULTILAYER_SHADER_PROGRAM_KEY));
+
+	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
+	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
+	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
+}
+
+ShaderProgram& Heightmap::getMultiLayerShaderProgram()
+{
+	return ShaderProgramManager::getInstance().getShaderProgram(MULTILAYER_SHADER_PROGRAM_KEY);
 }
 
 void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heightData)
@@ -88,6 +120,39 @@ void Heightmap::render() const
 
 	glDrawElements(GL_TRIANGLE_STRIP, _numIndices, GL_UNSIGNED_INT, 0);
 	glDisable(GL_PRIMITIVE_RESTART);
+}
+
+void Heightmap::renderMultilayered(const std::vector<std::string>& textureKeys, const std::vector<float> levels) const
+{
+	if (!_isInitialized) {
+		return;
+	}
+
+	// If there are less than 2 textures, does not even make sense to render heightmap in multilayer way
+	if (textureKeys.size() < 2) {
+		return;
+	}
+
+	// Number of levels defined must be correct
+	if ((textureKeys.size() - 1) * 2 != levels.size()) {
+		return;
+	}
+
+	// Bind chosen textures first
+	const auto& tm = TextureManager::getInstance();
+	auto& heightmapShaderProgram = getMultiLayerShaderProgram();
+	for (auto i = 0; i < int(textureKeys.size()); i++)
+	{
+		tm.getTexture(textureKeys[i]).bind(i);
+		heightmapShaderProgram[Heightmap::ShaderConstants::terrainSampler(i)] = i;
+	}
+
+	// Set uniform levels
+	heightmapShaderProgram[Heightmap::ShaderConstants::numLevels()] = int(levels.size());
+	heightmapShaderProgram[Heightmap::ShaderConstants::levels()] = levels;
+
+	// Finally render heightmap
+	render();
 }
 
 void Heightmap::renderPoints() const

@@ -91,6 +91,7 @@ add_subdirectory(014-normals-diffuse-lighting)
 add_subdirectory(015-geometry-shaders)
 add_subdirectory(016-heightmap-pt1-random-terrain)
 add_subdirectory(017-heightmap-pt2-from-image-and-skybox)
+add_subdirectory(018-heightmap-pt3-multiple-layers)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
