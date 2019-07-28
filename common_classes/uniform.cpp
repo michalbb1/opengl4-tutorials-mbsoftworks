@@ -80,6 +80,12 @@ Uniform& Uniform::operator=(const float floatValue)
 	return *this;
 }
 
+Uniform& Uniform::operator=(const std::vector<float>& floatValues)
+{
+	set(floatValues.data(), floatValues.size());
+	return *this;
+}
+
 void Uniform::set(const float floatValue)
 {
 	glUniform1fv(_location, 1, (GLfloat*)&floatValue);

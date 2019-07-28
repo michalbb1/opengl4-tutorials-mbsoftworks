@@ -35,6 +35,7 @@ public:
 
 	// Family of functions setting float uniforms
 	Uniform& operator=(const float floatValue);
+	Uniform& operator=(const std::vector<float>& floatValues);
 	void set(const float floatValue);
 	void set(const float* floatValues, int count = 1);
 
