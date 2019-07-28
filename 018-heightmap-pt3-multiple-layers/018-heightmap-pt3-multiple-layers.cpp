@@ -91,7 +91,6 @@ void OpenGLWindow::initializeScene()
 		hud = std::make_unique<HUD018>(*this);
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
-		TextureManager::getInstance().loadTexture2D("sand", "data/textures/sand.png");
 		TextureManager::getInstance().loadTexture2D("crate", "data/textures/crate.png");
 		TextureManager::getInstance().loadTexture2D("white_marble", "data/textures/white_marble.jpg");
 		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
