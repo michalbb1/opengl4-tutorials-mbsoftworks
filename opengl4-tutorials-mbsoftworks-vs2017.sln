@@ -44,6 +44,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "017-heightmap-pt2-from-imag
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "018-heightmap-pt3-multiple-layers", "018-heightmap-pt3-multiple-layers\018-heightmap-pt3-multiple-layers.vcxproj", "{50357D22-C7E7-4EE8-80A5-EF455B5AC11A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "019-assimp-model-loading", "019-assimp-model-loading\019-assimp-model-loading.vcxproj", "{56E189B6-49C9-415D-BD55-0AAC02AA8153}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -204,6 +206,14 @@ Global
 		{50357D22-C7E7-4EE8-80A5-EF455B5AC11A}.Release|x64.Build.0 = Release|x64
 		{50357D22-C7E7-4EE8-80A5-EF455B5AC11A}.Release|x86.ActiveCfg = Release|Win32
 		{50357D22-C7E7-4EE8-80A5-EF455B5AC11A}.Release|x86.Build.0 = Release|Win32
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Debug|x64.ActiveCfg = Debug|x64
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Debug|x64.Build.0 = Debug|x64
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Debug|x86.ActiveCfg = Debug|Win32
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Debug|x86.Build.0 = Debug|Win32
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Release|x64.ActiveCfg = Release|x64
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Release|x64.Build.0 = Release|x64
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Release|x86.ActiveCfg = Release|Win32
+		{56E189B6-49C9-415D-BD55-0AAC02AA8153}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
