@@ -8,3 +8,6 @@
 [submodule "dependencies/freetype2"]
 	path = dependencies/freetype2
 	url = https://github.com/aseprite/freetype2.git
+[submodule "dependencies/assimp"]
+	path = dependencies/assimp
+	url = https://github.com/assimp/assimp.git

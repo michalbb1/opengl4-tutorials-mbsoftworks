@@ -38,6 +38,12 @@ public:
 	*/
 	bool containsTexture(const std::string& key) const;
 
+	/** \brief  Checks, if texture with specified file path already exists.
+	*   \param  filePath File path of the texture to check
+	*   \return Texture key if texture with such path exists or empty string otherwise
+	*/
+	std::string containsTextureWithPath(const std::string& filePath) const;
+
 	/** \brief  Deletes a texture from the manager. If it does not exist, does not do anything.
 	*   \param  key Texture key to delete
 	*   \return True if texture exists and has been deleted or false otherwise.
