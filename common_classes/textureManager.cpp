@@ -52,3 +52,17 @@ bool TextureManager::containsTexture(const std::string& key) const
 {
 	return _textureCache.count(key) > 0;
 }
+
+std::string TextureManager::containsTextureWithPath(const std::string& filePath) const
+{
+	for (const auto& keyTexturePair : _textureCache)
+	{
+		const auto& key = keyTexturePair.first;
+		const auto& texture = keyTexturePair.second;
+		if (texture->getFilePath() == filePath) {
+			return key;
+		}
+	}
+
+	return "";
+}

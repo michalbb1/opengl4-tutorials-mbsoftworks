@@ -70,6 +70,21 @@ inline std::string normalizeSlashes(const std::string& originalPath, char slashC
 	return result;
 }
 
+
+inline std::string getDirectoryPath(const std::string& filePath)
+{
+	auto lastSlashIndex = filePath.find_last_of('\\');
+	if (lastSlashIndex == std::string::npos) {
+		lastSlashIndex = filePath.find_last_of('/');
+	}
+
+	if (lastSlashIndex == std::string::npos) {
+		return "";
+	}
+
+	return filePath.substr(0, lastSlashIndex + 1);
+}
+
 inline std::string formatStringImpl(const char* s, std::stringstream& ss)
 {
 	ss << s;

@@ -46,18 +46,19 @@ bool Texture::createFromData(const unsigned char* data, int width, int height, i
 	return true;
 }
 
-bool Texture::loadTexture2D(const std::string& fileName, bool generateMipmaps)
+bool Texture::loadTexture2D(const std::string& filePath, bool generateMipmaps)
 {
 	stbi_set_flip_vertically_on_load(1);
-	const auto imageData = stbi_load(fileName.c_str(), &_width, &_height, &_bytesPerPixel, 0);
+	const auto imageData = stbi_load(filePath.c_str(), &_width, &_height, &_bytesPerPixel, 0);
 	if (imageData == nullptr)
 	{
-		std::cout << "Failed to load image " << fileName << "!" << std::endl;
+		std::cout << "Failed to load image " << filePath << "!" << std::endl;
 		return false;
 	}
 
 	auto result = createFromData(imageData, _width, _height, _bytesPerPixel, generateMipmaps);
 	stbi_image_free(imageData);
+	_filePath = filePath;
 	return result;
 }
 
@@ -79,6 +80,11 @@ void Texture::deleteTexture()
 
 	glDeleteTextures(1, &_textureID);
 	_isLoaded = false;
+}
+
+std::string Texture::getFilePath() const
+{
+	return _filePath;
 }
 
 int Texture::getWidth() const

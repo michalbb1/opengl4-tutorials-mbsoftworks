@@ -12,7 +12,6 @@ smooth in vec2 ioVertexTexCoord;
 smooth in vec3 ioVertexNormal;
 smooth in float ioHeight;
 
-uniform sampler2D sampler;
 uniform vec4 color;
 
 uniform AmbientLight ambientLight;
