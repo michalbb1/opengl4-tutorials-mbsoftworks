@@ -1,3 +1,6 @@
+echo "Updating all submodules..."
+git submodule update --init --recursive
+
 echo Creating subdirectories for Assimp libraries...
 mkdir "dependencies/assimp-prebuilt/vs2017/libs32/debug"
 mkdir "dependencies/assimp-prebuilt/vs2017/libs32/release"
