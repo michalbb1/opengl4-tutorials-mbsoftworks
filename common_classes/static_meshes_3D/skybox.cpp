@@ -62,7 +62,7 @@ void Skybox::render(const glm::vec3& cameraPosition, ShaderProgram& shaderProgra
 
 	// Enlarge default cube by some factor, that's not further then far clipping plane (100 is fine)
 	auto skyboxModelMatrix = glm::translate(glm::mat4(1.0f), cameraPosition);
-	skyboxModelMatrix = glm::scale(skyboxModelMatrix, glm::vec3(100.0f, 100.0f, 100.0f));
+	skyboxModelMatrix = glm::scale(skyboxModelMatrix, glm::vec3(900.0f, 900.0f, 900.0f));
 	shaderProgram.setModelAndNormalMatrix(skyboxModelMatrix);
 
 	// Render front side if texture has been loaded

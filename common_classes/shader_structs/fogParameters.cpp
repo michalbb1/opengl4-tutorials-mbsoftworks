@@ -37,4 +37,9 @@ void FogParameters::setUniform(ShaderProgram& shaderProgram, const std::string& 
 	shaderProgram[constructAttributeName(uniformName, "isEnabled")] = isEnabled;
 }
 
+std::string FogParameters::getFogEquationName() const
+{
+	return equation == FOG_EQUATION_LINEAR ? "Linear" : equation == FOG_EQUATION_EXP ? "Exp" : "Exp2";
+}
+
 } // namespace shader_structs

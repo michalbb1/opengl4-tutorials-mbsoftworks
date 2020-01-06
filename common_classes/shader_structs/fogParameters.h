@@ -18,6 +18,8 @@ struct FogParameters : ShaderStruct
 	//* \brief Sets fog parameters in a shader program. */
 	void setUniform(ShaderProgram& shaderProgram, const std::string& uniformName) const override;
 
+	std::string getFogEquationName() const;
+
 	glm::vec3 color; //!< Color to be used with fog, usually grayish
 	float linearStart; //!< This is where linear fog starts (valid for linear equation only)
 	float linearEnd; //!< This is where linear fog ends (valid for linear equation only)

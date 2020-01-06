@@ -13,7 +13,7 @@
 namespace static_meshes_3D {
 
 const std::string Heightmap::MULTILAYER_SHADER_PROGRAM_KEY = "multilayer_heightmap";
-const std::string Heightmap::MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY = "multilayer_heightmap_fog";
+
 
 Heightmap::Heightmap(const HillAlgorithmParameters& params, bool withPositions, bool withTextureCoordinates, bool withNormals)
 	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
@@ -45,9 +45,6 @@ void Heightmap::prepareMultiLayerShaderProgram()
 	sm.loadVertexShader(MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/heightmap/multilayer.vert");
 	sm.loadFragmentShader(MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/heightmap/multilayer.frag");
 
-	sm.loadVertexShader(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY, "data/shaders/heightmap/multilayer_fog.vert");
-	sm.loadFragmentShader(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY, "data/shaders/heightmap/multilayer_fog.frag");
-
 	auto& spm = ShaderProgramManager::getInstance();
 	auto& multiLayerHeightmapShaderProgram = spm.createShaderProgram(MULTILAYER_SHADER_PROGRAM_KEY);
 	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader(MULTILAYER_SHADER_PROGRAM_KEY));
@@ -56,25 +53,11 @@ void Heightmap::prepareMultiLayerShaderProgram()
 	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
 	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
 	multiLayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
-
-	auto& multiLayerHeightmapShaderProgramWithFog = spm.createShaderProgram(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY);
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getVertexShader(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY));
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY));
-
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
-	multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
 }
 
 ShaderProgram& Heightmap::getMultiLayerShaderProgram()
 {
 	return ShaderProgramManager::getInstance().getShaderProgram(MULTILAYER_SHADER_PROGRAM_KEY);
-}
-
-ShaderProgram& Heightmap::getMultiLayerShaderProgramWithFog()
-{
-	return ShaderProgramManager::getInstance().getShaderProgram(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY);
 }
 
 void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heightData)

@@ -162,6 +162,7 @@
     <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\assimpModel.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\heightmap.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\heightmapWithFog.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\pyramid.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\assimpModel.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\heightmap.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\heightmapWithFog.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h" />

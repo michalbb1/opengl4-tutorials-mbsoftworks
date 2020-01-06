@@ -22,7 +22,6 @@ class Heightmap : public StaticMeshIndexed3D
 {
 public:
 	static const std::string MULTILAYER_SHADER_PROGRAM_KEY; // Holds a key for multilayer heightmap shader program (used as shaders key too)
-	static const std::string MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY; // Holds a key for multilayer heightmap shader program with a fog (used as shaders key too)
 
 	struct ShaderConstants
 	{
@@ -61,7 +60,6 @@ public:
 
 	static void prepareMultiLayerShaderProgram();
 	static ShaderProgram& getMultiLayerShaderProgram();
-	static ShaderProgram& getMultiLayerShaderProgramWithFog();
 
 	/** \brief  Generates heightmap from the provided height data.
 	*   \param  heightData 2D float vector containing height data - each value should be between 0.0 (lowest point) and 1.0 (highest point)

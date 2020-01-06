@@ -18,13 +18,24 @@ HUD020::HUD020(const OpenGLWindow& window)
 	});
 }
 
-void HUD020::renderHUD(const bool displayNormals) const
+void HUD020::renderHUD(const shader_structs::FogParameters& fogParameters) const
 {
 	printBuilder().print(10, 10, "FPS: {}", _window.getFPS());
 	printBuilder().print(10, 40, "Vertical Synchronization: {} (Press F3 to toggle)", _window.isVerticalSynchronizationEnabled() ? "On" : "Off");
 	
-	// Print information about displaying normals
-	printBuilder().print(10, 70, "Display Normals: {} (Press 'N' to toggle)", displayNormals ? "On" : "Off");
+	// Print information about fog
+	printBuilder().print(10, 70, "Fog: {} (Press 'X' to toggle)", fogParameters.isEnabled ? "On" : "Off");
+	printBuilder().print(10, 100, "Fog equation: {} (Press 'F' to change)", fogParameters.getFogEquationName());
+	if (fogParameters.equation == shader_structs::FogParameters::FOG_EQUATION_LINEAR)
+	{
+		printBuilder().print(10, 130, "Start distance: {} (Press '1' and '2' to change)", fogParameters.linearStart);
+		printBuilder().print(10, 160, "End distance: {} (Press '3' and '4' to change)", fogParameters.linearEnd);
+	}
+	else if (fogParameters.equation == shader_structs::FogParameters::FOG_EQUATION_EXP
+		|| fogParameters.equation == shader_structs::FogParameters::FOG_EQUATION_EXP2)
+	{
+		printBuilder().print(10, 130, "Density: {} (Press '1' and '2' to change)", fogParameters.density);
+	}
 
 	printBuilder()
 		.fromRight()

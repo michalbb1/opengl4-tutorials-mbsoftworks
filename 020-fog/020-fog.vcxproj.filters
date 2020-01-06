@@ -165,6 +165,9 @@
     <ClCompile Include="..\common_classes\shader_structs\fogParameters.cpp">
       <Filter>Source Files\common_classes\shader_structs</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\heightmapWithFog.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\shader_structs\fogParameters.h">
       <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\heightmapWithFog.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
