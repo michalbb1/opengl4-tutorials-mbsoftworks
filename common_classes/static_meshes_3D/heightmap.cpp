@@ -14,6 +14,7 @@ namespace static_meshes_3D {
 
 const std::string Heightmap::MULTILAYER_SHADER_PROGRAM_KEY = "multilayer_heightmap";
 
+
 Heightmap::Heightmap(const HillAlgorithmParameters& params, bool withPositions, bool withTextureCoordinates, bool withNormals)
 	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
 {

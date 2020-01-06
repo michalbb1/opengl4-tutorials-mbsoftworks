@@ -25,6 +25,7 @@ public:
 	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
 	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
 	DEFINE_SHADER_CONSTANT(utility, "utility");
+	DEFINE_SHADER_CONSTANT(fog, "fog");
 };
 
 /**
@@ -43,6 +44,8 @@ public:
 	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
 	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
 	DEFINE_SHADER_CONSTANT(normalLength, "normalLength");
+
+	DEFINE_SHADER_CONSTANT(fogParams, "fogParams");
 };
 
 /**
