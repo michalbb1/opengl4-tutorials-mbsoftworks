@@ -79,5 +79,5 @@ Uniform& ShaderProgram::operator[](const std::string& varName)
 void ShaderProgram::setModelAndNormalMatrix(const glm::mat4& modelMatrix)
 {
 	(*this)[ShaderConstants::modelMatrix()] = modelMatrix;
-	(*this)["matrices.normalMatrix"] = glm::transpose(glm::inverse(glm::mat3(modelMatrix)));
+	(*this)[ShaderConstants::normalMatrix()] = glm::transpose(glm::inverse(glm::mat3(modelMatrix)));
 }
