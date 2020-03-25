@@ -13,6 +13,7 @@ struct FogParameters : ShaderStruct
 	FogParameters();
 	FogParameters(const glm::vec3& color, float linearStart, float linearEnd, float density, int equation, const bool isEnabled = true);
 
+	//* \brief Fog parameters for using no fog (not enabled fog). */
 	static const FogParameters& noFog();
 
 	//* \brief Sets fog parameters in a shader program. */
