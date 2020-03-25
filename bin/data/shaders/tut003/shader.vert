@@ -7,6 +7,6 @@ smooth out vec3 ioVertexColor;
 
 void main()
 {
-	gl_Position = vec4(vertexPosition, 1.0);
-	ioVertexColor = vertexColor;
+    gl_Position = vec4(vertexPosition, 1.0);
+    ioVertexColor = vertexColor;
 }

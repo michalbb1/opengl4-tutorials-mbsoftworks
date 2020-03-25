@@ -2,10 +2,10 @@
 
 uniform struct
 {
-	mat4 projectionMatrix;
-	mat4 viewMatrix;
-	mat4 modelMatrix;
-	mat3 normalMatrix;
+    mat4 projectionMatrix;
+    mat4 viewMatrix;
+    mat4 modelMatrix;
+    mat3 normalMatrix;
 } matrices;
 
 layout(location = 0) in vec3 vertexPosition;
@@ -18,10 +18,10 @@ smooth out float ioHeight;
 
 void main()
 {
-	mat4 mvpMatrix = matrices.projectionMatrix * matrices.viewMatrix * matrices.modelMatrix;
-	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
-	
-	ioVertexTexCoord = vertexTexCoord;
-	ioVertexNormal = matrices.normalMatrix*vertexNormal;
-	ioHeight = vertexPosition.y;
+    mat4 mvpMatrix = matrices.projectionMatrix * matrices.viewMatrix * matrices.modelMatrix;
+    gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
+    
+    ioVertexTexCoord = vertexTexCoord;
+    ioVertexNormal = matrices.normalMatrix*vertexNormal;
+    ioHeight = vertexPosition.y;
 }

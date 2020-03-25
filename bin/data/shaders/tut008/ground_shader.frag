@@ -10,10 +10,10 @@ uniform sampler2D pavementSampler;
 
 void main()
 {
-	vec4 snowTexel = texture(snowSampler, ioVertexTexCoord);
-	vec4 pathTexel = texture(pathSampler, ioVertexTexCoord / 20.0f);
-	vec4 pavementTexel = texture(pavementSampler, ioVertexTexCoord);
-	float pathWeight = pathTexel.r;
-	float snowWeight = 1.0-pathWeight;
-	outputColor = pavementTexel*pathWeight + snowTexel*snowWeight;
+    vec4 snowTexel = texture(snowSampler, ioVertexTexCoord);
+    vec4 pathTexel = texture(pathSampler, ioVertexTexCoord / 20.0f);
+    vec4 pavementTexel = texture(pavementSampler, ioVertexTexCoord);
+    float pathWeight = pathTexel.r;
+    float snowWeight = 1.0-pathWeight;
+    outputColor = pavementTexel*pathWeight + snowTexel*snowWeight;
 }

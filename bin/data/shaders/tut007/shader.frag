@@ -9,6 +9,6 @@ uniform vec4 color;
 
 void main()
 {
-	vec4 texColor = texture(sampler, ioVertexTexCoord);
-	outputColor = texColor*color;
+    vec4 texColor = texture(sampler, ioVertexTexCoord);
+    outputColor = texColor*color;
 }

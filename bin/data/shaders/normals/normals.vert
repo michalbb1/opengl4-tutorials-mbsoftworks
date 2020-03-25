@@ -8,6 +8,6 @@ out vec3 ioVertexNormal;
 
 void main()
 {
-   ioVertexPosition = vertexPosition;
-   ioVertexNormal = vertexNormal;
+    ioVertexPosition = vertexPosition;
+    ioVertexNormal = vertexNormal;
 }

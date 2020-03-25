@@ -6,5 +6,5 @@ smooth in vec3 ioVertexColor;
 
 void main()
 {
-	outputColor = vec4(ioVertexColor, 1.0);
+    outputColor = vec4(ioVertexColor, 1.0);
 }
