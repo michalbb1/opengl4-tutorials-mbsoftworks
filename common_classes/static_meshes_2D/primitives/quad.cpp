@@ -44,12 +44,12 @@ void Quad::initializeData()
 	
 	if (hasPositions())
 	{
-		_vbo.addData(vertices, sizeof(glm::vec2)*numVertices);
+		_vbo.addRawData(vertices, sizeof(glm::vec2)*numVertices);
 	}
 
 	if (hasTextureCoordinates())
 	{
-		_vbo.addData(vertices, sizeof(glm::vec2)*numVertices);
+		_vbo.addRawData(vertices, sizeof(glm::vec2)*numVertices);
 	}
 
 	_vbo.uploadDataToGPU(GL_STATIC_DRAW);

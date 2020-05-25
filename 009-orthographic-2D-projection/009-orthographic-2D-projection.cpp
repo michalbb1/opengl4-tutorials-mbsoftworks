@@ -125,9 +125,9 @@ void OpenGLWindow::initializeScene()
 	// Setup vertex positions first
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(static_geometry::plainGroundVertices, sizeof(static_geometry::plainGroundVertices));
-	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
-	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
+	shapesVBO.addRawData(static_geometry::plainGroundVertices, sizeof(static_geometry::plainGroundVertices));
+	shapesVBO.addRawData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
+	shapesVBO.addRawData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
@@ -135,9 +135,9 @@ void OpenGLWindow::initializeScene()
 	// Setup texture coordinates next
 	texCoordsVBO.createVBO();
 	texCoordsVBO.bindVBO();
-	texCoordsVBO.addData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
-	texCoordsVBO.addData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
-	texCoordsVBO.addData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
+	texCoordsVBO.addRawData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
+	texCoordsVBO.addRawData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
+	texCoordsVBO.addRawData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
 	
 	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);

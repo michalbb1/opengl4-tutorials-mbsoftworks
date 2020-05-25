@@ -54,16 +54,16 @@ void PlainGround::initializeData()
 	_vbo.bindVBO();
 
 	if (hasPositions()) {
-		_vbo.addData(vertices, sizeof(glm::vec3)*numVertices);
+		_vbo.addRawData(vertices, sizeof(glm::vec3)*numVertices);
 	}
 
 	if (hasTextureCoordinates()) {
-		_vbo.addData(textureCoordinates, sizeof(glm::vec2)*numVertices);
+		_vbo.addRawData(textureCoordinates, sizeof(glm::vec2)*numVertices);
 	}
 
 	if (hasNormals()) {
 		glm::vec3 normal(0.0f, 1.0f, 0.0f);
-		_vbo.addData(&normal, sizeof(glm::vec3), numVertices);
+		_vbo.addRawData(&normal, sizeof(glm::vec3), numVertices);
 	}
 
 	_vbo.uploadDataToGPU(GL_STATIC_DRAW);

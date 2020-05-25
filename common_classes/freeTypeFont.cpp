@@ -175,8 +175,8 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
 
 			for (int i = 0; i < 4; i++)
 			{
-				_vbo.addData(&vertices[i], sizeof(glm::vec2));
-				_vbo.addData(&textureCoordinates[i], sizeof(glm::vec2));
+				_vbo.addRawData(&vertices[i], sizeof(glm::vec2));
+				_vbo.addRawData(&textureCoordinates[i], sizeof(glm::vec2));
 			}
 
 			charProps.renderIndex = currentRenderIndex;

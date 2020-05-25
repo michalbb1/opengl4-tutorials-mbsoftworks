@@ -11,10 +11,7 @@ void VertexBufferObject::createVBO(uint32_t reserveSizeBytes)
 	}
 
 	glGenBuffers(1, &_bufferID);
-	if (reserveSizeBytes > 0)
-	{
-		_rawData.reserve(reserveSizeBytes);
-	}
+	_rawData.reserve(reserveSizeBytes > 0 ? reserveSizeBytes : 1024);
 
 	_isBufferCreated = true;
 }
@@ -31,21 +28,28 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 	glBindBuffer(_bufferType, _bufferID);
 }
 
-void VertexBufferObject::addData(const void* ptrData, uint32_t dataSize, int repeat)
+void VertexBufferObject::addRawData(const void* ptrData, uint32_t dataSize, int repeat)
 {
-	for (int i = 0; i < repeat; i++) {
-		_rawData.insert(_rawData.end(), (unsigned char*)ptrData, (unsigned char*)ptrData + dataSize);
+	const auto bytesToAdd = dataSize * repeat;
+	if (_bytesAdded + bytesToAdd > _rawData.capacity())
+	{
+		const auto newCapacity = _rawData.capacity() * 2;
+		std::vector<unsigned char> newRawData;
+		newRawData.reserve(newCapacity);
+		memcpy(newRawData.data(), _rawData.data(), _bytesAdded);
+		_rawData = std::move(newRawData);
+	}
+
+	for (int i = 0; i < repeat; i++)
+	{
+		memcpy(_rawData.data() + _bytesAdded, ptrData, dataSize);
+		_bytesAdded += dataSize;
 	}
 }
 
-void* VertexBufferObject::getCurrentDataPointer()
+void* VertexBufferObject::getRawDataPointer()
 {
-	if (_isDataUploaded || _rawData.size() == 0)
-	{
-		return nullptr;
-	}
-
-	return (void*)_rawData[0];
+	return _rawData.data();
 }
 
 void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
@@ -56,10 +60,10 @@ void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
 		return;
 	}
 
-	glBufferData(_bufferType, _rawData.size(), &_rawData[0], usageHint);
+	glBufferData(_bufferType, _bytesAdded, _rawData.data(), usageHint);
 	_isDataUploaded = true;
-	_uploadedDataSize = (uint32_t)_rawData.size();
-	_rawData.clear();
+	_uploadedDataSize = _bytesAdded;
+	_bytesAdded = 0;
 }
 
 void* VertexBufferObject::mapBufferToMemory(GLenum usageHint)
@@ -94,7 +98,7 @@ GLuint VertexBufferObject::getBufferID()
 
 uint32_t VertexBufferObject::getBufferSize()
 {
-	return _isDataUploaded ? _uploadedDataSize : (uint32_t)_rawData.size();
+	return _isDataUploaded ? _uploadedDataSize : _bytesAdded;
 }
 
 void VertexBufferObject::deleteVBO()
@@ -105,6 +109,4 @@ void VertexBufferObject::deleteVBO()
 		_isDataUploaded = false;
 		_isBufferCreated = false;
 	}
-	
-	_rawData.clear();
 }

@@ -58,7 +58,7 @@ void Torus::initializeData()
 					(_mainRadius + _tubeRadius * cosTubeSegment)*sinMainSegment,
 					_tubeRadius*sinTubeSegment);
 				
-				_vbo.addData(&surfacePosition, sizeof(glm::vec3));
+				_vbo.addRawData(&surfacePosition, sizeof(glm::vec3));
 
 				// Update current tube angle
 				currentTubeSegmentAngle += tubeSegmentAngleStep;
@@ -84,7 +84,7 @@ void Torus::initializeData()
 			{
 				// Calculate texture coordinate and add it to the buffer
 				auto textureCoordinate = glm::vec2(currentTubeSegmentTexCoordU, currentMainSegmentTexCoordV);
-				_vbo.addData(&textureCoordinate, sizeof(glm::vec2));
+				_vbo.addRawData(&textureCoordinate, sizeof(glm::vec2));
 				// Update texture coordinate of tube segment
 				currentTubeSegmentTexCoordU += tubeSegmentTextureStep;
 			}
@@ -114,7 +114,7 @@ void Torus::initializeData()
 					sinMainSegment*cosTubeSegment,
 					sinTubeSegment
 				);
-				_vbo.addData(&normal, sizeof(glm::vec3));
+				_vbo.addRawData(&normal, sizeof(glm::vec3));
 
 				// Update current tube angle
 				currentTubeSegmentAngle += tubeSegmentAngleStep;
@@ -132,15 +132,15 @@ void Torus::initializeData()
 		for (auto j = 0; j <= _tubeSegments; j++)
 		{
 			GLuint vertexIndexA = currentVertexOffset;
-			_indicesVBO.addData(&vertexIndexA, sizeof(GLuint));
+			_indicesVBO.addRawData(&vertexIndexA, sizeof(GLuint));
 			GLuint vertexIndexB = currentVertexOffset + _tubeSegments + 1;
-			_indicesVBO.addData(&vertexIndexB, sizeof(GLuint));
+			_indicesVBO.addRawData(&vertexIndexB, sizeof(GLuint));
 			currentVertexOffset++;
 		}
 
 		// Don't restart primitive, if it's last segment, rendering ends here anyway
 		if (i != _mainSegments - 1) {
-			_indicesVBO.addData(&_primitiveRestartIndex, sizeof(GLuint));
+			_indicesVBO.addRawData(&_primitiveRestartIndex, sizeof(GLuint));
 		}
 	}
 

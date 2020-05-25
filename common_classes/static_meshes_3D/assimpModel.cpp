@@ -70,7 +70,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 				for (auto k = 0; k < face.mNumIndices; k++)
 				{
 					const auto& position = meshPtr->mVertices[face.mIndices[k]];
-					_vbo.addData(&position, sizeof(aiVector3D));
+					_vbo.addRawData(&position, sizeof(aiVector3D));
 				}
 
 				vertexCountMesh += face.mNumIndices;
@@ -96,7 +96,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 				for (auto k = 0; k < face.mNumIndices; k++)
 				{
 					const auto& textureCoord = meshPtr->mTextureCoords[0][face.mIndices[k]];
-					_vbo.addData(&textureCoord, sizeof(aiVector2D));
+					_vbo.addRawData(&textureCoord, sizeof(aiVector2D));
 				}
 			}
 		}
@@ -117,7 +117,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 				for (auto k = 0; k < face.mNumIndices; k++)
 				{
 					const auto& normal = meshPtr->HasNormals() ? meshPtr->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
-					_vbo.addData(&normal, sizeof(aiVector3D));
+					_vbo.addRawData(&normal, sizeof(aiVector3D));
 				}
 			}
 		}

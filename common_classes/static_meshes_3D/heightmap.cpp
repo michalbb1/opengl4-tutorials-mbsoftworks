@@ -270,7 +270,7 @@ void Heightmap::setUpVertices()
 			const auto& fVertexHeight = _heightData[i][j];
 			_vertices[i][j] = glm::vec3(-0.5f + factorColumn, fVertexHeight, -0.5f + factorRow);
 		}
-		_vbo.addData(_vertices[i].data(), _columns*sizeof(glm::vec3));
+		_vbo.addRawData(_vertices[i].data(), _columns*sizeof(glm::vec3));
 	}
 }
 
@@ -286,7 +286,7 @@ void Heightmap::setUpTextureCoordinates()
 		for (auto j = 0; j < _columns; j++) {
 			_textureCoordinates[i][j] = glm::vec2(textureStepU * j, textureStepV * i);
 		}
-		_vbo.addData(_textureCoordinates[i].data(), _columns * sizeof(glm::vec2));
+		_vbo.addRawData(_textureCoordinates[i].data(), _columns * sizeof(glm::vec2));
 	}
 }
 
@@ -356,7 +356,7 @@ void Heightmap::setUpNormals()
 			// Store final normal of j-th vertex in i-th row
 			_normals[i][j] = glm::normalize(finalVertexNormal);
 		}
-		_vbo.addData(_normals[i].data(), _columns * sizeof(glm::vec3));
+		_vbo.addRawData(_normals[i].data(), _columns * sizeof(glm::vec3));
 	}
 }
 
@@ -375,11 +375,11 @@ void Heightmap::setUpIndexBuffer()
 			{
 				const auto row = i + k;
 				const auto index = row * _columns + j;
-				_indicesVBO.addData(&index, sizeof(int));
+				_indicesVBO.addRawData(&index, sizeof(int));
 			}
 		}
 		// Restart triangle strips
-		_indicesVBO.addData(&_primitiveRestartIndex, sizeof(int));
+		_indicesVBO.addRawData(&_primitiveRestartIndex, sizeof(int));
 	}
 
 	// Send indices to GPU
