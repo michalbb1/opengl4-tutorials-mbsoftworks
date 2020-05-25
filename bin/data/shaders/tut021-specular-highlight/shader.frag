@@ -3,7 +3,6 @@
 #include "../lighting/ambientLight.frag"
 #include "../lighting/diffuseLight.frag"
 #include "../lighting/specularHighlight.frag"
-#include "../common/utility.frag"
 
 layout(location = 0) out vec4 outputColor;
 
