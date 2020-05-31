@@ -160,11 +160,16 @@ bool OpenGLWindow::isVerticalSynchronizationEnabled() const
 	return _isVerticalSynchronizationEnabled;
 }
 
+OpenGLWindow* OpenGLWindow::getDefaultWindow()
+{
+    return _windows.size() == 0 ? nullptr : (*_windows.begin()).second;
+}
+
 void OpenGLWindow::recalculateProjectionMatrix()
 {
 	int width, height;
 	glfwGetWindowSize(getWindow(), &width, &height);
-	_projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1000.0f);
+    _projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1500.0f);
 	_orthoMatrix = glm::ortho(0.0f, float(width), 0.0f, float(height));
 }
 
