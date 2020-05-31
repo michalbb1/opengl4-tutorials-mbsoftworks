@@ -61,17 +61,12 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
 		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 
-		sm.loadVertexShader("normals", "data/shaders/normals/normals.vert");
-		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
-		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
-
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut021_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut021_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::specularHighlight()));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
 		 
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/jajsnow1", "jpg");
 		hud = std::make_unique<HUD021>(*this);
