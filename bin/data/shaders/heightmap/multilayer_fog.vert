@@ -2,10 +2,10 @@
 
 uniform struct
 {
-	mat4 projectionMatrix;
-	mat4 viewMatrix;
-	mat4 modelMatrix;
-	mat3 normalMatrix;
+    mat4 projectionMatrix;
+    mat4 viewMatrix;
+    mat4 modelMatrix;
+    mat3 normalMatrix;
 } matrices;
 
 layout(location = 0) in vec3 vertexPosition;
@@ -19,12 +19,12 @@ smooth out vec4 ioEyeSpacePosition;
 
 void main()
 {
-	vec4 eyeSpacePosition = matrices.viewMatrix * matrices.modelMatrix * vec4(vertexPosition, 1.0);
-	mat4 mvpMatrix = matrices.projectionMatrix * matrices.viewMatrix * matrices.modelMatrix;
-	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
-	
-	ioVertexTexCoord = vertexTexCoord;
-	ioVertexNormal = matrices.normalMatrix*vertexNormal;
-	ioHeight = vertexPosition.y;
-	ioEyeSpacePosition = eyeSpacePosition;
+    mat4 mvMatrix = matrices.viewMatrix * matrices.modelMatrix;
+    mat4 mvpMatrix = matrices.projectionMatrix * mvMatrix;
+    gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
+    
+    ioVertexTexCoord = vertexTexCoord;
+    ioVertexNormal = matrices.normalMatrix * vertexNormal;
+    ioHeight = vertexPosition.y;
+    ioEyeSpacePosition = mvMatrix * vec4(vertexPosition, 1.0);
 }

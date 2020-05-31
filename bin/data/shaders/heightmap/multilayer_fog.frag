@@ -26,56 +26,56 @@ uniform int numLevels;
 
 void main()
 {
-	vec3 normal = normalize(ioVertexNormal);
-	vec4 textureColor = vec4(0.0);
-	bool isTextureColorSet = false;
-	for(int i = 0; i < numLevels && !isTextureColorSet; i++)
-	{
-		if(ioHeight > levels[i]) {
-			continue; // Not yet in between the right level
-		}
+    vec3 normal = normalize(ioVertexNormal);
+    vec4 textureColor = vec4(0.0);
+    bool isTextureColorSet = false;
+    for(int i = 0; i < numLevels && !isTextureColorSet; i++)
+    {
+        if(ioHeight > levels[i]) {
+            continue; // Not yet in between the right level
+        }
 
-		// This is the index of current sampler that we're using (texture in current layer)
-		int currentSamplerIndex = i / 2;
+        // This is the index of current sampler that we're using (texture in current layer)
+        int currentSamplerIndex = i / 2;
 
-		if(i % 2 == 0) {
-			// Here there is nothing special, just take the color of current texture
-			textureColor = texture(terrainSampler[currentSamplerIndex], ioVertexTexCoord);
-		}
-		else
-		{
-			// First, get color of the current texture and next texture
-			int nextSamplerIndex = currentSamplerIndex+1;
-			vec4 textureColorCurrent = texture(terrainSampler[currentSamplerIndex], ioVertexTexCoord);
-			vec4 textureColorNext = texture(terrainSampler[nextSamplerIndex], ioVertexTexCoord);
+        if(i % 2 == 0) {
+            // Here there is nothing special, just take the color of current texture
+            textureColor = texture(terrainSampler[currentSamplerIndex], ioVertexTexCoord);
+        }
+        else
+        {
+            // First, get color of the current texture and next texture
+            int nextSamplerIndex = currentSamplerIndex+1;
+            vec4 textureColorCurrent = texture(terrainSampler[currentSamplerIndex], ioVertexTexCoord);
+            vec4 textureColorNext = texture(terrainSampler[nextSamplerIndex], ioVertexTexCoord);
 
-			// Calculate factors, how much will each texture contribute
-			float levelDiff = levels[i] - levels[i-1];
-			float factorNext = (ioHeight - levels[i-1]) / levelDiff;
-			float factorCurrent = 1.0f - factorNext;
-			
-			// Calculate final texture color
-			textureColor = textureColorCurrent*factorCurrent + textureColorNext*factorNext;
-		}
+            // Calculate factors, how much will each texture contribute
+            float levelDiff = levels[i] - levels[i-1];
+            float factorNext = (ioHeight - levels[i-1]) / levelDiff;
+            float factorCurrent = 1.0f - factorNext;
+            
+            // Calculate final texture color
+            textureColor = textureColorCurrent*factorCurrent + textureColorNext*factorNext;
+        }
 
-		isTextureColorSet = true;
-	}
+        isTextureColorSet = true;
+    }
 
-	if(!isTextureColorSet)
-	{
-		int lastSamplerIndex = numLevels / 2;
-		textureColor = texture(terrainSampler[lastSamplerIndex], ioVertexTexCoord);
-	}
+    if(!isTextureColorSet)
+    {
+        int lastSamplerIndex = numLevels / 2;
+        textureColor = texture(terrainSampler[lastSamplerIndex], ioVertexTexCoord);
+    }
 
-	vec4 objectColor = textureColor*color;
-	vec3 lightColor = sumColors(getAmbientLightColor(ambientLight), getDiffuseLightColor(diffuseLight, normal));
+    vec4 objectColor = textureColor*color;
+    vec3 lightColor = sumColors(getAmbientLightColor(ambientLight), getDiffuseLightColor(diffuseLight, normal));
 
-	outputColor = objectColor*vec4(lightColor, 1.0);
-	
-	// Apply fog calculation only if fog is enabled
+    outputColor = objectColor*vec4(lightColor, 1.0);
+    
+    // Apply fog calculation only if fog is enabled
     if(fogParams.isEnabled)
     {
-		float fogCoordinate = abs(ioEyeSpacePosition.z / ioEyeSpacePosition.w);
-		outputColor = mix(outputColor, vec4(fogParams.color, 1.0), getFogFactor(fogParams, fogCoordinate));
+        float fogCoordinate = abs(ioEyeSpacePosition.z / ioEyeSpacePosition.w);
+        outputColor = mix(outputColor, vec4(fogParams.color, 1.0), getFogFactor(fogParams, fogCoordinate));
     }
 }

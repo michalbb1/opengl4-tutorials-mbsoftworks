@@ -63,14 +63,14 @@ void Pyramid::initializeData()
 	
 	if (hasPositions())
 	{
-		_vbo.addData(vertices, sizeof(glm::vec3)*numVertices);
+		_vbo.addRawData(vertices, sizeof(glm::vec3)*numVertices);
 	}
 
 	if (hasTextureCoordinates())
 	{
 		for (auto i = 0; i < 4; i++)
 		{
-			_vbo.addData(textureCoordinates, sizeof(glm::vec2)*3);
+			_vbo.addRawData(textureCoordinates, sizeof(glm::vec2)*3);
 		}
 	}
 
@@ -84,7 +84,7 @@ void Pyramid::initializeData()
 			const auto vecA = posB - posA;
 			const auto vecB = posC - posA;
 			auto cp = glm::normalize(glm::cross(vecA, vecB));
-			_vbo.addData(&cp, sizeof(glm::vec3), 3);
+			_vbo.addRawData(&cp, sizeof(glm::vec3), 3);
 		}
 	}
 

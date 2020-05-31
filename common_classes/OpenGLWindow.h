@@ -126,6 +126,11 @@ public:
 	*/
 	bool isVerticalSynchronizationEnabled() const;
 
+    /** \brief  Gets OpenGL default window.
+    *   \return Default OpenGL window.
+    */
+    static OpenGLWindow* getDefaultWindow();
+
 private:
 	GLFWwindow* _window = nullptr; //!< Pointer to GLFWwindow, nullptr by default
 	bool _keyWasPressed[512]; //!< Array of bools, used by keyPressedOnce function

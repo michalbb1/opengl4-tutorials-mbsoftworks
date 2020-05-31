@@ -1,8 +1,9 @@
 #pragma once
 
-#include <glad\glad.h>
-
+// STL
 #include <vector>
+
+#include <glad\glad.h>
 
 /**
   Wraps OpenGL's vertex buffer object to a higher level class.
@@ -11,7 +12,6 @@
 class VertexBufferObject
 {
 public:
-
 	/** \brief Creates a new VBO, with optional reserved buffer size.
 	*   \param size Buffer size reservation, in bytes (so that memory allocations don't take place while adding data)
 	*/
@@ -22,17 +22,27 @@ public:
 	*/
 	void bindVBO(GLenum bufferType = GL_ARRAY_BUFFER);
 
-	/** \brief Adds data to the in-memory buffer, before they get uploaded.
-	*   \param ptrData  Pointer to the data (arbitrary type)
+	/** \brief Adds raw data to the in-memory buffer, before they get uploaded.
+	*   \param ptrData  Pointer to the raw data (arbitrary type)
 	*   \param dataSize Size of the added data (in bytes)
-	*   \param repeat How many times to repeat same data in the buffers (default is 1)
+	*   \param repeat How many times to repeat same data in the buffer (default is 1)
 	*/
-	void addData(const void* ptrData, uint32_t dataSizeBytes, int repeat = 1);
+	void addRawData(const void* ptrData, uint32_t dataSizeBytes, int repeat = 1);
+
+	/** \brief Adds arbitrary data to the in-memory buffer, before they get uploaded.
+	*   \param ptrData Data to be added
+	*   \param repeat  How many times to repeat same data in the buffer (default is 1)
+	*/
+	template<typename T>
+	void addData(const T& obj, int repeat = 1)
+	{
+		addRawData(&obj, sizeof(T), repeat);
+	}
 
 	/** \brief Gets pointer to the data from in-memory buffer (only before uploading them).
 	*   \return Pointer to the raw data.
 	*/
-	void* getCurrentDataPointer();
+	void* getRawDataPointer();
 
 	/** \brief Uploads gathered data to the GPU memory. Now the VBO is ready to be used.
 	*   \param usageHint Hint for OpenGL, how is the data intended to be used (GL_STATIC_DRAW, GL_DYNAMIC_DRAW)
@@ -66,14 +76,16 @@ public:
 	*/
 	uint32_t getBufferSize();
 
-	//* \brief Deletes VBO and fress memory and internal structures.
+	//* \brief Deletes VBO and frees memory and internal structures.
 	void deleteVBO();
 
 private:
 	GLuint _bufferID = 0; //! OpenGL assigned buffer ID
 	int _bufferType; //! Buffer type (GL_ARRAY_BUFFER, GL_ELEMENT_BUFFER...)
-	uint32_t _uploadedDataSize; //! Holds buffer data size after uploading to GPU
+
 	std::vector<unsigned char> _rawData; //! In-memory raw data buffer, used to gather the data for VBO.
+	size_t _bytesAdded = 0; //! Number of bytes added to the buffer so far
+	uint32_t _uploadedDataSize; //! Holds buffer data size after uploading to GPU
 
 	bool _isBufferCreated = false;
 	bool _isDataUploaded = false; //! Flag telling, if data has been uploaded to GPU already.

@@ -64,10 +64,6 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 		sm.loadFragmentShader(ShaderKeys::fog(), "data/shaders/fog/fog.frag");
 
-		sm.loadVertexShader("normals", "data/shaders/normals/normals.vert");
-		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
-		sm.loadFragmentShader("normals", "data/shaders/normals/normals.frag");
-
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut020_fog_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut020_fog_main"));
@@ -75,7 +71,7 @@ void OpenGLWindow::initializeScene()
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
-		 
+		
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/jajsnow1", "jpg");
 		hud = std::make_unique<HUD020>(*this);
 		

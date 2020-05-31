@@ -26,11 +26,11 @@ void main()
     vec3 lightColor = sumColors(getAmbientLightColor(ambientLight), getDiffuseLightColor(diffuseLight, normal));
 
     outputColor = objectColor*vec4(lightColor, 1.0);
-	
-	// Apply fog calculation only if fog is enabled
+    
+    // Apply fog calculation only if fog is enabled
     if(fogParams.isEnabled)
     {
-		float fogCoordinate = abs(ioEyeSpacePosition.z / ioEyeSpacePosition.w);
-		outputColor = mix(outputColor, vec4(fogParams.color, 1.0), getFogFactor(fogParams, fogCoordinate));
+          float fogCoordinate = abs(ioEyeSpacePosition.z / ioEyeSpacePosition.w);
+          outputColor = mix(outputColor, vec4(fogParams.color, 1.0), getFogFactor(fogParams, fogCoordinate));
     }
 }

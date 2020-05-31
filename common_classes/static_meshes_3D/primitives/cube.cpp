@@ -106,14 +106,14 @@ void Cube::initializeData()
 	
 	if (hasPositions())
 	{
-		_vbo.addData(vertices, sizeof(glm::vec3)*numVertices);
+		_vbo.addRawData(vertices, sizeof(glm::vec3)*numVertices);
 	}
 
 	if (hasTextureCoordinates())
 	{
 		for (auto i = 0; i < 6; i++)
 		{
-			_vbo.addData(textureCoordinates, sizeof(glm::vec2)*6);
+			_vbo.addRawData(textureCoordinates, sizeof(glm::vec2)*6);
 		}
 	}
 
@@ -121,7 +121,7 @@ void Cube::initializeData()
 	{
 		for (auto i = 0; i < 6; i++)
 		{
-			_vbo.addData(&normals[i], sizeof(glm::vec3), 6);
+			_vbo.addRawData(&normals[i], sizeof(glm::vec3), 6);
 		}
 	}
 
