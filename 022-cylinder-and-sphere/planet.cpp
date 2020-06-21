@@ -1,10 +1,12 @@
 // STL
 #include <mutex>
 
-#include "planet.h"
+// glm
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+// Project
+#include "planet.h"
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
 
@@ -29,6 +31,7 @@ void Planet::render() const
     auto& mainProgram = spm.getShaderProgram("main");
 
     tm.getTexture(_textureKey).bind();
+    _material.setUniform(mainProgram, "material");
 
     mainProgram.setModelAndNormalMatrix(getModelMatrix());
     sphereMesh->render();
