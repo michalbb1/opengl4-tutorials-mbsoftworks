@@ -12,15 +12,15 @@
 namespace static_meshes_3D {
 
 /**
-	Sphere static mesh with given number of slices, stacks and radius.
+    Sphere static mesh with given number of slices, stacks and radius.
 */
 class Sphere : public StaticMeshIndexed3D
 {
 public:
     Sphere(float radius, int numSlices, int numStacks, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
-	void render() const override;
-	void renderPoints() const override;
+    void render() const override;
+    void renderPoints() const override;
 
     /**
      * Gets sphere radius.
@@ -49,7 +49,7 @@ private:
     GLuint _bodyIndexOffset; // Index offset to render body
     GLuint _southPoleIndexOffset; // Index offset to render south pole
 
-	void initializeData() override;
+    void initializeData() override;
 };
 
 } // namespace static_meshes_3D

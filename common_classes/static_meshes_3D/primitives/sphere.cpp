@@ -26,11 +26,11 @@ Sphere::Sphere(float radius, int numSlices, int numStacks, bool withPositions, b
 
 void Sphere::render() const
 {
-	if (!_isInitialized) {
-		return;
-	}
+    if (!_isInitialized) {
+        return;
+    }
 
-	glBindVertexArray(_vao);
+    glBindVertexArray(_vao);
 
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(_primitiveRestartIndex);
@@ -41,7 +41,7 @@ void Sphere::render() const
     // Render body
     glDrawElements(GL_TRIANGLE_STRIP, _numBodyIndices, GL_UNSIGNED_INT, (void*)(sizeof(GLuint)*_bodyIndexOffset));
 
-    // Render south pole
+    // Render south pole 
     glDrawElements(GL_TRIANGLES, _numPoleIndices, GL_UNSIGNED_INT, (void*)(sizeof(GLuint)*_southPoleIndexOffset));
 
     // Disable primitive restart, we won't need it now
@@ -50,11 +50,11 @@ void Sphere::render() const
 
 void Sphere::renderPoints() const
 {
-	if (!_isInitialized) {
-		return;
-	}
+    if (!_isInitialized) {
+        return;
+    }
 
-	glBindVertexArray(_vao);
+    glBindVertexArray(_vao);
     glDrawArrays(GL_POINTS, 0, _numVertices);
 }
 
@@ -75,9 +75,9 @@ int Sphere::getNumStacks() const
 
 void Sphere::initializeData()
 {
-	if (_isInitialized) {
-		return;
-	}
+    if (_isInitialized) {
+        return;
+    }
 
     // Cache count of vertices
     _numVertices = (_numStacks + 1) * (_numSlices + 1);
@@ -132,8 +132,8 @@ void Sphere::initializeData()
     }
 
     // Generate sphere vertex positions
-	if (hasPositions())
-	{
+    if (hasPositions())
+    {
         for (auto i = 0; i <= _numStacks; i++)
         {
             for (auto j = 0; j <= _numSlices; j++)
@@ -144,11 +144,11 @@ void Sphere::initializeData()
                 _vbo.addData(glm::vec3(x, y, z));
             }
         }
-	}
+    }
 
     // Generate sphere texture coordinates
-  	if (hasTextureCoordinates())
-	{
+      if (hasTextureCoordinates())
+    {
         for (auto i = 0; i <= _numStacks; i++)
         {
             for (auto j = 0; j <= _numSlices; j++)
@@ -175,11 +175,11 @@ void Sphere::initializeData()
                 _vbo.addData(glm::vec2(u, v));
             }
         }
-	}
+    }
 
     // Generate sphere normals
-	if (hasNormals())
-	{
+    if (hasNormals())
+    {
         for (auto i = 0; i <= _numStacks; i++)
         {
             for (int j = 0; j <= _numSlices; j++)
@@ -190,7 +190,7 @@ void Sphere::initializeData()
                 _vbo.addData(glm::vec3(x, y, z));
             }
         }
-	}
+    }
 
     // Now that we have all vertex data, generate indices for north pole (triangles)
     for (int i = 0; i < _numSlices; i++)
@@ -235,13 +235,13 @@ void Sphere::initializeData()
     }
     
     _vbo.bindVBO();
-	_vbo.uploadDataToGPU(GL_STATIC_DRAW);
-	setVertexAttributesPointers(_numVertices);
+    _vbo.uploadDataToGPU(GL_STATIC_DRAW);
+    setVertexAttributesPointers(_numVertices);
 
     _indicesVBO.bindVBO(GL_ELEMENT_ARRAY_BUFFER);
     _indicesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
-	_isInitialized = true;
+    _isInitialized = true;
 }
 
 } // namespace static_meshes_3D
