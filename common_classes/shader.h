@@ -24,7 +24,8 @@ class ShaderKeys
 public:
 	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
 	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
-	DEFINE_SHADER_CONSTANT(specularHighlight, "specularHighlight");
+    DEFINE_SHADER_CONSTANT(specularHighlight, "specularHighlight");
+    DEFINE_SHADER_CONSTANT(pointLight, "pointLight");
 	DEFINE_SHADER_CONSTANT(utility, "utility");
 	DEFINE_SHADER_CONSTANT(fog, "fog");
 };
@@ -47,7 +48,9 @@ public:
 
 	// Lighting
 	DEFINE_SHADER_CONSTANT(ambientLight, "ambientLight");
-	DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
+    DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
+    DEFINE_SHADER_CONSTANT(pointLightA, "pointLightA");
+    DEFINE_SHADER_CONSTANT(pointLightB, "pointLightB");
 	DEFINE_SHADER_CONSTANT(normalLength, "normalLength");
 	DEFINE_SHADER_CONSTANT(material, "material");
 	DEFINE_SHADER_CONSTANT(eyePosition, "eyePosition");
