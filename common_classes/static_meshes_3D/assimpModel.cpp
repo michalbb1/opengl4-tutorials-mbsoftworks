@@ -8,21 +8,24 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+// GLM
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace static_meshes_3D {
 
-AssimpModel::AssimpModel(const std::string& filePath, const std::string& defaultTextureName, bool withPositions, bool withTextureCoordinates, bool withNormals)
+AssimpModel::AssimpModel(const std::string& filePath, const std::string& defaultTextureName, bool withPositions, bool withTextureCoordinates, bool withNormals, const glm::mat4& modelTransformMatrix)
 	: StaticMesh3D(withPositions, withTextureCoordinates, withNormals)
 {
-	loadModelFromFile(filePath, defaultTextureName);
+	loadModelFromFile(filePath, defaultTextureName, modelTransformMatrix);
 }
 
-AssimpModel::AssimpModel(const std::string& filePath, bool withPositions, bool withTextureCoordinates, bool withNormals)
+AssimpModel::AssimpModel(const std::string& filePath, bool withPositions, bool withTextureCoordinates, bool withNormals, const glm::mat4& modelTransformMatrix)
 	: StaticMesh3D(withPositions, withTextureCoordinates, withNormals)
 {
-	loadModelFromFile(filePath);
+	loadModelFromFile(filePath, "", modelTransformMatrix);
 }
 
-bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::string& defaultTextureName)
+bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::string& defaultTextureName, const glm::mat4& modelTransformMatrix)
 {
 	if (_isInitialized) {
 		deleteMesh();
@@ -70,7 +73,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 				for (auto k = 0; k < face.mNumIndices; k++)
 				{
 					const auto& position = meshPtr->mVertices[face.mIndices[k]];
-					_vbo.addRawData(&position, sizeof(aiVector3D));
+                    _vbo.addData(glm::vec3(modelTransformMatrix * glm::vec4(position.x, position.y, position.z, 1.0f)));
 				}
 
 				vertexCountMesh += face.mNumIndices;
@@ -104,6 +107,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 	
 	if (hasNormals())
 	{
+        const auto normalMatrix = glm::transpose(glm::inverse(glm::mat3(modelTransformMatrix)));
 		for (auto i = 0; i < scene->mNumMeshes; i++)
 		{
 			const auto meshPtr = scene->mMeshes[i];
@@ -116,8 +120,8 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 
 				for (auto k = 0; k < face.mNumIndices; k++)
 				{
-					const auto& normal = meshPtr->HasNormals() ? meshPtr->mNormals[face.mIndices[k]] : aiVector3D(1.0f, 1.0f, 1.0f);
-					_vbo.addRawData(&normal, sizeof(aiVector3D));
+					const auto& normal = meshPtr->HasNormals() ? meshPtr->mNormals[face.mIndices[k]] : aiVector3D(0.0f, 1.0f, 0.0f);
+                    _vbo.addData(glm::normalize(normalMatrix * glm::vec3(normal.x, normal.y, normal.z)));
 				}
 			}
 		}
