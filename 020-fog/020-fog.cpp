@@ -80,7 +80,7 @@ void OpenGLWindow::initializeScene()
 		TextureManager::getInstance().loadTexture2D("rocky_terrain", "data/textures/rocky_terrain.jpg");
 		TextureManager::getInstance().loadTexture2D("snow", "data/textures/snow.png");
 		
-		classicHouseModel = std::make_unique<static_meshes_3D::AssimpModel>("data/models/house/house.3ds");
+		classicHouseModel = std::make_unique<static_meshes_3D::AssimpModel>("data/models/house/house.3ds", true, true, true);
 		medievalHouseModel = std::make_unique<static_meshes_3D::AssimpModel>("data/models/medieval_house/medieval_house.obj", "medieval_house_diff.png", true, true, true);
 
 		static_meshes_3D::HeightmapWithFog::prepareMultiLayerShaderProgramWithFog();

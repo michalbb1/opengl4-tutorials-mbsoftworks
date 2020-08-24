@@ -10,6 +10,9 @@
 // Assimp
 #include <assimp/Importer.hpp>
 
+// GLM
+#include <glm/glm.hpp>
+
 namespace static_meshes_3D {
 
 /**
@@ -18,16 +21,19 @@ namespace static_meshes_3D {
 class AssimpModel : public StaticMesh3D
 {
 public:
-	AssimpModel(const std::string& filePath, const std::string& defaultTextureName, bool withPositions, bool withTextureCoordinates, bool withNormals);
-	AssimpModel(const std::string& filePath, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
+	AssimpModel(const std::string& filePath, const std::string& defaultTextureName, bool withPositions, bool withTextureCoordinates, bool withNormals, const glm::mat4& modelTransformMatrix = glm::mat4(1.0f));
+	AssimpModel(const std::string& filePath, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true, const glm::mat4& modelTransformMatrix = glm::mat4(1.0f));
 
 	/** \brief  Loads a model from a given file using Assimp library. Default texture name should be provided,
 	*   if Assimp can't parse material properties from models (happens with many free models from internet).
+    *
 	*   \param filePath File path to load model from (can be of any format supported by Assimp)
 	*   \param defaultTextureName Optional default texture name, if model would be loaded without textures
+    *   \param modelTransformMatrix Optional parameter to transform the model data (sometimes the model is strangely rotated, big, small etc.)
+    *
 	*   \return True, if model has been loaded successfully or false otherwise.
 	*/
-	bool loadModelFromFile(const std::string& filePath, const std::string& defaultTextureName = "");
+	bool loadModelFromFile(const std::string& filePath, const std::string& defaultTextureName = "", const glm::mat4& modelTransformMatrix = glm::mat4(1.0f));
 
 	void render() const override;
 	void renderPoints() const override;
