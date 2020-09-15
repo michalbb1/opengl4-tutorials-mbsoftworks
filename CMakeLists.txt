@@ -72,7 +72,7 @@ set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT "${COMMON_CLASSES_STATIC_MES
 # TUTORIALS SUBDIRECTORIES
 #-------------------------------
 
-add_subdirectory(dependencies/windows-freetype2-custom-cmake)
+#add_subdirectory(dependencies/windows-freetype2-custom-cmake)
 
 add_subdirectory(001-creating-opengl4-window)
 add_subdirectory(002-first-shader)
@@ -85,13 +85,13 @@ add_subdirectory(008-textures-pt2-multitexturing)
 add_subdirectory(009-orthographic-2D-projection)
 add_subdirectory(010-first-great-refactoring)
 add_subdirectory(011-indexed-rendering-torus)
-add_subdirectory(012-freetype-fonts-pt1)
-add_subdirectory(013-blending-pt1)
-add_subdirectory(014-normals-diffuse-lighting)
-add_subdirectory(015-geometry-shaders)
-add_subdirectory(016-heightmap-pt1-random-terrain)
-add_subdirectory(017-heightmap-pt2-from-image-and-skybox)
-add_subdirectory(018-heightmap-pt3-multiple-layers)
+#add_subdirectory(012-freetype-fonts-pt1)
+#add_subdirectory(013-blending-pt1)
+#add_subdirectory(014-normals-diffuse-lighting)
+#add_subdirectory(015-geometry-shaders)
+#add_subdirectory(016-heightmap-pt1-random-terrain)
+#add_subdirectory(017-heightmap-pt2-from-image-and-skybox)
+#add_subdirectory(018-heightmap-pt3-multiple-layers)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})

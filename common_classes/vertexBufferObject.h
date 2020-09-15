@@ -3,7 +3,7 @@
 // STL
 #include <vector>
 
-#include <glad\glad.h>
+#include <glad/glad.h>
 
 /**
   Wraps OpenGL's vertex buffer object to a higher level class.

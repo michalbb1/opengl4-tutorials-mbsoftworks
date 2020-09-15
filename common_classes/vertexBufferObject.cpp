@@ -1,5 +1,8 @@
+// STL
 #include <iostream>
+#include <cstring>
 
+// Project
 #include "vertexBufferObject.h"
 
 void VertexBufferObject::createVBO(uint32_t reserveSizeBytes)

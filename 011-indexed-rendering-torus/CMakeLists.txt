@@ -12,7 +12,6 @@ file(GLOB TUTORIAL_011_HEADER_FILES *.h)
 
 set(COMMON_CLASSES_SOURCE_FILES
 "${COMMON_CLASSES_ROOT}/flyingCamera.cpp"
-"${COMMON_CLASSES_ROOT}/HUD.cpp"
 "${COMMON_CLASSES_ROOT}/OpenGLWindow.cpp"
 "${COMMON_CLASSES_ROOT}/matrixManager.cpp"
 "${COMMON_CLASSES_ROOT}/sampler.cpp"
@@ -30,7 +29,6 @@ set(COMMON_CLASSES_SOURCE_FILES
 
 set(COMMON_CLASSES_HEADER_FILES
 "${COMMON_CLASSES_ROOT}/flyingCamera.h"
-"${COMMON_CLASSES_ROOT}/HUD.h"
 "${COMMON_CLASSES_ROOT}/OpenGLWindow.h"
 "${COMMON_CLASSES_ROOT}/matrixManager.h"
 "${COMMON_CLASSES_ROOT}/sampler.h"
@@ -108,7 +106,11 @@ include_directories(${STB_INCLUDE_DIRS})
 
 # Add executable and link with libraries
 add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} -lpthread -lm)
+else()
+	target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
+endif()
 
 set_target_properties(${PROJECT_NAME}
 	PROPERTIES

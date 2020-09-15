@@ -1,15 +1,17 @@
 #pragma once
 
+// STL
 #include <string>
 
+// Project
 #include "../common_classes/OpenGLWindow.h"
-#include "../common_classes/HUD.h"
+#include "../common_classes/HUDBase.h"
 #include "../common_classes/texture.h"
 
 /**
   HUD for tutorial 010.
 */
-class HUD010 : public HUD
+class HUD010 : public HUDBase
 {
 public:
 	const static std::string CHRISTMAS_TREE_TEXTURE_KEY;
