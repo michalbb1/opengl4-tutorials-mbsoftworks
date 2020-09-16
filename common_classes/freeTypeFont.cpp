@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
 
-#include "freetypeFont.h"
+#include "freeTypeFont.h"
 #include "shaderManager.h"
 #include "shaderProgramManager.h"
 #include "samplerManager.h"

@@ -111,11 +111,11 @@ include_directories(${GLM_INCLUDE_DIRS})
 include_directories(${STB_INCLUDE_DIRS})
 include_directories(${FREETYPE_INCLUDE_DIRS})
 
-# Add executable and link with libraries
+# Add executable
 add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
 
 # Link this tutorial with GLFW static libraries and FreeType
-target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} ${FREETYPE_LIBS})
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} ${FREETYPE_STATIC_LIBRARIES})
 
 # On Unix systems, we will also need pthread library
 if(UNIX)

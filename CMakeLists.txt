@@ -45,32 +45,42 @@ else()
 	endif()
 endif()
 
+message(STATUS "GLFW include directories: ${GLFW_INCLUDE_DIRS}")
+message(STATUS "GLFW static libraries: ${GLFW_STATIC_LIBRARIES}")
+
 # GLAD
 set(GLAD_ROOT "${CMAKE_SOURCE_DIR}/dependencies/glad")
 set(GLAD_INCLUDE_DIRS "${GLAD_ROOT}/include")
 file(GLOB GLAD_SOURCE_FILES "${GLAD_ROOT}/src/glad.c")
 file(GLOB GLAD_HEADER_FILES "${GLAD_INCLUDE_DIRS}/glad/glad.h")
-message(STATUS "${GLAD_HEADER_FILES}")
+
+message(STATUS "GLAD include directories: ${GLAD_INCLUDE_DIRS}")
 
 # STB
 set(STB_ROOT "${CMAKE_SOURCE_DIR}/dependencies/stb")
 set(STB_INCLUDE_DIRS "${STB_ROOT}")
 
+message(STATUS "STB include directories: ${GLAD_INCLUDE_DIRS}")
+
 # glm
 set(GLM_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/glm")
 
-# FreeType 2
+message(STATUS "GLM include directories: ${GLM_INCLUDE_DIRS}")
+
+# FreeType2
 if(UNIX)
-	find_package(PkgConfig REQUIRED)
-	pkg_search_module(GLFW REQUIRED glfw3)
+	pkg_search_module(FREETYPE REQUIRED freetype2)
 else()
 	set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/freetype2/include" CACHE STRING "Freetype2 include directories")
 	if(IS_64BIT_BUILD)
-		set(FREETYPE_LIBS "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs64/freetype2_64.lib")
+		set(FREETYPE_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs64/freetype2_64.lib")
 	else()
-		set(FREETYPE_LIBS "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs32/freetype2.lib")
+		set(FREETYPE_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs32/freetype2.lib")
 	endif()
 endif()
+
+message(STATUS "FreeType2 include directories: ${FREETYPE_INCLUDE_DIRS}")
+message(STATUS "FreeType2 libraries: ${FREETYPE_STATIC_LIBRARIES}")
 
 # common_classes
 set(COMMON_CLASSES_ROOT "${CMAKE_SOURCE_DIR}/common_classes")
