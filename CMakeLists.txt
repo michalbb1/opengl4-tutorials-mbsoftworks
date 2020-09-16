@@ -37,13 +37,12 @@ if(UNIX)
 	find_package(PkgConfig REQUIRED)
 	pkg_search_module(GLFW REQUIRED glfw3)
 else()
+	set(GLFW_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/glfw/include")
 	if(IS_64BIT_BUILD)
-		set(GLFW_ROOT "${CMAKE_SOURCE_DIR}/dependencies/glfw-3.2.1.bin.WIN64")
+		set(GLFW_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/glfw-prebuilt/vs2017/libs64/glfw3.lib")
 	else()
-		set(GLFW_ROOT "${CMAKE_SOURCE_DIR}/dependencies/glfw-3.2.1.bin.WIN32")
+		set(GLFW_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/glfw-prebuilt/vs2017/libs32/glfw3.lib")
 	endif()
-	set(GLFW_INCLUDE_DIRS "${GLFW_ROOT}/include")
-	set(GLFW_STATIC_LIBRARIES "${GLFW_ROOT}/lib-vc2015/glfw3.lib")
 endif()
 
 # GLAD
@@ -60,6 +59,19 @@ set(STB_INCLUDE_DIRS "${STB_ROOT}")
 # glm
 set(GLM_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/glm")
 
+# FreeType 2
+if(UNIX)
+	find_package(PkgConfig REQUIRED)
+	pkg_search_module(GLFW REQUIRED glfw3)
+else()
+	set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/freetype2/include" CACHE STRING "Freetype2 include directories")
+	if(IS_64BIT_BUILD)
+		set(FREETYPE_LIBS "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs64/freetype2_64.lib")
+	else()
+		set(FREETYPE_LIBS "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs32/freetype2.lib")
+	endif()
+endif()
+
 # common_classes
 set(COMMON_CLASSES_ROOT "${CMAKE_SOURCE_DIR}/common_classes")
 set(COMMON_CLASSES_SHADER_STRUCTS_ROOT "${COMMON_CLASSES_ROOT}/shader_structs")
@@ -72,8 +84,6 @@ set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT "${COMMON_CLASSES_STATIC_MES
 # TUTORIALS SUBDIRECTORIES
 #-------------------------------
 
-#add_subdirectory(dependencies/windows-freetype2-custom-cmake)
-
 add_subdirectory(001-creating-opengl4-window)
 add_subdirectory(002-first-shader)
 add_subdirectory(003-adding-colors)
@@ -85,7 +95,7 @@ add_subdirectory(008-textures-pt2-multitexturing)
 add_subdirectory(009-orthographic-2D-projection)
 add_subdirectory(010-first-great-refactoring)
 add_subdirectory(011-indexed-rendering-torus)
-#add_subdirectory(012-freetype-fonts-pt1)
+add_subdirectory(012-freetype-fonts-pt1)
 #add_subdirectory(013-blending-pt1)
 #add_subdirectory(014-normals-diffuse-lighting)
 #add_subdirectory(015-geometry-shaders)

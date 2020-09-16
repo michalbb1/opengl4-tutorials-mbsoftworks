@@ -115,7 +115,12 @@ include_directories(${FREETYPE_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
 
 # Link this tutorial with GLFW static libraries and FreeType
-target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} freetype)
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} ${FREETYPE_LIBS})
+
+# On Unix systems, we will also need pthread library
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME} pthread)
+endif()
 
 set_target_properties(${PROJECT_NAME}
 	PROPERTIES

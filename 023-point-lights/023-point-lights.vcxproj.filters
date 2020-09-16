@@ -290,9 +290,6 @@
     <ClCompile Include="HUD023.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="023-point-lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -301,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\assimpModel.cpp">
       <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
