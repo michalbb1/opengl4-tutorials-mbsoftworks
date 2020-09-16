@@ -59,19 +59,23 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_debug.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_release.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_debug64.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_release64.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,7 +156,7 @@
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="005-camera-pt1-simple-walking-camera.cpp" />
-    <ClCompile Include="main_windows.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />

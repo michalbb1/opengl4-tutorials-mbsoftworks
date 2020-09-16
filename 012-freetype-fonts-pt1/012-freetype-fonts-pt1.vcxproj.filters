@@ -108,9 +108,6 @@
     <ClCompile Include="012-freetype-fonts-pt1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
     <ClCompile Include="HUD012.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

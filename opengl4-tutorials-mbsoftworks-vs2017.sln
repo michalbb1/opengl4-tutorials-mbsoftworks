@@ -26,11 +26,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "011-indexed-rendering-torus", "011-indexed-rendering-torus\011-indexed-rendering-torus.vcxproj", "{66A370BE-96E1-4B59-AFEC-BB95EBF989BB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "012-freetype-fonts-pt1", "012-freetype-fonts-pt1\012-freetype-fonts-pt1.vcxproj", "{260EE0B2-F704-4F5D-AC37-124E7EB770EA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3} = {EF78FA6C-1F0E-46D6-8B12-29223591BBF3}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "build-freetype2-vs2017", "dependencies\build-freetype2-vs2017\build-freetype2-vs2017.vcxproj", "{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "013-blending-pt1", "013-blending-pt1\013-blending-pt1.vcxproj", "{E306D078-0361-4983-9DC4-6E6330C7DFC2}"
 EndProject
@@ -158,14 +153,6 @@ Global
 		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x64.Build.0 = Release|x64
 		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x86.ActiveCfg = Release|Win32
 		{260EE0B2-F704-4F5D-AC37-124E7EB770EA}.Release|x86.Build.0 = Release|Win32
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x64.ActiveCfg = Debug|x64
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x64.Build.0 = Debug|x64
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x86.ActiveCfg = Debug|Win32
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Debug|x86.Build.0 = Debug|Win32
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x64.ActiveCfg = Release|x64
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x64.Build.0 = Release|x64
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.ActiveCfg = Release|Win32
-		{EF78FA6C-1F0E-46D6-8B12-29223591BBF3}.Release|x86.Build.0 = Release|Win32
 		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x64.ActiveCfg = Debug|x64
 		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x64.Build.0 = Debug|x64
 		{E306D078-0361-4983-9DC4-6E6330C7DFC2}.Debug|x86.ActiveCfg = Debug|Win32

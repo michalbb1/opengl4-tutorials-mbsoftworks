@@ -16,7 +16,6 @@
 
 #include "../common_classes/static_meshes_3D/skybox.h"
 #include "../common_classes/static_meshes_3D/heightmap.h"
-#include "../common_classes/static_meshes_3D/assimpModel.h"
 
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
