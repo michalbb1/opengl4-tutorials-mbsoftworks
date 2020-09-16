@@ -1,5 +1,6 @@
 // STL
 #include <algorithm>
+#include <stdexcept>
 
 // GLM
 #include <glm/glm.hpp>

@@ -82,7 +82,22 @@ endif()
 message(STATUS "FreeType2 include directories: ${FREETYPE_INCLUDE_DIRS}")
 message(STATUS "FreeType2 libraries: ${FREETYPE_STATIC_LIBRARIES}")
 
-# common_classes
+# Assimp
+if(UNIX)
+	pkg_search_module(ASSIMP REQUIRED assimp)
+else()
+	set(ASSIMP_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/dependencies/assimp/include" CACHE STRING "Assimp include directories")
+	if(IS_64BIT_BUILD)
+		set(ASSIMP_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/assimp-prebuilt/vs2017/libs64/freetype2_64.lib")
+	else()
+		set(ASSIMP_STATIC_LIBRARIES "${CMAKE_SOURCE_DIR}/dependencies/freetype2-prebuilt/vs2017/libs32/freetype2.lib")
+	endif()
+endif()
+
+message(STATUS "Assimp include directories: ${ASSIMP_INCLUDE_DIRS}")
+message(STATUS "Assimp libraries: ${ASSIMP_STATIC_LIBRARIES}")
+
+# Variables for common classes (used throughout all projects)
 set(COMMON_CLASSES_ROOT "${CMAKE_SOURCE_DIR}/common_classes")
 set(COMMON_CLASSES_SHADER_STRUCTS_ROOT "${COMMON_CLASSES_ROOT}/shader_structs")
 set(COMMON_CLASSES_STATIC_MESHES_2D_ROOT "${COMMON_CLASSES_ROOT}/static_meshes_2D")
@@ -112,6 +127,11 @@ add_subdirectory(015-geometry-shaders)
 add_subdirectory(016-heightmap-pt1-random-terrain)
 add_subdirectory(017-heightmap-pt2-from-image-and-skybox)
 add_subdirectory(018-heightmap-pt3-multiple-layers)
+add_subdirectory(019-assimp-model-loading)
+add_subdirectory(020-fog)
+add_subdirectory(021-specular-highlight)
+add_subdirectory(022-cylinder-and-sphere)
+add_subdirectory(023-point-lights)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
