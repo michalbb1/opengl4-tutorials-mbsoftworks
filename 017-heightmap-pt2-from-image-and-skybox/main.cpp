@@ -24,7 +24,7 @@ int main()
 	OpenGLWindow window;
 	if (!window.createOpenGLWindow(windowTitle, majorVersion, minorVersion, showFullscreen))
 	{
-		printf("Failed to create window with OpenGL context %d.%d! Shutting down...", majorVersion, minorVersion);
+		printf("Failed to create window with OpenGL context %d.%d! Shutting down...\n", majorVersion, minorVersion);
 		return 1;
 	}
 
