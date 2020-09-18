@@ -1,6 +1,6 @@
 #include <mutex>
 
-#include "freetypeFontManager.h"
+#include "freeTypeFontManager.h"
 
 FreeTypeFontManager& FreeTypeFontManager::getInstance()
 {

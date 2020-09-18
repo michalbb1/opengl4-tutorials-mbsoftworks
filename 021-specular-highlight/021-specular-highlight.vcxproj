@@ -58,27 +58,27 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_debug.props" />
-    <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_vs2017_debug.props" />
-    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_debug.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_release.props" />
-    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_release.props" />
-    <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_vs2017_release.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_debug64.props" />
-    <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_vs2017_debug64.props" />
-    <Import Project="..\properties_debug64.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\properties_release64.props" />
-    <Import Project="..\dependencies\build-freetype2-vs2017\freetype2_vs2017_release64.props" />
-    <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_vs2017_release64.props" />
+    <Import Project="..\common_properties.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -147,7 +147,6 @@
     <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h" />
     <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
-    <ClInclude Include="..\common_classes\static_meshes_3D\assimpModel.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\heightmap.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\heightmapWithFog.h" />
     <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h" />
@@ -186,7 +185,6 @@
     <ClCompile Include="..\common_classes\shader_structs\shaderStruct.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp" />
-    <ClCompile Include="..\common_classes\static_meshes_3D\assimpModel.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\heightmap.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\heightmapWithFog.cpp" />
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp" />
@@ -203,7 +201,7 @@
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="021-specular-highlight.cpp" />
     <ClCompile Include="HUD021.cpp" />
-    <ClCompile Include="main_windows.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

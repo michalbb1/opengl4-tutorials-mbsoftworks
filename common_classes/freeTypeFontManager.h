@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 
-#include "freetypeFont.h"
+#include "freeTypeFont.h"
 
 class FreeTypeFontManager
 {

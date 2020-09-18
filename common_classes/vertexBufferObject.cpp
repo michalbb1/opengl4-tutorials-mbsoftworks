@@ -1,8 +1,11 @@
+// STL
 #include <iostream>
+#include <cstring>
 
+// Project
 #include "vertexBufferObject.h"
 
-void VertexBufferObject::createVBO(uint32_t reserveSizeBytes)
+void VertexBufferObject::createVBO(size_t reserveSizeBytes)
 {
 	if (_isBufferCreated)
 	{
@@ -28,7 +31,7 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 	glBindBuffer(_bufferType, _bufferID);
 }
 
-void VertexBufferObject::addRawData(const void* ptrData, uint32_t dataSize, int repeat)
+void VertexBufferObject::addRawData(const void* ptrData, size_t dataSize, int repeat)
 {
 	const auto bytesToAdd = dataSize * repeat;
 	if (_bytesAdded + bytesToAdd > _rawData.capacity())
@@ -76,7 +79,7 @@ void* VertexBufferObject::mapBufferToMemory(GLenum usageHint)
 	return glMapBuffer(_bufferType, usageHint);
 }
 
-void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, uint32_t offset, uint32_t length)
+void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length)
 {
 	if (!_isDataUploaded)
 	{
@@ -96,7 +99,7 @@ GLuint VertexBufferObject::getBufferID()
 	return _bufferID;
 }
 
-uint32_t VertexBufferObject::getBufferSize()
+size_t VertexBufferObject::getBufferSize()
 {
 	return _isDataUploaded ? _uploadedDataSize : _bytesAdded;
 }

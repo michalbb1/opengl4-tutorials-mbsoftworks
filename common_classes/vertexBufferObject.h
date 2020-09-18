@@ -3,7 +3,7 @@
 // STL
 #include <vector>
 
-#include <glad\glad.h>
+#include <glad/glad.h>
 
 /**
   Wraps OpenGL's vertex buffer object to a higher level class.
@@ -15,7 +15,7 @@ public:
 	/** \brief Creates a new VBO, with optional reserved buffer size.
 	*   \param size Buffer size reservation, in bytes (so that memory allocations don't take place while adding data)
 	*/
-	void createVBO(uint32_t reserveSizeBytes = 0);
+	void createVBO(size_t reserveSizeBytes = 0);
 
 	/** \brief Binds this vertex buffer object (makes current).
 	*   \param bufferType Type of the bound buffer (usually GL_ARRAY_BUFFER, but can be also GL_ELEMENT_BUFFER for instance)
@@ -27,7 +27,7 @@ public:
 	*   \param dataSize Size of the added data (in bytes)
 	*   \param repeat How many times to repeat same data in the buffer (default is 1)
 	*/
-	void addRawData(const void* ptrData, uint32_t dataSizeBytes, int repeat = 1);
+	void addRawData(const void* ptrData, size_t dataSizeBytes, int repeat = 1);
 
 	/** \brief Adds arbitrary data to the in-memory buffer, before they get uploaded.
 	*   \param ptrData Data to be added
@@ -61,7 +61,7 @@ public:
 	*   \param  length    Byte length of the mapped data
 	*   \return Pointer to the mapped data, or nullptr, if something fails.
 	*/
-	void* mapSubBufferToMemory(GLenum usageHint, uint32_t offset, uint32_t length);
+	void* mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length);
 
 	//* \brief Unmaps buffer (must have been mapped previously).
 	void unmapBuffer();
@@ -74,7 +74,7 @@ public:
 	/** \brief Gets buffer size, in bytes.
 	*   \return Buffer size in bytes.
 	*/
-	uint32_t getBufferSize();
+    size_t getBufferSize();
 
 	//* \brief Deletes VBO and frees memory and internal structures.
 	void deleteVBO();
@@ -85,7 +85,7 @@ private:
 
 	std::vector<unsigned char> _rawData; //! In-memory raw data buffer, used to gather the data for VBO.
 	size_t _bytesAdded = 0; //! Number of bytes added to the buffer so far
-	uint32_t _uploadedDataSize; //! Holds buffer data size after uploading to GPU
+    size_t _uploadedDataSize; //! Holds buffer data size after uploading to GPU
 
 	bool _isBufferCreated = false;
 	bool _isDataUploaded = false; //! Flag telling, if data has been uploaded to GPU already.

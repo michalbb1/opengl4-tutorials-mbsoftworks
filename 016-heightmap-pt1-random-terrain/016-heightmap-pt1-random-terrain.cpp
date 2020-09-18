@@ -6,7 +6,7 @@
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/flyingCamera.h"
 
-#include "../common_classes/freetypeFont.h"
+#include "../common_classes/freeTypeFont.h"
 #include "../common_classes/shaderManager.h"
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
