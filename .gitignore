@@ -260,3 +260,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# CMake build folder
+build/
+
+# Visual Studio Code folder
+.vscode/

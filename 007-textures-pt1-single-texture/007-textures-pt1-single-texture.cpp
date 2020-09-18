@@ -68,7 +68,7 @@ void OpenGLWindow::initializeScene()
 	texCoordsVBO.bindVBO();
 	texCoordsVBO.addRawData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
 	texCoordsVBO.addRawData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
-	texCoordsVBO.addRawData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
+	texCoordsVBO.addRawData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords));
 	
 	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
@@ -79,7 +79,7 @@ void OpenGLWindow::initializeScene()
 
 	groundTexture.loadTexture2D("data/textures/clay.png");
 	houseTexture.loadTexture2D("data/textures/brick.png");
-	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
+	roofTexture.loadTexture2D("data/textures/test.jpg");
 
 	filterTextures[0].loadTexture2D("data/textures/tut007/mag_nearest_min_nearest.png");
 	filterTextures[1].loadTexture2D("data/textures/tut007/mag_nearest_min_bilinear.png");
@@ -168,10 +168,11 @@ void OpenGLWindow::renderScene()
 	{
 		samplersShowcase[i].bind();
 		// First, calculate the basic position of house
+        
 		auto modelMatrixHouse = glm::mat4(1.0);
 		auto housePosition = startPointLeft + glm::vec3(0.0f, 0.0f, -i * 25.0f);
 		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
-
+        /*
 		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
 		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -184,14 +185,14 @@ void OpenGLWindow::renderScene()
 		glDrawArrays(GL_TRIANGLES, 28, 6);
 		
 		filterTextures[i].bind();
-		glDrawArrays(GL_TRIANGLES, 22, 6);
+		glDrawArrays(GL_TRIANGLES, 22, 6);*/
 
 		roofTexture.bind();
 		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
-		glDrawArrays(GL_TRIANGLES, 40, 12);
+		glDrawArrays(GL_TRIANGLES, 40, 24);
 
 		if(glm::distance(camera.getEye(), housePosition) < houseBottomSize*0.66f) {
 			groundSamplerIndex = i;
@@ -207,7 +208,7 @@ void OpenGLWindow::renderScene()
 		auto modelMatrixHouse = glm::mat4(1.0);
 		auto housePosition = startPointRight + glm::vec3(0.0f, 0.0f, -j * 25.0f);
 		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
-
+        /*
 		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
 		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -217,17 +218,17 @@ void OpenGLWindow::renderScene()
 
 		houseTexture.bind();
 		glDrawArrays(GL_TRIANGLES, 4, 12);
-		glDrawArrays(GL_TRIANGLES, 22, 12);
+		glDrawArrays(GL_TRIANGLES, 22, 12);*/
 
 		filterTextures[i].bind();
 		glDrawArrays(GL_TRIANGLES, 16, 6);
 
 		roofTexture.bind();
-		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
-		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
-		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
-		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
-		glDrawArrays(GL_TRIANGLES, 40, 12);
+        auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
+        glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
+        modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
+        mainProgram["matrices.modelMatrix"] = modelMatrixTop;
+        glDrawArrays(GL_TRIANGLES, 40, 24);
 
 		if (glm::distance(camera.getEye(), housePosition) < houseBottomSize*0.66f) {
 			groundSamplerIndex = i;

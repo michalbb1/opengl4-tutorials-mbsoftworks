@@ -54,9 +54,16 @@ include_directories(${GLAD_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 include_directories(${STB_INCLUDE_DIRS})
 
-# Add executable and link with libraries
+# Add executable
 add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+
+# Link this tutorial with GLFW static libraries
 target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES})
+
+# On Unix systems, we will also need pthread library
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME} pthread)
+endif()
 
 set_target_properties(${PROJECT_NAME}
 	PROPERTIES

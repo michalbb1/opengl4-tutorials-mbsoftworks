@@ -36,7 +36,7 @@
     <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

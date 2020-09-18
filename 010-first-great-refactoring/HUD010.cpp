@@ -1,7 +1,8 @@
+// STL
 #include <mutex>
 
+// Project
 #include "HUD010.h"
-
 #include "../common_classes/textureManager.h"
 #include "../common_classes/matrixManager.h"
 
@@ -9,7 +10,7 @@ const std::string HUD010::CHRISTMAS_TREE_TEXTURE_KEY = "christmas_tree";
 const std::string HUD010::SNOWFLAKE_TREE_TEXTURE_KEY = "snowflake";
 
 HUD010::HUD010(const OpenGLWindow& window)
-	: HUD(window)
+	: HUDBase(window)
 {
 	static std::once_flag prepareOnceFlag;
 	std::call_once(prepareOnceFlag, []()

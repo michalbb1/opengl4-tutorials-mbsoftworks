@@ -1,0 +1,187 @@
+#-------------------------------
+# TUTORIAL CONFIGURATION
+#-------------------------------
+
+set(PROJECT_NAME "022-cylinder-and-sphere")
+project(${PROJECT_NAME}) # Project's name
+cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
+set (CMAKE_CXX_STANDARD 14) # Support C++14
+
+file(GLOB TUTORIAL_022_SOURCE_FILES *.cpp)
+file(GLOB TUTORIAL_022_HEADER_FILES *.h)
+
+set(COMMON_CLASSES_SOURCE_FILES
+"${COMMON_CLASSES_ROOT}/flyingCamera.cpp"
+"${COMMON_CLASSES_ROOT}/freeTypeFont.cpp"
+"${COMMON_CLASSES_ROOT}/freeTypeFontManager.cpp"
+"${COMMON_CLASSES_ROOT}/HUD.cpp"
+"${COMMON_CLASSES_ROOT}/OpenGLWindow.cpp"
+"${COMMON_CLASSES_ROOT}/matrixManager.cpp"
+"${COMMON_CLASSES_ROOT}/sampler.cpp"
+"${COMMON_CLASSES_ROOT}/samplerManager.cpp"
+"${COMMON_CLASSES_ROOT}/shader.cpp"
+"${COMMON_CLASSES_ROOT}/shaderManager.cpp"
+"${COMMON_CLASSES_ROOT}/shaderProgram.cpp"
+"${COMMON_CLASSES_ROOT}/shaderProgramManager.cpp"
+"${COMMON_CLASSES_ROOT}/staticGeometry.cpp"
+"${COMMON_CLASSES_ROOT}/texture.cpp"
+"${COMMON_CLASSES_ROOT}/textureManager.cpp"
+"${COMMON_CLASSES_ROOT}/uniform.cpp"
+"${COMMON_CLASSES_ROOT}/vertexBufferObject.cpp"
+)
+
+set(COMMON_CLASSES_HEADER_FILES
+"${COMMON_CLASSES_ROOT}/flyingCamera.h"
+"${COMMON_CLASSES_ROOT}/freeTypeFont.h"
+"${COMMON_CLASSES_ROOT}/freeTypeFontManager.h"
+"${COMMON_CLASSES_ROOT}/HUD.h"
+"${COMMON_CLASSES_ROOT}/OpenGLWindow.h"
+"${COMMON_CLASSES_ROOT}/matrixManager.h"
+"${COMMON_CLASSES_ROOT}/sampler.h"
+"${COMMON_CLASSES_ROOT}/samplerManager.h"
+"${COMMON_CLASSES_ROOT}/shader.h"
+"${COMMON_CLASSES_ROOT}/shaderProgram.h"
+"${COMMON_CLASSES_ROOT}/shaderProgramManager.h"
+"${COMMON_CLASSES_ROOT}/staticGeometry.h"
+"${COMMON_CLASSES_ROOT}/stringUtils.h"
+"${COMMON_CLASSES_ROOT}/texture.h"
+"${COMMON_CLASSES_ROOT}/textureManager.h"
+"${COMMON_CLASSES_ROOT}/uniform.h"
+"${COMMON_CLASSES_ROOT}/vertexBufferObject.h"
+)
+
+set(COMMON_CLASSES_SHADER_STRUCTS_SOURCE_FILES
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/ambientLight.cpp"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/diffuseLight.cpp"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/material.cpp"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/shaderStruct.cpp"
+)
+
+set(COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/ambientLight.h"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/diffuseLight.h"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/material.h"
+"${COMMON_CLASSES_SHADER_STRUCTS_ROOT}/shaderStruct.h"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_2D_SOURCE_FILES
+"${COMMON_CLASSES_STATIC_MESHES_2D_ROOT}/staticMesh2D.cpp"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_2D_SOURCE_FILES
+"${COMMON_CLASSES_STATIC_MESHES_2D_ROOT}/staticMesh2D.cpp"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_2D_HEADER_FILES
+"${COMMON_CLASSES_STATIC_MESHES_2D_ROOT}/staticMesh2D.h"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_SOURCE_FILES
+"${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_ROOT}/quad.cpp"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_HEADER_FILES
+"${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_ROOT}/quad.h"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_3D_SOURCE_FILES
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/skybox.cpp"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMesh3D.cpp"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMeshIndexed3D.cpp"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_3D_HEADER_FILES
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/skybox.h"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMesh3D.h"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMeshIndexed3D.h"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_SOURCE_FILES
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/cylinder.cpp"
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/cube.cpp"
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/sphere.cpp"
+)
+
+set(COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_HEADER_FILES
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/cylinder.h"
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/cube.h"
+"${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_ROOT}/sphere.h"
+)
+
+set(STB_HEADER_FILES
+"${STB_INCLUDE_DIRS}/stb_image.h"
+)
+
+# Need to add header files as well in order for source grouping to work
+set(ALL_SOURCE_FILES
+${TUTORIAL_022_SOURCE_FILES} ${TUTORIAL_022_HEADER_FILES}
+${GLAD_SOURCE_FILES} ${GLAD_HEADER_FILES}
+${COMMON_CLASSES_SOURCE_FILES} ${COMMON_CLASSES_HEADER_FILES}
+${COMMON_CLASSES_SHADER_STRUCTS_SOURCE_FILES} ${COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES}
+${COMMON_CLASSES_STATIC_MESHES_2D_SOURCE_FILES} ${COMMON_CLASSES_STATIC_MESHES_2D_HEADER_FILES}
+${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_SOURCE_FILES} ${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_HEADER_FILES}
+${COMMON_CLASSES_STATIC_MESHES_3D_SOURCE_FILES} ${COMMON_CLASSES_STATIC_MESHES_3D_HEADER_FILES}
+${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_SOURCE_FILES} ${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_HEADER_FILES}
+${STB_HEADER_FILES}
+)
+
+# Setup include directories of the tutorial
+include_directories(${GLFW_INCLUDE_DIRS})
+include_directories(${GLAD_INCLUDE_DIRS})
+include_directories(${GLM_INCLUDE_DIRS})
+include_directories(${STB_INCLUDE_DIRS})
+include_directories(${FREETYPE_INCLUDE_DIRS})
+
+# Add executable
+add_executable(${PROJECT_NAME} ${ALL_SOURCE_FILES})
+
+# Link this tutorial with GLFW and Freetype static libraries
+target_link_libraries(${PROJECT_NAME} ${GLFW_STATIC_LIBRARIES} ${FREETYPE_STATIC_LIBRARIES})
+
+# On Unix systems, we will also need pthread library
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME} pthread)
+endif()
+
+set_target_properties(${PROJECT_NAME}
+	PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}"
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}"
+)
+
+if(IS_64BIT_BUILD)
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d64"
+		OUTPUT_NAME_RELEASE "${PROJECT_NAME}64"
+	)
+else()
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+		OUTPUT_NAME_DEBUG "${PROJECT_NAME}_d"
+		OUTPUT_NAME_RELEASE ${PROJECT_NAME}
+	)
+endif()
+
+#-------------------------------
+# SOURCE GROUPING
+#-------------------------------
+
+source_group("Source Files" FILES ${TUTORIAL_022_SOURCE_FILES})
+source_group("Source Files\\common_classes" FILES ${COMMON_CLASSES_SOURCE_FILES})
+source_group("Source Files\\common_classes\\shader_structs" FILES ${COMMON_CLASSES_SHADER_STRUCTS_SOURCE_FILES})
+source_group("Source Files\\common_classes\\static_meshes_2D" FILES ${COMMON_CLASSES_STATIC_MESHES_2D_SOURCE_FILES})
+source_group("Source Files\\common_classes\\static_meshes_2D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_SOURCE_FILES})
+source_group("Source Files\\common_classes\\static_meshes_3D" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_SOURCE_FILES})
+source_group("Source Files\\common_classes\\static_meshes_3D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_SOURCE_FILES})
+source_group("Source Files\\glad" FILES ${GLAD_SOURCE_FILES})
+
+source_group("Header Files" FILES ${TUTORIAL_022_HEADER_FILES})
+source_group("Header Files\\common_classes" FILES ${COMMON_CLASSES_HEADER_FILES})
+source_group("Header Files\\glad" FILES ${GLAD_HEADER_FILES})
+source_group("Header Files\\common_classes\\shader_structs" FILES ${COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES})
+source_group("Header Files\\common_classes\\static_meshes_2D" FILES ${COMMON_CLASSES_STATIC_MESHES_2D_HEADER_FILES})
+source_group("Header Files\\common_classes\\static_meshes_2D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_HEADER_FILES})
+source_group("Header Files\\common_classes\\static_meshes_3D" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_HEADER_FILES})
+source_group("Header Files\\common_classes\\static_meshes_3D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_HEADER_FILES})
+source_group("Header Files\\stb" FILES ${STB_HEADER_FILES})

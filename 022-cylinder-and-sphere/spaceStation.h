@@ -2,6 +2,7 @@
 
 // STL
 #include <string>
+#include <memory>
 
 // Project
 #include "../common_classes/OpenGLWindow.h"
