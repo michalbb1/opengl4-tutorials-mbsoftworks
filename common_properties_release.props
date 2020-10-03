@@ -6,7 +6,7 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IncludePath>$(SolutionDir)dependencies\glm;$(SolutionDir)dependencies\glad\include;$(SolutionDir)dependencies\stb;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <TargetName>$(ProjectName)_d</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
