@@ -54,6 +54,7 @@ public:
 	DEFINE_SHADER_CONSTANT(normalLength, "normalLength");
 	DEFINE_SHADER_CONSTANT(material, "material");
 	DEFINE_SHADER_CONSTANT(eyePosition, "eyePosition");
+    DEFINE_SHADER_CONSTANT(numPointLights, "numPointLights");
 	
 	// Fog constants
 	DEFINE_SHADER_CONSTANT(fogParams, "fogParams");

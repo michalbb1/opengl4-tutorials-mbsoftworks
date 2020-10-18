@@ -169,6 +169,7 @@ add_subdirectory(020-fog)
 add_subdirectory(021-specular-highlight)
 add_subdirectory(022-cylinder-and-sphere)
 add_subdirectory(023-point-lights)
+add_subdirectory(024-uniform-buffer-object)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})

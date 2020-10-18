@@ -49,6 +49,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "022-cylinder-and-sphere", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "023-point-lights", "023-point-lights\023-point-lights.vcxproj", "{BDB96A19-9EDC-4C42-B2BA-1F6085055714}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "024-uniform-buffer-object", "024-uniform-buffer-object\024-uniform-buffer-object.vcxproj", "{C1E1C754-423A-445E-B263-ABC155D26672}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -241,6 +243,14 @@ Global
 		{BDB96A19-9EDC-4C42-B2BA-1F6085055714}.Release|x64.Build.0 = Release|x64
 		{BDB96A19-9EDC-4C42-B2BA-1F6085055714}.Release|x86.ActiveCfg = Release|Win32
 		{BDB96A19-9EDC-4C42-B2BA-1F6085055714}.Release|x86.Build.0 = Release|Win32
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Debug|x64.ActiveCfg = Debug|x64
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Debug|x64.Build.0 = Debug|x64
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Debug|x86.ActiveCfg = Debug|Win32
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Debug|x86.Build.0 = Debug|Win32
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x64.ActiveCfg = Release|x64
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x64.Build.0 = Release|x64
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x86.ActiveCfg = Release|Win32
+		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

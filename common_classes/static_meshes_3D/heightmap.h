@@ -59,7 +59,7 @@ public:
 	Heightmap(const std::string& fileName, bool withPositions = true, bool withTextureCoordinates = true, bool withNormals = true);
 
 	static void prepareMultiLayerShaderProgram();
-	static ShaderProgram& getMultiLayerShaderProgram();
+    static ShaderProgram& getMultiLayerShaderProgram();
 
 	/** \brief  Generates heightmap from the provided height data.
 	*   \param  heightData 2D float vector containing height data - each value should be between 0.0 (lowest point) and 1.0 (highest point)
@@ -88,12 +88,19 @@ public:
 	*/
 	int getColumns() const;
 
-	/** \brief  Gets height value on specified row and column position.
-	*   \param  row Row to get height at
-	*   \param  column Column to get height at
-	*   \return Height at the specified point or 0.0, if parameters are out of bounds
-	*/
-	float getHeight(const int row, const int column) const;
+    /** \brief  Gets height value on specified row and column position.
+    *   \param  row Row to get height at
+    *   \param  column Column to get height at
+    *   \return Height at the specified point or 0.0, if parameters are out of bounds
+    */
+    float getHeight(const int row, const int column) const;
+
+    /** \brief  Gets height value on specified row and column position.
+    *   \param  row Row to get height at
+    *   \param  column Column to get height at
+    *   \return Height at the specified point or 0.0, if parameters are out of bounds
+    */
+    float getRenderedHeightAtPosition(const glm::vec3& renderSize, const glm::vec3& position) const;
 
 	/** \brief  Generates random height data using hill algorithm.
 	*   \param  params Parameters for hill algorithm generator

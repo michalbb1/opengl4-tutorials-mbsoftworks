@@ -14,7 +14,6 @@ namespace static_meshes_3D {
 
 const std::string Heightmap::MULTILAYER_SHADER_PROGRAM_KEY = "multilayer_heightmap";
 
-
 Heightmap::Heightmap(const HillAlgorithmParameters& params, bool withPositions, bool withTextureCoordinates, bool withNormals)
 	: StaticMeshIndexed3D(withPositions, withTextureCoordinates, withNormals)
 {
@@ -185,6 +184,17 @@ float Heightmap::getHeight(const int row, const int column) const
 	}
 
 	return _heightData[row][column];
+}
+
+float Heightmap::getRenderedHeightAtPosition(const glm::vec3& renderSize, const glm::vec3& position) const
+{
+    const auto halfWidth = renderSize.x / 2.0f;
+    const auto halfDepth = renderSize.z / 2.0f;
+
+    const auto row = int(_rows * (position.z + halfDepth) / renderSize.z);
+    const auto column = int(_columns * (position.x + halfWidth) / renderSize.x);
+
+    return getHeight(row, column) * renderSize.y;
 }
 
 std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAlgorithmParameters& params)

@@ -59,28 +59,28 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\common_properties.props" />
+    <Import Project="..\common_properties_debug.props" />
     <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
     <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties.props" />
     <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_properties_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\common_properties.props" />
+    <Import Project="..\common_properties_release.props" />
     <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties.props" />
     <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties.props" />
     <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_properties_release.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\common_properties.props" />
+    <Import Project="..\common_properties_debug64.props" />
     <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
     <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties64.props" />
     <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_properties_debug64.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\common_properties.props" />
+    <Import Project="..\common_properties_release64.props" />
     <Import Project="..\dependencies\glfw-prebuilt\vs2017\glfw_properties64.props" />
     <Import Project="..\dependencies\freetype2-prebuilt\vs2017\freetype2_properties64.props" />
     <Import Project="..\dependencies\assimp-prebuilt\vs2017\assimp_properties_release64.props" />

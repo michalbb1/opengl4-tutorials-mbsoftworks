@@ -9,13 +9,14 @@ void VertexBufferObject::createVBO(size_t reserveSizeBytes)
 {
 	if (_isBufferCreated)
 	{
-		std::cout << "This buffer is already created! You need to delete it before re-creating it!" << std::endl;
+		std::cerr << "This buffer is already created! You need to delete it before re-creating it!" << std::endl;
 		return;
 	}
 
 	glGenBuffers(1, &_bufferID);
 	_rawData.reserve(reserveSizeBytes > 0 ? reserveSizeBytes : 1024);
 
+    std::cout << "Created vertex buffer object with ID " << _bufferID << " and initial reserved size " << _rawData.capacity() << " bytes" << std::endl;
 	_isBufferCreated = true;
 }
 
@@ -23,7 +24,7 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 {
 	if (!_isBufferCreated)
 	{
-		std::cout << "This buffer is not created yet! You cannot bind it before you create it!" << std::endl;
+		std::cerr << "This buffer is not created yet! You cannot bind it before you create it!" << std::endl;
 		return;
 	}
 
@@ -59,7 +60,7 @@ void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
 {
 	if (!_isBufferCreated)
 	{
-		std::cout << "This buffer is not created yet! Call createVBO before uploading data to GPU!" << std::endl;
+		std::cerr << "This buffer is not created yet! Call createVBO before uploading data to GPU!" << std::endl;
 		return;
 	}
 
@@ -106,10 +107,12 @@ size_t VertexBufferObject::getBufferSize()
 
 void VertexBufferObject::deleteVBO()
 {
-	if (_isBufferCreated)
-	{
-		glDeleteBuffers(1, &_bufferID);
-		_isDataUploaded = false;
-		_isBufferCreated = false;
-	}
+    if (!_isBufferCreated) {
+        return;
+    }
+
+    std::cout << "Deleting vertex buffer object with ID " << _bufferID << "..." << std::endl;
+	glDeleteBuffers(1, &_bufferID);
+	_isDataUploaded = false;
+	_isBufferCreated = false;
 }
