@@ -2,13 +2,13 @@
 # TUTORIAL CONFIGURATION
 #-------------------------------
 
-set(PROJECT_NAME "023-point-lights")
+set(PROJECT_NAME "024-uniform-buffer-object")
 project(${PROJECT_NAME}) # Project's name
 cmake_minimum_required(VERSION 3.1) # Specify the minimum version for CMake
 set (CMAKE_CXX_STANDARD 14) # Support C++14
 
-file(GLOB TUTORIAL_023_SOURCE_FILES *.cpp)
-file(GLOB TUTORIAL_023_HEADER_FILES *.h)
+file(GLOB TUTORIAL_024_SOURCE_FILES *.cpp)
+file(GLOB TUTORIAL_024_HEADER_FILES *.h)
 
 set(COMMON_CLASSES_SOURCE_FILES
 "${COMMON_CLASSES_ROOT}/flyingCamera.cpp"
@@ -27,6 +27,7 @@ set(COMMON_CLASSES_SOURCE_FILES
 "${COMMON_CLASSES_ROOT}/texture.cpp"
 "${COMMON_CLASSES_ROOT}/textureManager.cpp"
 "${COMMON_CLASSES_ROOT}/uniform.cpp"
+"${COMMON_CLASSES_ROOT}/uniformBufferObject.cpp"
 "${COMMON_CLASSES_ROOT}/vertexBufferObject.cpp"
 )
 
@@ -47,6 +48,7 @@ set(COMMON_CLASSES_HEADER_FILES
 "${COMMON_CLASSES_ROOT}/texture.h"
 "${COMMON_CLASSES_ROOT}/textureManager.h"
 "${COMMON_CLASSES_ROOT}/uniform.h"
+"${COMMON_CLASSES_ROOT}/uniformBufferObject.h"
 "${COMMON_CLASSES_ROOT}/vertexBufferObject.h"
 )
 
@@ -88,7 +90,7 @@ set(COMMON_CLASSES_STATIC_MESHES_2D_PRIMITIVES_HEADER_FILES
 
 set(COMMON_CLASSES_STATIC_MESHES_3D_SOURCE_FILES
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/assimpModel.cpp"
-"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/plainGround.cpp"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/heightmap.cpp"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/skybox.cpp"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMesh3D.cpp"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMeshIndexed3D.cpp"
@@ -96,7 +98,7 @@ set(COMMON_CLASSES_STATIC_MESHES_3D_SOURCE_FILES
 
 set(COMMON_CLASSES_STATIC_MESHES_3D_HEADER_FILES
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/assimpModel.h"
-"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/plainGround.h"
+"${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/heightmap.h"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/skybox.h"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMesh3D.h"
 "${COMMON_CLASSES_STATIC_MESHES_3D_ROOT}/staticMeshIndexed3D.h"
@@ -120,7 +122,7 @@ set(STB_HEADER_FILES
 
 # Need to add header files as well in order for source grouping to work
 set(ALL_SOURCE_FILES
-${TUTORIAL_023_SOURCE_FILES} ${TUTORIAL_023_HEADER_FILES}
+${TUTORIAL_024_SOURCE_FILES} ${TUTORIAL_024_HEADER_FILES}
 ${GLAD_SOURCE_FILES} ${GLAD_HEADER_FILES}
 ${COMMON_CLASSES_SOURCE_FILES} ${COMMON_CLASSES_HEADER_FILES}
 ${COMMON_CLASSES_SHADER_STRUCTS_SOURCE_FILES} ${COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES}
@@ -174,7 +176,7 @@ endif()
 # SOURCE GROUPING
 #-------------------------------
 
-source_group("Source Files" FILES ${TUTORIAL_023_SOURCE_FILES})
+source_group("Source Files" FILES ${TUTORIAL_024_SOURCE_FILES})
 source_group("Source Files\\common_classes" FILES ${COMMON_CLASSES_SOURCE_FILES})
 source_group("Source Files\\common_classes\\shader_structs" FILES ${COMMON_CLASSES_SHADER_STRUCTS_SOURCE_FILES})
 source_group("Source Files\\common_classes\\static_meshes_2D" FILES ${COMMON_CLASSES_STATIC_MESHES_2D_SOURCE_FILES})
@@ -183,7 +185,7 @@ source_group("Source Files\\common_classes\\static_meshes_3D" FILES ${COMMON_CLA
 source_group("Source Files\\common_classes\\static_meshes_3D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_SOURCE_FILES})
 source_group("Source Files\\glad" FILES ${GLAD_SOURCE_FILES})
 
-source_group("Header Files" FILES ${TUTORIAL_023_SOURCE_FILES})
+source_group("Header Files" FILES ${TUTORIAL_024_SOURCE_FILES})
 source_group("Header Files\\common_classes" FILES ${COMMON_CLASSES_HEADER_FILES})
 source_group("Header Files\\glad" FILES ${GLAD_HEADER_FILES})
 source_group("Header Files\\common_classes\\shader_structs" FILES ${COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES})
