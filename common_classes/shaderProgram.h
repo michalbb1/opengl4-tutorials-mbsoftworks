@@ -51,8 +51,19 @@ public:
 	// Model and normal matrix setting is pretty common, that's why this convenience function
 	void setModelAndNormalMatrix(const glm::mat4& modelMatrix);
 
-private:
+    /** \brief Gets index of given uniform block in this shader program.
+    *   \param  uniformBlockName uniform block name
+    *   \return Index of uniform block or GL_INVALID_INDEX if such block doesn't exist / some other error occurs.
+    */
+    GLuint getUniformBlockIndex(const std::string& uniformBlockName) const;
 
+    /** \brief Binds uniform block of this program to a uniform binding point
+    *   \param  uniformBlockName uniform block name
+    *   \param  bindingPoint     uniform binding point to bind the uniform block to
+    */
+    void bindUniformBlockToBindingPoint(const std::string& uniformBlockName, const GLuint bindingPoint) const;
+
+private:
 	GLuint _shaderProgramID;  //! OpenGL-assigned shader program ID
 	bool _isLinked = false; //! Flag teling, whether shader program has been linked successfully
 	std::map<std::string, Uniform> _uniforms; //! Cache of uniform locations (reduces OpenGL calls)

@@ -81,3 +81,27 @@ void ShaderProgram::setModelAndNormalMatrix(const glm::mat4& modelMatrix)
 	(*this)[ShaderConstants::modelMatrix()] = modelMatrix;
 	(*this)[ShaderConstants::normalMatrix()] = glm::transpose(glm::inverse(glm::mat3(modelMatrix)));
 }
+
+GLuint ShaderProgram::getUniformBlockIndex(const std::string& uniformBlockName) const
+{
+    if (!_isLinked)
+    {
+        std::cerr << "Cannot get index of uniform block " << uniformBlockName << " when program has not been linked!" << std::endl;
+        return GL_INVALID_INDEX;
+    }
+
+    GLuint result = glGetUniformBlockIndex(_shaderProgramID, uniformBlockName.c_str());
+    if (result == GL_INVALID_INDEX) {
+        std::cerr << "Could not get index of uniform block " << uniformBlockName << ", check if such uniform block really exists!" << std::endl;
+    }
+
+    return result;
+}
+
+void ShaderProgram::bindUniformBlockToBindingPoint(const std::string& uniformBlockName, const GLuint bindingPoint) const
+{
+    const auto blockIndex = getUniformBlockIndex(uniformBlockName);
+    if (blockIndex != GL_INVALID_INDEX) {
+        glUniformBlockBinding(_shaderProgramID, blockIndex, bindingPoint);
+    }
+}
