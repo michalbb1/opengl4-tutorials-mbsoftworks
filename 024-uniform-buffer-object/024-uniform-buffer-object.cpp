@@ -36,7 +36,7 @@ constexpr int MATRICES_BLOCK_BINDING_POINT = 0;
 constexpr int POINT_LIGHTS_BLOCK_BINDING_POINT = 1;
 constexpr int MAX_POINT_LIGHTS = 20;
 
-FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
+FlyingCamera camera(glm::vec3(160.0f, 50.0f, -150.0f), glm::vec3(160.0f, 50.0f, -149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
 
 std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
 const glm::vec3 heightMapSize(400.0f, 40.0f, 400.0f);
@@ -123,7 +123,9 @@ void OpenGLWindow::initializeScene()
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
 		TextureManager::getInstance().loadTexture2D("grass", "data/textures/grass.jpg");
-		TextureManager::getInstance().loadTexture2D("ice", "data/textures/ice.png");
+        TextureManager::getInstance().loadTexture2D("ice", "data/textures/ice.png");
+        TextureManager::getInstance().loadTexture2D("cobblestone_mossy", "data/textures/cobblestone_mossy.png");
+        TextureManager::getInstance().loadTexture2D("rocky_terrain", "data/textures/rocky_terrain.jpg");
 		TextureManager::getInstance().loadTexture2D("scifi_metal", "data/textures/scifi_metal.jpg");
 		
         sphere = std::make_unique<static_meshes_3D::Sphere>(2.0f, 8, 8);
@@ -279,10 +281,10 @@ void OpenGLWindow::renderScene()
     // Finally set heightmap model matrix and render it
     const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
     heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-    heightmap->renderMultilayered({ "grass", "ice", "scifi_metal" }, { 0.2f, 0.3f, 0.55f, 0.7f });
+    heightmap->renderMultilayered({ "cobblestone_mossy", "grass", "rocky_terrain" }, { 0.2f, 0.3f, 0.55f, 0.7f });
 
 	// Render HUD
-    hud->renderHUD(ambientLight, *pointLights.begin(), pointLights.size());
+    hud->renderHUD(ambientLight, *pointLights.begin(), (int)pointLights.size());
 	
 	// Update variables
 	rotationAngle += sof(glm::radians(30.0f));
