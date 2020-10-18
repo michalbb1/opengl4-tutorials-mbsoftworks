@@ -176,11 +176,13 @@
     <ClCompile Include="..\common_classes\texture.cpp" />
     <ClCompile Include="..\common_classes\textureManager.cpp" />
     <ClCompile Include="..\common_classes\uniform.cpp" />
+    <ClCompile Include="..\common_classes\uniformBufferObject.cpp" />
     <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
     <ClCompile Include="..\dependencies\glad\src\glad.c" />
     <ClCompile Include="024-uniform-buffer-object.cpp" />
     <ClCompile Include="HUD024.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pointLightExtended.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_classes\flyingCamera.h" />
@@ -219,10 +221,12 @@
     <ClInclude Include="..\common_classes\texture.h" />
     <ClInclude Include="..\common_classes\textureManager.h" />
     <ClInclude Include="..\common_classes\uniform.h" />
+    <ClInclude Include="..\common_classes\uniformBufferObject.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
     <ClInclude Include="HUD024.h" />
+    <ClInclude Include="pointLightExtended.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

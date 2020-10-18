@@ -180,6 +180,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_classes\uniformBufferObject.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="pointLightExtended.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
@@ -300,6 +306,12 @@
       <Filter>Header Files\common_classes\shader_structs</Filter>
     </ClInclude>
     <ClInclude Include="HUD024.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniformBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="pointLightExtended.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

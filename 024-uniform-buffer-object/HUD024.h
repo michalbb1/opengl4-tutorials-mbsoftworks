@@ -19,5 +19,5 @@ public:
 
 	/** \brief  Renders HUD. */
 	void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
-	void renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::PointLight& pointLight) const;
+	void renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::PointLight& pointLight, const int numPointLights) const;
 };

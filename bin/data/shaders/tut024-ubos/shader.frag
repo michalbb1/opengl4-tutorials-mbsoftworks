@@ -18,9 +18,13 @@ uniform vec4 color;
 uniform AmbientLight ambientLight;
 uniform DiffuseLight diffuseLight;
 uniform Material material;
-uniform PointLight pointLights[20];
-uniform int numPointLights;
 uniform vec3 eyePosition;
+
+uniform int numPointLights;
+layout(std140, binding = 1) uniform PointLightsBlock
+{
+    PointLight lights[20];
+} block_pointLights;
 
 void main()
 {
@@ -32,7 +36,7 @@ void main()
 	vec3 specularHighlightColor = getSpecularHighlightColor(ioWorldPosition.xyz, normal, eyePosition, material, diffuseLight);
 	vec3 lightColor = ambientColor + diffuseColor + specularHighlightColor;
 	for(int i = 0; i < numPointLights; i++) {
-		lightColor += getPointLightColor(pointLights[i], ioWorldPosition.xyz, normal);
+		lightColor += getPointLightColor(block_pointLights.lights[i], ioWorldPosition.xyz, normal);
 	}
     
     outputColor = objectColor * vec4(lightColor, 1.0);

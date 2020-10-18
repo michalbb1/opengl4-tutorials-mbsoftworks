@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 #include <deque>
-#include <random>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/flyingCamera.h"
@@ -15,11 +15,12 @@
 #include "../common_classes/samplerManager.h"
 #include "../common_classes/freeTypeFontManager.h"
 #include "../common_classes/matrixManager.h"
+#include "../common_classes/uniformBufferObject.h"
 
 #include "../common_classes/static_meshes_3D/assimpModel.h"
 #include "../common_classes/static_meshes_3D/skybox.h"
 
-#include "../common_classes/static_meshes_3D/plainGround.h"
+#include "../common_classes/static_meshes_3D/heightmap.h"
 #include "../common_classes/static_meshes_3D/primitives/sphere.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
@@ -28,11 +29,18 @@
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/shader_structs/pointLight.h"
 
+#include "pointLightExtended.h"
 #include "HUD024.h"
+
+constexpr int MATRICES_BLOCK_BINDING_POINT = 0;
+constexpr int POINT_LIGHTS_BLOCK_BINDING_POINT = 1;
+constexpr int MAX_POINT_LIGHTS = 20;
 
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
 
-std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
+std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
+const glm::vec3 heightMapSize(400.0f, 40.0f, 400.0f);
+
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
 std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<static_meshes_3D::Sphere> sphere;
@@ -42,60 +50,42 @@ std::unique_ptr<HUD024> hud;
 shader_structs::AmbientLight ambientLight(glm::vec3(0.1f, 0.1f, 0.1f));
 shader_structs::Material shinyMaterial(1.0f, 32.0f);
 
-constexpr int MAX_POINT_LIGHTS = 20;
-
-class PointLightExtended : public shader_structs::PointLight
-{
-public:
-    const double MAX_TRAVEL_DISTANCE{ 200.0 };
-    glm::vec3 direction;
-
-    PointLightExtended(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& color, const float ambientFactor,
-        const float constantAttenuation, const float linearAttenuation, const float exponentialAttenuation,
-        const bool isOn = true)
-        : PointLight(position, color, ambientFactor, constantAttenuation, linearAttenuation, exponentialAttenuation, isOn)
-        , direction(direction) {}
-
-    void update(const float& speedMultiplier)
-    {
-        const auto newPosition = position + direction * speedMultiplier;
-        position += direction * speedMultiplier;
-        if (newPosition.x >= MAX_TRAVEL_DISTANCE || newPosition.x <= -MAX_TRAVEL_DISTANCE
-            || newPosition.z >= MAX_TRAVEL_DISTANCE || newPosition.z <= -MAX_TRAVEL_DISTANCE)
-        {
-            direction *= -1.0f;
-        }
-        else
-        {
-            position = newPosition;
-        }
-    }
-};
-
 std::vector<glm::vec3> tripleToriPositions
 {
-	glm::vec3(-120.0f, 0.0f, -120.0f),
-	glm::vec3(120.0f, 0.0f, -120.0f),
-	glm::vec3(120.0f, 0.0f, 120.0f),
-	glm::vec3(-120.0f, 0.0f, 120.0f)
+	glm::vec3(-140.0f, 0.0f, -140.0f),
+	glm::vec3(140.0f, 0.0f, -140.0f),
+	glm::vec3(140.0f, 0.0f, 140.0f),
+	glm::vec3(-140.0f, 0.0f, 140.0f)
 };
 
 std::vector<glm::vec3> barnPositions
 {
-    glm::vec3(0.0f, 0.0f, -120.0f),
-    glm::vec3(-120.0f, 0.0f, 0.0f),
-    glm::vec3(0.0f, 0.0f, 120.0f),
-    glm::vec3(120.0f, 0.0f, 0.0f)
+    glm::vec3(0.0f, 0.0f, -160.0f),
+    glm::vec3(-170.0f, 0.0f, 0.0f),
+    glm::vec3(0.0f, 0.0f, 160.0f),
+    glm::vec3(170.0f, 0.0f, 0.0f),
+    glm::vec3(-20.0f, 40.0f, 0.0f)
 };
 
-std::deque<PointLightExtended> pointLights;
-
 float rotationAngle; // Rotation angle used to animate tori
+
+std::unique_ptr<UniformBufferObject> uboMatrices; // UBO for matrices
+
+std::deque<PointLightExtended> pointLights; // All point lights are stored here
+std::unique_ptr<UniformBufferObject> uboPointLights; // UBO for point lights
 
 void OpenGLWindow::initializeScene()
 {
 	try
 	{
+        uboMatrices = std::make_unique<UniformBufferObject>();
+        uboMatrices->createUBO(sizeof(glm::mat4) * 2);
+        uboMatrices->bindBufferBaseToBindingPoint(MATRICES_BLOCK_BINDING_POINT);
+
+        uboPointLights = std::make_unique<UniformBufferObject>();
+        uboPointLights->createUBO(MAX_POINT_LIGHTS * shader_structs::PointLight::getDataSizeStd140());
+        uboPointLights->bindBufferBaseToBindingPoint(POINT_LIGHTS_BLOCK_BINDING_POINT);
+
 		auto& sm = ShaderManager::getInstance();
 		auto& spm = ShaderProgramManager::getInstance();
 		auto& tm = TextureManager::getInstance();
@@ -115,6 +105,18 @@ void OpenGLWindow::initializeScene()
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::specularHighlight()));
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::pointLight()));
+        
+        auto& customMultilayerHeightmapShaderProgram = spm.createShaderProgram(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY);
+        sm.loadVertexShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/tut024-ubos/multilayer_heightmap.vert");
+        sm.loadFragmentShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/tut024-ubos/multilayer_heightmap.frag");
+
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
+
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::pointLight()));
+        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
 		 
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/jajsundown1", "jpg");
 		hud = std::make_unique<HUD024>(*this);
@@ -132,9 +134,18 @@ void OpenGLWindow::initializeScene()
         barnMatrix = glm::scale(barnMatrix, glm::vec3(0.05f, 0.05f, 0.05f));
         barn = std::make_unique<static_meshes_3D::AssimpModel>("data/models/scheune_3ds/scheune.3ds", "", true, true, true, barnMatrix);
 
-        plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, true);
+        heightmap = std::make_unique<static_meshes_3D::Heightmap>("data/heightmaps/tut019.png", true, true, true);
 
 		spm.linkAllPrograms();
+
+        // Bind uniform blocks with binding points for main program
+        auto& mainProgram = spm.getShaderProgram("main");
+        mainProgram.bindUniformBlockToBindingPoint("MatricesBlock", MATRICES_BLOCK_BINDING_POINT);
+        mainProgram.bindUniformBlockToBindingPoint("PointLightsBlock", POINT_LIGHTS_BLOCK_BINDING_POINT);
+       
+        // Bind uniform blocks with binding points for custom multilayer heightmap shader program
+        customMultilayerHeightmapShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", MATRICES_BLOCK_BINDING_POINT);
+        customMultilayerHeightmapShaderProgram.bindUniformBlockToBindingPoint("PointLightsBlock", POINT_LIGHTS_BLOCK_BINDING_POINT);
 	}
 	catch (const std::runtime_error& ex)
 	{
@@ -143,8 +154,9 @@ void OpenGLWindow::initializeScene()
 		return;
 	}
 
-    pointLights.push_back(PointLightExtended(glm::vec3(-60.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, 0.3f, 0.007f, 0.00008f));
-    pointLights.push_back(PointLightExtended(glm::vec3(60.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), 0.0f, 0.3f, 0.007f, 0.00008f));
+    // Create two initial point lights
+    pointLights.push_back(PointLightExtended::createRandomPointLight(glm::vec3(-60.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+    pointLights.push_back(PointLightExtended::createRandomPointLight(glm::vec3(60.0f, 20.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
@@ -164,39 +176,41 @@ void OpenGLWindow::renderScene()
 	mm.setOrthoProjectionMatrix(getOrthoProjectionMatrix());
 	mm.setViewMatrix(camera.getViewMatrix());
 
+    // Set matrices uniform buffer object data - we just set projection and view matrix here, they are
+    // consistent across all shader programs
+    uboMatrices->bindUBO();
+    uboMatrices->setBufferData(0, glm::value_ptr(getProjectionMatrix()), sizeof(glm::mat4));
+    uboMatrices->setBufferData(sizeof(glm::mat4), glm::value_ptr(camera.getViewMatrix()), sizeof(glm::mat4));
+
+    // Set point lights uniform buffer object data - in our case the poing lights are same across all shader programs
+    uboPointLights->bindUBO();
+    GLsizeiptr offset = 0;
+    for (const auto& pointLight : pointLights)
+    {
+        uboPointLights->setBufferData(offset, pointLight.getDataPointer(), pointLight.getDataSizeStd140());
+        offset += pointLight.getDataSizeStd140();
+    }
+
 	// Set up some common properties in the main shader program
 	auto& mainProgram = spm.getShaderProgram("main");
 	mainProgram.useProgram();
-	mainProgram[ShaderConstants::projectionMatrix()] = getProjectionMatrix();
-	mainProgram[ShaderConstants::viewMatrix()] = camera.getViewMatrix();
 	mainProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
 	mainProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	mainProgram[ShaderConstants::sampler()] = 0;
 	
-	// Render skybox first with only ambient light
+	// Render skybox first with only ambient light and without point lights
+    // Btw it's a cool effect if you leave point lights here, looks like the sky is illuminated :)
     ambientLight.setUniform(mainProgram, ShaderConstants::ambientLight());
 	shader_structs::DiffuseLight::none().setUniform(mainProgram, ShaderConstants::diffuseLight());
 	shader_structs::Material::none().setUniform(mainProgram, ShaderConstants::material());
-    mainProgram["numPointLights"] = 0;
+    mainProgram[ShaderConstants::numPointLights()] = 0;
 	skybox->render(camera.getEye(), mainProgram);
 
-    // Now setup all lighting properties
-    int pointLightIndex = 0;
-    for (const auto& pointLight : pointLights)
-    {
-        pointLight.setUniform(mainProgram, string_utils::formatString("pointLights[{}]", pointLightIndex++));
-    }
-    mainProgram["numPointLights"] = pointLightIndex;
-
-    // Render ground with only ambient light as well
+	// Set up material properties for specular highlights and restore point light effects
     SamplerManager::getInstance().getSampler("main").bind();
-    mainProgram.setModelAndNormalMatrix(glm::mat4(1.0f));
-    tm.getTexture("grass").bind();
-    plainGround->render();
-
-	// Set up material properties for specular highlights and apply scifi metal texture
 	mainProgram[ShaderConstants::eyePosition()] = camera.getEye();
 	shinyMaterial.setUniform(mainProgram, ShaderConstants::material());
+    mainProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
 	TextureManager::getInstance().getTexture("scifi_metal").bind(0);
 
 	// Render triple tori on their positions
@@ -232,14 +246,11 @@ void OpenGLWindow::renderScene()
 
     // Render barns with no specular reflections
     shader_structs::Material::none().setUniform(mainProgram, ShaderConstants::material());
-    auto barnRotationAngle = 0.0f;
     for (const auto& barnPosition : barnPositions)
     {
         auto basicModelMatrix = glm::translate(glm::mat4(1.0f), barnPosition);
-        basicModelMatrix = glm::rotate(basicModelMatrix, barnRotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
         mainProgram.setModelAndNormalMatrix(basicModelMatrix);
         barn->render();
-        barnRotationAngle += glm::pi<float>() / 2.0f;
     }
 
     // Render all point lights
@@ -250,11 +261,28 @@ void OpenGLWindow::renderScene()
         mainProgram[ShaderConstants::color()] = glm::vec4(pointLight.color, 1.0f);
         tm.getTexture("ice").bind();
         sphere->render();
-        pointLight.update(sof(20.0f));
+        pointLight.update(sof(20.0f), heightmap->getRenderedHeightAtPosition(heightMapSize, pointLight.position) + sphere->getRadius() + 1.0f);
     }
 
+    // Render heightmap
+    auto& heightmapShaderProgram = static_meshes_3D::Heightmap::getMultiLayerShaderProgram();
+    heightmapShaderProgram.useProgram();
+
+    // Use common properties like lighting setup
+    heightmapShaderProgram[ShaderConstants::color()] = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ambientLight.setUniform(heightmapShaderProgram, ShaderConstants::ambientLight());
+    shader_structs::DiffuseLight::none().setUniform(heightmapShaderProgram, ShaderConstants::diffuseLight());
+
+    // Set number of point lights
+    heightmapShaderProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
+
+    // Finally set heightmap model matrix and render it
+    const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
+    heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
+    heightmap->renderMultilayered({ "grass", "ice", "scifi_metal" }, { 0.2f, 0.3f, 0.55f, 0.7f });
+
 	// Render HUD
-    hud->renderHUD(ambientLight, *pointLights.begin());
+    hud->renderHUD(ambientLight, *pointLights.begin(), pointLights.size());
 	
 	// Update variables
 	rotationAngle += sof(glm::radians(30.0f));
@@ -271,7 +299,10 @@ void OpenGLWindow::releaseScene()
 	SamplerManager::getInstance().clearSamplerCache();
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
-    plainGround.reset();
+    uboMatrices.reset();
+    uboPointLights.reset();
+
+    heightmap.reset();
 	hud.reset();
 }
 
@@ -289,34 +320,64 @@ void OpenGLWindow::handleInput()
 		shinyMaterial.isEnabled = !shinyMaterial.isEnabled;
 	}
 
-	if (keyPressed(GLFW_KEY_1))
+    auto& firstPointLight = *pointLights.begin();
+
+    auto syncPointLightsAttenuations = [this, &firstPointLight]()
     {
+        for (auto& pointLight : pointLights)
+        {
+            pointLight.constantAttenuation = firstPointLight.constantAttenuation;
+            pointLight.linearAttenuation = firstPointLight.linearAttenuation;
+            pointLight.exponentialAttenuation = firstPointLight.exponentialAttenuation;
+        }
+    };
 
-	}
-
-	if (keyPressed(GLFW_KEY_2))
+    if (keyPressed(GLFW_KEY_1))
     {
+        firstPointLight.constantAttenuation -= sof(0.2f);
+        if (firstPointLight.constantAttenuation < 0.0f) {
+            firstPointLight.constantAttenuation = 0.0f;
+        }
 
-	}
+        syncPointLightsAttenuations();
+    }
+
+    if (keyPressed(GLFW_KEY_2))
+    {
+        firstPointLight.constantAttenuation += sof(0.2f);
+        syncPointLightsAttenuations();
+    }
 
     if (keyPressed(GLFW_KEY_3))
     {
+        firstPointLight.linearAttenuation -= sof(0.01f);
+        if (firstPointLight.linearAttenuation < 0.0f) {
+            firstPointLight.linearAttenuation = 0.0f;
+        }
 
+        syncPointLightsAttenuations();
     }
 
     if (keyPressed(GLFW_KEY_4))
     {
-
+        firstPointLight.linearAttenuation += sof(0.01f);
+        syncPointLightsAttenuations();
     }
 
     if (keyPressed(GLFW_KEY_5))
     {
+        firstPointLight.exponentialAttenuation -= sof(0.0001f);
+        if (firstPointLight.exponentialAttenuation < 0.0f) {
+            firstPointLight.exponentialAttenuation = 0.0f;
+        }
 
+        syncPointLightsAttenuations();
     }
 
     if (keyPressed(GLFW_KEY_6))
     {
-
+        firstPointLight.exponentialAttenuation += sof(0.0001f);
+        syncPointLightsAttenuations();
     }
 
     if (keyPressed(GLFW_KEY_KP_ADD))
@@ -335,20 +396,21 @@ void OpenGLWindow::handleInput()
         }
     }
 
-    static std::random_device rd;
-    static std::mt19937 e2(rd());
-
     if (keyPressedOnce(GLFW_KEY_SPACE))
     {
-        auto cameraDirection = camera.getViewPoint() - camera.getEye();
-        cameraDirection.y = 0.0f;
-        cameraDirection = glm::normalize(cameraDirection);
-        std::uniform_real_distribution<float> dist(0.4f, 0.8f);
-
         if (pointLights.size() == MAX_POINT_LIGHTS) {
             pointLights.pop_front();
         }
-        pointLights.push_back(PointLightExtended(camera.getEye(), cameraDirection, glm::vec3(dist(e2), dist(e2), dist(e2)), 0.0f, 0.3f, 0.007f, 0.00008f));
+
+        pointLights.push_back(PointLightExtended::createRandomPointLight(camera.getEye(), camera.getViewPoint() - camera.getEye()));
+        syncPointLightsAttenuations();
+    }
+
+    if (keyPressedOnce('R'))
+    {
+        while(pointLights.size() != 1) {
+            pointLights.pop_front();
+        }
     }
 
 	int posX, posY, width, height;
