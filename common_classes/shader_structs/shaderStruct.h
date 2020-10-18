@@ -7,12 +7,13 @@ namespace shader_structs {
 struct ShaderStruct
 {
 public:
-
 	/** \brief  Sets this shader structure as uniform variable.
 	*   \param  shaderProgram Shader program to set uniform variable in
 	*   \param  uniformName Name of the uniform variable
 	*/
 	virtual void setUniform(ShaderProgram& shaderProgram, const std::string& uniformName) const = 0;
+
+    virtual void* getDataPointer() const { return NULL; }
 
 protected:
 
