@@ -1,55 +1,61 @@
 #pragma once
 
+// GLM
 #include <glm/glm.hpp>
 
 /**
-  Manages all the commonly needed matrices.
-*/
+ * Singleton class that manages and keeps track of most commonly used matrices in the program.
+ */
 class MatrixManager
 {
 public:
-	MatrixManager(const MatrixManager&) = delete;
-	void operator=(const MatrixManager&) = delete;
+    /**
+     * Gets the one and only instance of the matrix manager.
+     */
+    static MatrixManager& getInstance();
 
-	/** \brief  Gets the one and only instance of the matrix manager.
-	*   \return Matrix manager instance.
-	*/
-	static MatrixManager& getInstance();
+    /**
+     * Gets projection matrix.
+     */
+    const glm::mat4& getProjectionMatrix() const;
 
-	/** \brief  Gets projection matrix.
-	*   \return Projection matrix.
-	*/
-	const glm::mat4& getProjectionMatrix() const;
+    /**
+     * Gets orthographic projection matrix.
+     */
+    const glm::mat4& getOrthoProjectionMatrix() const;
 
-	/** \brief  Gets orthographic projection matrix.
-	*   \return Orthographic projection matrix.
-	*/
-	const glm::mat4& getOrthoProjectionMatrix() const;
+    /**
+     * Gets view matrix.
+     */
+    const glm::mat4& getViewMatrix() const;
 
-	/** \brief  Gets view matrix.
-	*   \return View matrix.
-	*/
-	const glm::mat4& getViewMatrix() const;
+    /**
+     * Sets projection matrix.
+     *
+     * @param projectionMatrix  New projection matrix
+     */
+    void setProjectionMatrix(const glm::mat4& projectionMatrix);
 
-	/** \brief  Sets projection matrix.
-	*   \param  projectionMatrix New projection matrix
-	*/
-	void setProjectionMatrix(const glm::mat4& projectionMatrix);
+    /**
+     * Sets orthographic projection matrix.
+     *
+     * @param orthoProjectionMatrix  New orthographic projection matrix
+     */
+    void setOrthoProjectionMatrix(const glm::mat4& orthoProjectionMatrix);
 
-	/** \brief  Sets orthographic projection matrix.
-	*   \param  orthoProjectionMatrix New orthographic projection matrix
-	*/
-	void setOrthoProjectionMatrix(const glm::mat4& orthoProjectionMatrix);
-
-	/** \brief  Sets view matrix.
-	*   \param  viewMatrix New view matrix
-	*/
-	void setViewMatrix(const glm::mat4& viewMatrix);
+    /**
+     * Sets view matrix.
+     *
+     * @param viewMatrix  New view matrix
+     */
+    void setViewMatrix(const glm::mat4& viewMatrix);
 
 private:
-	MatrixManager() {}
+    MatrixManager() {} // Private constructor to make class singleton
+    MatrixManager(const MatrixManager&) = delete; // No copy constructor allowed
+    void operator=(const MatrixManager&) = delete; // No copy assignment allowed
 
-	glm::mat4 _projectionMatrix; //!< Current projection matrix
-	glm::mat4 _orthoProjectionMatrix; //!< Current orthographic projection matrix
-	glm::mat4 _viewMatrix; //!< Current view matrix
+    glm::mat4 _projectionMatrix; // Current projection matrix
+    glm::mat4 _orthoProjectionMatrix; // Current orthographic projection matrix
+    glm::mat4 _viewMatrix; // Current view matrix
 };

@@ -1,6 +1,8 @@
-#include "pyramid.h"
-
+// GLM
 #include <glm/glm.hpp>
+
+// Project
+#include "pyramid.h"
 
 namespace static_meshes_3D {
 

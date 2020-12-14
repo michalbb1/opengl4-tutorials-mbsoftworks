@@ -11,31 +11,31 @@ UniformBufferObject::~UniformBufferObject()
 
 void UniformBufferObject::createUBO(const size_t byteSize, GLenum usageHint)
 {
-	if (_isBufferCreated)
-	{
-		std::cerr << "This buffer is already created! You need to delete it before re-creating it!" << std::endl;
-		return;
-	}
+    if (_isBufferCreated)
+    {
+        std::cerr << "This buffer is already created! You need to delete it before re-creating it!" << std::endl;
+        return;
+    }
 
     // Generate buffer ID, bind it immediately and reserve space for it
-	glGenBuffers(1, &_bufferID);
+    glGenBuffers(1, &_bufferID);
     glBindBuffer(GL_UNIFORM_BUFFER, _bufferID);
     glBufferData(GL_UNIFORM_BUFFER, byteSize, NULL, usageHint);
 
     // Mark that the buffer has been created and store its size
-	_isBufferCreated = true;
+    _isBufferCreated = true;
     _byteSize = byteSize;
 }
 
 void UniformBufferObject::bindUBO() const
 {
-	if (!_isBufferCreated)
-	{
-		std::cerr << "Uniform buffer object is not created yet! You cannot bind it before you create it!" << std::endl;
-		return;
-	}
+    if (!_isBufferCreated)
+    {
+        std::cerr << "Uniform buffer object is not created yet! You cannot bind it before you create it!" << std::endl;
+        return;
+    }
 
-	glBindBuffer(GL_UNIFORM_BUFFER, _bufferID);
+    glBindBuffer(GL_UNIFORM_BUFFER, _bufferID);
 }
 
 void UniformBufferObject::setBufferData(const size_t offset, const void* ptrData, const size_t dataSize)

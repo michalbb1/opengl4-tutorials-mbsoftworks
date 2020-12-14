@@ -7,8 +7,8 @@
 #include <glad/glad.h>
 
 /**
-  Wraps OpenGL's uniform buffer object to a higher level class.
-*/
+ * Wraps OpenGL's uniform buffer object to a convenient higher level class.
+ */
 class UniformBufferObject
 {
 public:

@@ -1,5 +1,7 @@
+// STL
 #include <mutex>
 
+// Project
 #include "freeTypeFontManager.h"
 
 FreeTypeFontManager& FreeTypeFontManager::getInstance()

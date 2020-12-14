@@ -1,10 +1,11 @@
 #pragma once
 
+// GLAD
 #include <glad/glad.h>
 
 /**
-  Magnification filters enumeration.
-*/
+ * Magnification filters enumeration.
+ */
 enum MagnificationFilter
 {
 	MAG_FILTER_NEAREST, // Nearest filter for magnification
@@ -12,8 +13,8 @@ enum MagnificationFilter
 };
 
 /**
-  Minification filters enumeration.
-*/
+ * Minification filters enumeration.
+ */
 enum MinificationFilter
 {
 	MIN_FILTER_NEAREST, // Nearest filter for minification
@@ -24,45 +25,59 @@ enum MinificationFilter
 };
 
 /**
-  Wraps OpenGL sampler into a convenient class.
-*/
+ * Wraps OpenGL sampler into a convenient class.
+ */
 class Sampler
 {
 public:
 	~Sampler();
 
-	/** \brief  Creates sampler object. */
+	/**
+	 * Creates a new sampler object.
+	 */
 	void create();
 
-	/** \brief  Binds sampler object to specific texture unit.
-	*   \param  textureUnit  Texture unit index to bind sampler to
-	*/
+	/**
+	 * Binds sampler object to a given texture unit.
+	 *
+	 * @param textureUnit  Texture unit index to bind sampler to
+	 */
 	void bind(int textureUnit = 0) const;
 
-	/** \brief  Deletes sampler object. */
+	/**
+	 * Deletes sampler object from OpenGL.
+	 */
 	void deleteSampler();
 
-	/** \brief  Sets magnification filter of the sampler.
-	*   \param  magnificationFilter  Magnification filter
-	*/
+	/**
+	 * Sets magnification filter of the sampler.
+	 *
+	 * @param magnificationFilter  Magnification filter
+	 */
 	void setMagnificationFilter(MagnificationFilter magnificationFilter) const;
 
-	/** \brief  Sets minification filter of the sampler.
-	*   \param  minificationFilter  Minification filter
-	*/
+	/**
+	 * Sets minification filter of the sampler.
+	 *
+	 * @param minificationFilter  Minification filter
+	 */
 	void setMinificationFilter(MinificationFilter minificationFilter) const;
 
-	/** \brief  Sets the texture repetition with the sampler.
-	*   \param  repeat  True, if the texture should be repeated or false, if it should be clamped
-	*/
+	/**
+	 * Sets the texture repetition with the sampler.
+	 *
+	 * @param repeat  True, if the texture should be repeated or false, if it should be clamped
+	 */
 	void setRepeat(bool repeat) const;
 
 private:
-	GLuint _samplerID = 0; //!< OpenGL-assigned sampler ID
-	bool _isCreated = false; //!< Flag telling, if sampler has been created
+	GLuint _samplerID = 0; // OpenGL-assigned sampler ID
+	bool _isCreated = false; // Flag telling, if sampler has been created
 
-	/** \brief  Checks, if the sampler has been created and if not, logs it into console.
-	*   \return True, if sampler has been created or false otherwise.
-	*/
+	/**
+	 * Checks, if the sampler has been created and if not, logs it into console.
+	 *
+	 * @return True, if sampler has been created or false otherwise.
+	 */
 	bool createdCheck() const;
 };

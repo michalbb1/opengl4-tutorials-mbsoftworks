@@ -1,3 +1,4 @@
+// Project
 #include "pointLight.h"
 
 namespace shader_structs {
@@ -17,9 +18,9 @@ PointLight::PointLight(const glm::vec3& position, const glm::vec3& color, const 
 
 void PointLight::setUniform(ShaderProgram& shaderProgram, const std::string& uniformName) const
 {
-	shaderProgram[constructAttributeName(uniformName, "position")] = position;
-	shaderProgram[constructAttributeName(uniformName, "color")] = color;
-	shaderProgram[constructAttributeName(uniformName, "ambientFactor")] = ambientFactor;
+    shaderProgram[constructAttributeName(uniformName, "position")] = position;
+    shaderProgram[constructAttributeName(uniformName, "color")] = color;
+    shaderProgram[constructAttributeName(uniformName, "ambientFactor")] = ambientFactor;
     shaderProgram[constructAttributeName(uniformName, "constantAttenuation")] = constantAttenuation;
     shaderProgram[constructAttributeName(uniformName, "linearAttenuation")] = linearAttenuation;
     shaderProgram[constructAttributeName(uniformName, "exponentialAttenuation")] = exponentialAttenuation;
@@ -42,8 +43,8 @@ void* PointLight::getDataPointer() const
 
 const PointLight& PointLight::none()
 {
-	static PointLight nonePointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f, false);
-	return nonePointLight;
+    static PointLight nonePointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f, 0.0f, false);
+    return nonePointLight;
 }
 
 } // namespace shader_structs
