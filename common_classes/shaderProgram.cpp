@@ -112,3 +112,13 @@ void ShaderProgram::bindUniformBlockToBindingPoint(const std::string& uniformBlo
         glUniformBlockBinding(_shaderProgramID, blockIndex, bindingPoint);
     }
 }
+
+void ShaderProgram::setTransformFeedbackVaryings(const std::vector<std::string>& varyingNames, const GLenum bufferMode) const
+{
+	std::vector<const char*> varyingNamesPtrs;
+	for (const auto& varyingName : varyingNames) {
+		varyingNamesPtrs.push_back(varyingName.c_str());
+	}
+
+	glTransformFeedbackVaryings(_shaderProgramID, varyingNames.size(), varyingNamesPtrs.data(), bufferMode);
+}
