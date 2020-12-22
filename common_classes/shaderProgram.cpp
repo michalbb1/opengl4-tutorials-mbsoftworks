@@ -26,6 +26,10 @@ bool ShaderProgram::addShaderToProgram(const Shader& shader)
 
 bool ShaderProgram::linkProgram()
 {
+	if (_isLinked) {
+		return true;
+	}
+
     glLinkProgram(_shaderProgramID);
     int linkStatus;
     glGetProgramiv(_shaderProgramID, GL_LINK_STATUS, &linkStatus);
@@ -41,6 +45,7 @@ bool ShaderProgram::linkProgram()
 
         return false;
     }
+
     return _isLinked;
 }
 

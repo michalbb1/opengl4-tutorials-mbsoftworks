@@ -16,7 +16,8 @@
 
 namespace static_meshes_3D {
 
-SnowCoveredPlainGround::SnowCoveredPlainGround(bool withPositions, bool withTextureCoordinates, bool withNormals) : PlainGround(withPositions, withTextureCoordinates, withNormals)
+SnowCoveredPlainGround::SnowCoveredPlainGround(bool withPositions, bool withTextureCoordinates, bool withNormals)
+	: PlainGround(withPositions, withTextureCoordinates, withNormals)
 {
     static std::once_flag prepareOnceFlag;
     std::call_once(prepareOnceFlag, []()

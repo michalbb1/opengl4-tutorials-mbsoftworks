@@ -67,6 +67,11 @@ public:
      */
     glm::vec3 getUpVector() const;
 
+	/**
+	 * Gets normalized view vector of the camera.
+	 */
+	glm::vec3 getNormalizedViewVector() const;
+
     /**
      * Updates camera - reacts on key presses and updates camera's internal state (position, view vector...).
      *
@@ -108,11 +113,6 @@ private:
      * @param angleInDegrees Angle to rotate by (in degrees)
      */
     void rotateUpDown(float angleInDegrees);
-
-    /**
-     * Gets normalized view vector of the camera.
-     */
-    glm::vec3 getNormalizedViewVector() const;
 
     glm::vec3 _position; // Camera's position (eye position)
     glm::vec3 _viewPoint; // Viewpoint - where does camera look to

@@ -19,7 +19,7 @@ void TextureManager::loadTexture2D(const std::string& key, const std::string& fi
     auto texturePtr = std::make_unique<Texture>();
     if (!texturePtr->loadTexture2D(fileName, generateMipmaps))
     {
-        auto msg = "Could not load texture with key '" + key + "' from file '" + fileName + " '!";
+        auto msg = "Could not load texture with key '" + key + "' from file '" + fileName + "'!";
         throw std::runtime_error(msg.c_str());
     }
     _textureCache[key] = std::move(texturePtr);

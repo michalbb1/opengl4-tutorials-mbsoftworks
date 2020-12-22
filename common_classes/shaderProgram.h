@@ -82,13 +82,23 @@ public:
      */
     GLuint getUniformBlockIndex(const std::string& uniformBlockName) const;
 
-    /**
-     * Binds uniform block of this program to a uniform binding point
-     *
-     * @param  uniformBlockName  uniform block name
-     * @param  bindingPoint      uniform binding point to bind the uniform block to
-     */
-    void bindUniformBlockToBindingPoint(const std::string& uniformBlockName, const GLuint bindingPoint) const;
+	/**
+	 * Binds uniform block of this program to a uniform binding point.
+	 *
+	 * @param uniformBlockName  uniform block name
+	 * @param bindingPoint      uniform binding point to bind the uniform block to
+	 */
+	void bindUniformBlockToBindingPoint(const std::string& uniformBlockName, const GLuint bindingPoint) const;
+
+	/**
+	 * Tells OpenGL, which output variables should be recorded during transform feedback.
+	 *
+	 * @param varyingNames  names of the output variables to be recorded
+	 * @param bindingPoint  mode to capture variables, default is GL_INTERLEAVED_ATTRIBS
+	 *
+	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTransformFeedbackVaryings.xhtml
+	 */
+	void setTransformFeedbackVaryings(const std::vector<std::string>& varyingNames, const GLenum bufferMode = GL_INTERLEAVED_ATTRIBS) const;
 
 private:
     GLuint _shaderProgramID; // OpenGL-assigned shader program ID

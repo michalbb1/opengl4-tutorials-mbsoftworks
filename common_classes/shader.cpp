@@ -86,7 +86,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
     auto normFileName = string_utils::normalizeSlashes(fileName, slashCharacter);
 
     size_t slashIndex = -1;
-    for (auto i = fileName.size() - 1; i >= 0; i--)
+    for (int i = int(fileName.size()) - 1; i >= 0; i--)
     {
         if (fileName[i] == slashCharacter)
         {
