@@ -92,13 +92,16 @@ public:
 
 	/**
 	 * Tells OpenGL, which output variables should be recorded during transform feedback.
+     * From early OpenGL versions (3.0), a term varying was used for variables shared between shader stages,
+     * but this name is deprecated for quite some time. But for legacy reasons, OpenGL function names
+     * still use the term varying.
 	 *
-	 * @param varyingNames  names of the output variables to be recorded
-	 * @param bindingPoint  mode to capture variables, default is GL_INTERLEAVED_ATTRIBS
+	 * @param recordedVariablesNames  names of the output variables to be recorded
+	 * @param bindingPoint            mode to capture variables, default is GL_INTERLEAVED_ATTRIBS
 	 *
 	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTransformFeedbackVaryings.xhtml
 	 */
-	void setTransformFeedbackVaryings(const std::vector<std::string>& varyingNames, const GLenum bufferMode = GL_INTERLEAVED_ATTRIBS) const;
+	void setTransformFeedbackRecordedVariables(const std::vector<std::string>& recordedVariablesNames, const GLenum bufferMode = GL_INTERLEAVED_ATTRIBS) const;
 
 private:
     GLuint _shaderProgramID; // OpenGL-assigned shader program ID

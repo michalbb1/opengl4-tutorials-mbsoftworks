@@ -1,10 +1,13 @@
+// STL
 #include <iostream>
 #include <memory>
 #include <deque>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// Project
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/flyingCamera.h"
 
@@ -35,7 +38,6 @@ constexpr int MATRICES_BLOCK_BINDING_POINT = 0;
 FlyingCamera flyingCamera(glm::vec3(-160.0f, 15.0f, 150.0f), glm::vec3(-160.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::SnowCoveredPlainGround> snowCoveredPlainGround;
-
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
 std::unique_ptr<static_meshes_3D::AssimpModel> barnModel;
 std::unique_ptr<HUD025> hud;
@@ -103,6 +105,7 @@ void OpenGLWindow::initializeScene()
         barnMatrix = glm::scale(barnMatrix, glm::vec3(0.05f, 0.05f, 0.05f));
         barnModel = std::make_unique<static_meshes_3D::AssimpModel>("data/models/scheune_3ds/scheune.3ds", "", true, true, true, barnMatrix);
 
+        // Create and initialize fire particle system
         fireParticleSystem = std::make_unique<FireParticleSystem>(10000, flyingCamera, fogParameters);
         fireParticleSystem->initialize();
 
@@ -113,6 +116,7 @@ void OpenGLWindow::initializeScene()
         fireParticleSystem->setGeneratedLifeTimeMinMax(1.5f, 4.0f);
         fireParticleSystem->setGeneratedSizeMinMax(0.2f, 0.7f);
 
+        // Create and initialize snow particle system
         snowParticleSystem = std::make_unique<SnowParticleSystem>(50000, flyingCamera, fogParameters);
         snowParticleSystem->initialize();
 
@@ -187,13 +191,15 @@ void OpenGLWindow::renderScene()
         barnModel->render();
     }
 
-    // Render heightmap
+    // Render ground
     snowCoveredPlainGround->render();
 
+    // Enable blending to render particles and disable writing to depth buffer
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glDepthMask(0);
+    glDepthMask(GL_FALSE);
 
+    // Update generated position of fire particles when it's dragged
     if (isFireDragged)
     {
         const auto newFirePosition = flyingCamera.getEye() + flyingCamera.getNormalizedViewVector() * 20.0f;
@@ -202,14 +208,17 @@ void OpenGLWindow::renderScene()
         fireParticleSystem->setGeneratedPositionMinMax(newGeneratedPositionMin, newGeneratedPositionMax);
     }
 
+    // Update and render fire
     fireParticleSystem->updateParticles(sof(1.0f));
     fireParticleSystem->renderParticles();
 
+    // Update and render snow, also set generated position of snow to always revolve around player
     snowParticleSystem->setGeneratedPositionMinMax(flyingCamera.getEye() + glm::vec3(-200.0f, 50.0f, -200.0f), flyingCamera.getEye() + glm::vec3(200.0f, 50.0f, 200.0f));
     snowParticleSystem->updateParticles(sof(1.0f));
     snowParticleSystem->renderParticles();
 
-    glDepthMask(1);
+    // Re-enable writing to depth buffer and disable blending
+    glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 
     // Render HUD
@@ -218,20 +227,21 @@ void OpenGLWindow::renderScene()
 
 void OpenGLWindow::releaseScene()
 {
+    snowCoveredPlainGround.reset();
     skybox.reset();
+    barnModel.reset();
+
+    hud.reset();
+    uboMatrices.reset();
+
+    fireParticleSystem.reset();
+    snowParticleSystem.reset();
 
     ShaderProgramManager::getInstance().clearShaderProgramCache();
     ShaderManager::getInstance().clearShaderCache();
     TextureManager::getInstance().clearTextureCache();
     SamplerManager::getInstance().clearSamplerCache();
     FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
-
-    fireParticleSystem.reset();
-    snowParticleSystem.reset();
-
-    uboMatrices.reset();
-
-    hud.reset();
 }
 
 void OpenGLWindow::handleInput()
