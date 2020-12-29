@@ -1,15 +1,15 @@
 #version 440 core
 
-layout (location = 1) in vec3 vertexPosition;
-layout (location = 3) in float lifeTime;
-layout (location = 4) in float size;
+layout (location = 1) in vec3 inPosition;
+layout (location = 3) in float inLifetime;
+layout (location = 4) in float inSize;
 
-out float ioLifeTime;
+out float ioLifetime;
 out float ioSize;
 
 void main()
 {
-    gl_Position = vec4(vertexPosition, 1.0);
-    ioLifeTime = lifeTime;
-    ioSize = size;
+    gl_Position = vec4(inPosition, 1.0);
+    ioLifetime = inLifetime;
+    ioSize = inSize;
 }

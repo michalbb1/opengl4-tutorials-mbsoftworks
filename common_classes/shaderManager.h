@@ -45,6 +45,17 @@ public:
     void loadGeometryShader(const std::string& key, const std::string &filePath);
 
     /**
+     * Tries to load and store geometry shader with specified key.
+     * This method doesn't throw exceptions, just returns true or false.
+     *
+     * @param key       Key to store geometry shader with
+     * @param filePath  File path to load shader from
+     *
+     * @return True, if the shader was loaded and stored successfully or false otherwise.
+     */
+    bool tryLoadGeometryShader(const std::string& key, const std::string &filePath);
+
+    /**
      * Retrieves vertex shader with a specified key.
      *
      * @param key  Key to get vertex shader from

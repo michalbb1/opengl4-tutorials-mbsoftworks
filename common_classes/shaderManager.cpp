@@ -43,7 +43,7 @@ void ShaderManager::loadFragmentShader(const std::string& key, const std::string
     _fragmentShaderCache[key] = std::move(fragmentShader);
 }
 
-void ShaderManager::loadGeometryShader(const std::string & key, const std::string & filePath)
+void ShaderManager::loadGeometryShader(const std::string& key, const std::string& filePath)
 {
     if (containsGeometryShader(key))
     {
@@ -59,6 +59,20 @@ void ShaderManager::loadGeometryShader(const std::string & key, const std::strin
     }
 
     _geometryShaderCache[key] = std::move(geometryShader);
+}
+
+bool ShaderManager::tryLoadGeometryShader(const std::string& key, const std::string& filePath)
+{
+    try
+    {
+        loadGeometryShader(key, filePath);
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 const Shader& ShaderManager::getVertexShader(const std::string& key) const

@@ -36,12 +36,12 @@ public:
     void setGeneratedVelocityMinMax(const glm::vec3& generatedVelocityMin, const glm::vec3& generatedVelocityMax);
     
     /**
-     * Sets life time boundaries of generated particles.
+     * Sets lifetime boundaries of generated particles.
      * 
-     * @param generatedLifeTimeMin  Minimal possible life time of generated particles
-     * @param generatedLifeTimeMax  Maximal possible life time of generated particles
+     * @param generatedLifetimeMin  Minimal possible lifetime of generated particles
+     * @param generatedLifetimeMax  Maximal possible lifetime of generated particles
      */    
-    void setGeneratedLifeTimeMinMax(const float generatedLifeTimeMin, const float generatedLifeTimeMax);
+    void setGeneratedLifetimeMinMax(const float generatedLifetimeMin, const float generatedLifetimeMax);
 
     /**
      * Sets size boundaries of generated particles.
@@ -85,6 +85,8 @@ private:
     const FlyingCamera& flyingCamera_; // Used camera in the scene
     const shader_structs::FogParameters& fogParameters_; // Fog parameters to be set for shader program
 
+    glm::vec3 particlesColor_{ glm::vec3(0.83f, 0.435f, 0.0f) }; // Color of generated particles
+
     float remainingTimeToGenerateSeconds_{ 0.0f }; // How many seconds remain until next generation batch
     float generateEverySeconds_{ 0.05f }; // How often is one batch of particles generated (in seconds)
     int numParticlesToGenerate_{ 40 }; // Number of generated particles in one batch
@@ -95,14 +97,11 @@ private:
     glm::vec3 generatedVelocityMin_{ glm::vec3(-3, 0, -3) }; // Minimal velocity of generated particles
     glm::vec3 generatedVelocityRange_{ glm::vec3(6, 10, 6) }; // Maximal velocity of generated particles
 
-    glm::vec3 particlesColor_{ glm::vec3(0.83f, 0.435f, 0.0f) }; // Color of generated particles
+    float generatedLifetimeMin_{ 1.5f }; // Minimal lifetime of generated particles
+    float generatedLifetimeRange_{ 2.5f }; // Maximal lifetime of generated particles
 
-    float generatedLifeTimeMin_{ 1.5f }; // Minimal life time of generated particles
-    float generatedLifeTimeRange_{ 2.5f }; // Maximal life time of generated particles
     float generatedSizeMin_{ 0.4f }; // Minimal size of generated particles
     float generatedSizeRange_{ 0.75f }; // Maximal size of generated particles
-
-    
 
     shader_structs::PointLight pointLight_{getCenterOfGeneratedFire(), particlesColor_, 0.0f, 0.3f, 0.007f, 0.00008f}; // Point light of fire
 };

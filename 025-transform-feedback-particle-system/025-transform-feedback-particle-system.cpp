@@ -33,8 +33,6 @@
 
 #include "HUD025.h"
 
-constexpr int MATRICES_BLOCK_BINDING_POINT = 0;
-
 FlyingCamera flyingCamera(glm::vec3(-160.0f, 15.0f, 150.0f), glm::vec3(-160.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::SnowCoveredPlainGround> snowCoveredPlainGround;
@@ -74,7 +72,7 @@ void OpenGLWindow::initializeScene()
         // Create UBO for matrices and bind it to the MATRICES_BLOCK_BINDING_POINT
         uboMatrices = std::make_unique<UniformBufferObject>();
         uboMatrices->createUBO(sizeof(glm::mat4) * 2);
-        uboMatrices->bindBufferBaseToBindingPoint(MATRICES_BLOCK_BINDING_POINT);
+        uboMatrices->bindBufferBaseToBindingPoint(UniformBlockBindingPoints::MATRICES);
 
         auto& sm = ShaderManager::getInstance();
         auto& spm = ShaderProgramManager::getInstance();
@@ -113,7 +111,7 @@ void OpenGLWindow::initializeScene()
         fireParticleSystem->setParticlesColor(glm::vec3(0.83f, 0.435f, 0.0f));
         fireParticleSystem->setGeneratedPositionMinMax(glm::vec3(50.0f, 0.0f, 16.0f), glm::vec3(54.0f, 0.0f, 20.0f));
         fireParticleSystem->setGeneratedVelocityMinMax(glm::vec3(-2.5f, 0.0f, -2.5f), glm::vec3(2.5f, 8.0f, 2.5f));
-        fireParticleSystem->setGeneratedLifeTimeMinMax(1.5f, 4.0f);
+        fireParticleSystem->setGeneratedLifetimeMinMax(1.5f, 4.0f);
         fireParticleSystem->setGeneratedSizeMinMax(0.2f, 0.7f);
 
         // Create and initialize snow particle system
@@ -129,7 +127,7 @@ void OpenGLWindow::initializeScene()
         spm.linkAllPrograms();
 
         // Bind uniform blocks with binding points for main program
-        mainShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", MATRICES_BLOCK_BINDING_POINT);
+        mainShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", UniformBlockBindingPoints::MATRICES);
     }
     catch (const std::runtime_error& ex)
     {

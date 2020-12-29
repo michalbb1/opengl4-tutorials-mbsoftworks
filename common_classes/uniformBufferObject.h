@@ -59,3 +59,13 @@ private:
 
 	bool _isBufferCreated = false; // Flag telling if the buffer is created
 };
+
+/**
+ * Stores most common binding blocks used throughout the tutorials.
+ */
+class UniformBlockBindingPoints
+{
+public:
+    static const int MATRICES{ 0 };
+    static const int POINT_LIGHTS{ 1 };
+};

@@ -1,10 +1,10 @@
 // Project
 #include "snowParticleSystem.h"
 
-#include "../common_classes/matrixManager.h"
 #include "../common_classes/shaderManager.h"
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
+#include "../common_classes/uniformBufferObject.h"
 
 SnowParticleSystem::SnowParticleSystem(const int numMaxParticlesInBuffer, const FlyingCamera& flyingCamera, const shader_structs::FogParameters& fogParameters)
     : TransformFeedbackParticleSystem(numMaxParticlesInBuffer)
@@ -56,10 +56,12 @@ bool SnowParticleSystem::initializeShadersAndRecordedVariables()
     // Create shader program for updating particles
     sm.loadVertexShader("snow_particle_system_update", "data/shaders/tut-025-particle-system-tf/snow_update.vert");
     sm.loadGeometryShader("snow_particle_system_update", "data/shaders/tut-025-particle-system-tf/snow_update.geom");
+    sm.tryLoadGeometryShader("random", "data/shaders/common/random.glsl");
 
     auto& spUpdateParticles = spm.createShaderProgram("snow_particle_system_update");
     spUpdateParticles.addShaderToProgram(sm.getVertexShader("snow_particle_system_update"));
     spUpdateParticles.addShaderToProgram(sm.getGeometryShader("snow_particle_system_update"));
+    spUpdateParticles.addShaderToProgram(sm.getGeometryShader("random"));
 
     // Before linking the program, we have to tell OpenGL which output variables we want to record during transform feedback
     spUpdateParticles.setTransformFeedbackRecordedVariables(getRecordedVariablesNames());
@@ -81,7 +83,12 @@ bool SnowParticleSystem::initializeShadersAndRecordedVariables()
     // Load texture for snowflake particles
     tm.loadTexture2D("snowflake_particles", "data/textures/particles/snowflakes.bmp");
 
-    return spRenderParticles.linkProgram();
+    if (!spRenderParticles.linkProgram()) {
+        return false;
+    }
+
+    spRenderParticles.bindUniformBlockToBindingPoint("MatricesBlock", UniformBlockBindingPoints::MATRICES);
+    return true;
 }
 
 void SnowParticleSystem::prepareUpdateParticles(float deltaTime)
@@ -110,7 +117,7 @@ void SnowParticleSystem::prepareUpdateParticles(float deltaTime)
     if (remainingTimeToGenerateSeconds_ <= 0.0f)
     {
         spUpdateParticles["numParticlesToGenerate"] = numParticlesToGenerate_;
-        spUpdateParticles["randomGeneratorSeed"] = generateRandomNumberGeneratorSeed();
+        spUpdateParticles["initialRandomGeneratorSeed"] = generateRandomNumberGeneratorSeed();
         remainingTimeToGenerateSeconds_ += generateEverySeconds_;
     }
     else {
@@ -121,14 +128,10 @@ void SnowParticleSystem::prepareUpdateParticles(float deltaTime)
 void SnowParticleSystem::prepareRenderParticles()
 {
     const auto& tm = TextureManager::getInstance();
-    const auto& mm = MatrixManager::getInstance();
 
     // Get and use program for rendering snow particles
     auto& spRenderParticles = ShaderProgramManager::getInstance().getShaderProgram("snow_particle_system_render");
     spRenderParticles.useProgram();
-
-    spRenderParticles["matrices.mProj"] = mm.getProjectionMatrix();
-    spRenderParticles["matrices.mView"] = mm.getViewMatrix();
 
     // Calculate and set billboarding vectors from our flying camera
     calculateBillboardingVectors(flyingCamera_.getNormalizedViewVector(), flyingCamera_.getUpVector());

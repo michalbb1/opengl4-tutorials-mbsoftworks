@@ -1,85 +1,70 @@
 #version 440 core
 
+#include "../common/random.glsl"
+
+const int PARTICLE_TYPE_GENERATOR = 0;
+const int PARTICLE_TYPE_NORMAL = 1;
+
 layout(points) in;
 layout(points) out;
-layout(max_vertices = 40) out;
+layout(max_vertices = 64) out;
 
 // All that we get from vertex shader
 in int ioType[];
 in vec3 ioPosition[];
 in vec3 ioVelocity[];
-in float ioLifeTime[];
+in float ioLifetime[];
 in float ioSize[];
 
-// All that we send further
+// All that we send further and that is recorded by transform feedback
 out int outType;
 out vec3 outPosition;
 out vec3 outVelocity;
 out vec3 outColor;
-out float outLifeTime;
+out float outLifetime;
 out float outSize;
 
-uniform vec3 randomGeneratorSeed; // Seed number for our random number function
-vec3 localRandomGeneratorSeed;
-
-uniform vec3 generatedPositionMin; // Position where new particles are spawned
+// Position where new particles are generated
+uniform vec3 generatedPositionMin;
 uniform vec3 generatedPositionRange;
-uniform vec3 generatedVelocityMin; // Velocity of new particle - from min to (min+range)
+
+// Velocity of newly generated particles
+uniform vec3 generatedVelocityMin;
 uniform vec3 generatedVelocityRange;
 
+// Size of newly generated particles
 uniform float generatedSizeMin;
 uniform float generatedSizeRange;
 
-uniform float generatedLifeTimeMin;
-uniform float generatedLifeTimeRange; // Life of new particle - from min to (min+range)
-uniform float deltaTime; // Time passed since last frame
+// Lifetime of newly generated particles
+uniform float generatedLifetimeMin;
+uniform float generatedLifetimeRange;
 
-uniform int numParticlesToGenerate; // How many particles will be generated next time, if greater than zero, particles are generated
+// Time passed since last frame (in seconds)
+uniform float deltaTime;
 
-// This function returns random number from zero to one
-float randomFloat()
-{
-    uint n = floatBitsToUint(localRandomGeneratorSeed.y * 214013.0 + localRandomGeneratorSeed.x * 2531011.0 + localRandomGeneratorSeed.z * 141251.0);
-    n = n * (n * n * 15731u + 789221u);
-    n = (n >> 9u) | 0x3F800000u;
-
-    float result =  2.0 - uintBitsToFloat(n);
-    localRandomGeneratorSeed = vec3(localRandomGeneratorSeed.x + 147158.0 * result,
-        localRandomGeneratorSeed.y * result  + 415161.0 * result,
-        localRandomGeneratorSeed.z + 324154.0 * result);
-    return result;
-}
-
-float randomFloatMinRange(float min, float range)
-{
-    return min + range * randomFloat();
-}
-
-vec3 randomVectorMinRange(vec3 min, vec3 range)
-{
-    return vec3(min.x + range.x * randomFloat(), min.y + range.y * randomFloat(), min.z + range.z * randomFloat());
-}
+// How many particles should be generated during this pass - if greater than zero, then particles are generated
+uniform int numParticlesToGenerate;
 
 void main()
 {
-    localRandomGeneratorSeed = randomGeneratorSeed;
+    initializeRandomNumberGeneratorSeed();
 
+    // First, check if the incoming type of particle is generator
     outType = ioType[0];
-    outPosition = ioPosition[0];
-    outVelocity = ioVelocity[0];
-    outSize = ioSize[0];
-
-    if(outType == 0)
+    if(outType == PARTICLE_TYPE_GENERATOR)
     {
+        // If it's the case, always emit generator particle further
         EmitVertex();
         EndPrimitive();
 
+        // And now generate random particles, if numParticlesToGenerate is greater than zero
         for(int i = 0; i < numParticlesToGenerate; i++)
         {
-            outType = 1;
+            outType = PARTICLE_TYPE_NORMAL;
             outPosition = randomVectorMinRange(generatedPositionMin, generatedPositionRange);
             outVelocity = randomVectorMinRange(generatedVelocityMin, generatedVelocityRange);
-            outLifeTime = randomFloatMinRange(generatedLifeTimeMin, generatedLifeTimeRange);
+            outLifetime = randomFloatMinRange(generatedLifetimeMin, generatedLifetimeRange);
             outSize = randomFloatMinRange(generatedSizeMin, generatedSizeRange);
             EmitVertex();
             EndPrimitive();
@@ -88,10 +73,13 @@ void main()
         return;
     }
 
-    outLifeTime = ioLifeTime[0] - deltaTime;
-    if(outLifeTime > 0.0)
+    // If we get here, this means we deal with normal fire particle
+    // Update its lifetime first and if it survives, emit the particle
+    outLifetime = ioLifetime[0] - deltaTime;
+    if(outLifetime > 0.0)
     {
-        outPosition += outVelocity * deltaTime;
+        outVelocity = ioVelocity[0];
+        outPosition = ioPosition[0] + outVelocity * deltaTime;
         outSize = ioSize[0];
         EmitVertex();
         EndPrimitive(); 

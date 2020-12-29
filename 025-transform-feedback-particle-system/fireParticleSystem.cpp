@@ -1,10 +1,10 @@
 // Project
 #include "fireParticleSystem.h"
 
-#include "../common_classes/matrixManager.h"
 #include "../common_classes/shaderManager.h"
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
+#include "../common_classes/uniformBufferObject.h"
 
 FireParticleSystem::FireParticleSystem(const int numMaxParticlesInBuffer, const FlyingCamera& flyingCamera, const shader_structs::FogParameters& fogParameters)
     : TransformFeedbackParticleSystem(numMaxParticlesInBuffer)
@@ -32,10 +32,10 @@ void FireParticleSystem::setGeneratedVelocityMinMax(const glm::vec3& generatedVe
     generatedVelocityRange_ = generatedVelocityMax - generatedVelocityMin;
 }
 
-void FireParticleSystem::setGeneratedLifeTimeMinMax(const float generatedLifeTimeMin, const float generatedLifeTimeMax)
+void FireParticleSystem::setGeneratedLifetimeMinMax(const float generatedLifetimeMin, const float generatedLifetimeMax)
 {
-    generatedLifeTimeMin_ = generatedLifeTimeMin;
-    generatedLifeTimeRange_ = generatedLifeTimeMax - generatedLifeTimeMin;
+    generatedLifetimeMin_ = generatedLifetimeMin;
+    generatedLifetimeRange_ = generatedLifetimeMax - generatedLifetimeMin;
 }
 
 void FireParticleSystem::setGeneratedSizeMinMax(const float generatedSizeMin, const float generatedSizeMax)
@@ -66,22 +66,24 @@ bool FireParticleSystem::initializeShadersAndRecordedVariables()
     auto& spm = ShaderProgramManager::getInstance();
     auto& tm = TextureManager::getInstance();
 
-    // Record velocity, life time and size
+    // Record velocity, lifetime and size
     addRecordedVec3("outVelocity", false);
-    addRecordedFloat("outLifeTime");
+    addRecordedFloat("outLifetime");
     addRecordedFloat("outSize");
 
     // Create shader program for updating particles
     sm.loadVertexShader("fire_particle_system_update", "data/shaders/tut-025-particle-system-tf/fire_update.vert");
     sm.loadGeometryShader("fire_particle_system_update", "data/shaders/tut-025-particle-system-tf/fire_update.geom");
+    sm.tryLoadGeometryShader("random", "data/shaders/common/random.glsl");
 
-    auto& spUpdateParticles = spm.createShaderProgram("fire_particle_system_update");
-    spUpdateParticles.addShaderToProgram(sm.getVertexShader("fire_particle_system_update"));
-    spUpdateParticles.addShaderToProgram(sm.getGeometryShader("fire_particle_system_update"));
+    auto& updateProgram = spm.createShaderProgram("fire_particle_system_update");
+    updateProgram.addShaderToProgram(sm.getVertexShader("fire_particle_system_update"));
+    updateProgram.addShaderToProgram(sm.getGeometryShader("fire_particle_system_update"));
+    updateProgram.addShaderToProgram(sm.getGeometryShader("random"));
 
     // Before linking the program, we have to tell OpenGL which output variables we want to record during transform feedback
-    spUpdateParticles.setTransformFeedbackRecordedVariables(getRecordedVariablesNames());
-    if (!spUpdateParticles.linkProgram()) {
+    updateProgram.setTransformFeedbackRecordedVariables(getRecordedVariablesNames());
+    if (!updateProgram.linkProgram()) {
         return false;
     }
 
@@ -90,67 +92,68 @@ bool FireParticleSystem::initializeShadersAndRecordedVariables()
     sm.loadGeometryShader("fire_particle_system_render", "data/shaders/tut-025-particle-system-tf/fire_render.geom");
     sm.loadFragmentShader("fire_particle_system_render", "data/shaders/tut-025-particle-system-tf/fire_render.frag");
 
-    auto& spRenderParticles = ShaderProgramManager::getInstance().createShaderProgram("fire_particle_system_render");
-    spRenderParticles.addShaderToProgram(sm.getVertexShader("fire_particle_system_render"));
-    spRenderParticles.addShaderToProgram(sm.getGeometryShader("fire_particle_system_render"));
-    spRenderParticles.addShaderToProgram(sm.getFragmentShader("fire_particle_system_render"));
-    spRenderParticles.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
+    auto& renderProgram = ShaderProgramManager::getInstance().createShaderProgram("fire_particle_system_render");
+    renderProgram.addShaderToProgram(sm.getVertexShader("fire_particle_system_render"));
+    renderProgram.addShaderToProgram(sm.getGeometryShader("fire_particle_system_render"));
+    renderProgram.addShaderToProgram(sm.getFragmentShader("fire_particle_system_render"));
+    renderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
 
     // Load texture for fire particles
     tm.loadTexture2D("fire_particle", "data/textures/particles/fire.bmp");
 
-    return spRenderParticles.linkProgram();
+    if (!renderProgram.linkProgram()) {
+        return false;
+    }
+
+    renderProgram.bindUniformBlockToBindingPoint("MatricesBlock", UniformBlockBindingPoints::MATRICES);
+    return true;
 }
 
 void FireParticleSystem::prepareUpdateParticles(float deltaTime)
 {
     // Get and use program for updating fire particles
-    auto& spUpdateParticles = ShaderProgramManager::getInstance().getShaderProgram("fire_particle_system_update");
-    spUpdateParticles.useProgram();
+    auto& updateProgram = ShaderProgramManager::getInstance().getShaderProgram("fire_particle_system_update");
+    updateProgram.useProgram();
 
     // Update time passed since last frame
-    spUpdateParticles["deltaTime"] = deltaTime;
+    updateProgram["deltaTime"] = deltaTime;
 
     // Set uniform variables for generated position boundaries
-    spUpdateParticles["generatedPositionMin"] = generatedPositionMin_;
-    spUpdateParticles["generatedPositionRange"] = generatedPositionRange_;
+    updateProgram["generatedPositionMin"] = generatedPositionMin_;
+    updateProgram["generatedPositionRange"] = generatedPositionRange_;
 
     // Set uniform variables for generated velocity boundaries
-    spUpdateParticles["generatedVelocityMin"] = generatedVelocityMin_;
-    spUpdateParticles["generatedVelocityRange"] = generatedVelocityRange_;
+    updateProgram["generatedVelocityMin"] = generatedVelocityMin_;
+    updateProgram["generatedVelocityRange"] = generatedVelocityRange_;
 
-    // Set uniform variables for generated life time boundaries
-    spUpdateParticles["generatedLifeTimeMin"] = generatedLifeTimeMin_;
-    spUpdateParticles["generatedLifeTimeRange"] = generatedLifeTimeRange_;
+    // Set uniform variables for generated lifetime boundaries
+    updateProgram["generatedLifetimeMin"] = generatedLifetimeMin_;
+    updateProgram["generatedLifetimeRange"] = generatedLifetimeRange_;
 
     // Set uniform variables for generated size boundaries
-    spUpdateParticles["generatedSizeMin"] = generatedSizeMin_;
-    spUpdateParticles["generatedSizeRange"] = generatedSizeRange_;
+    updateProgram["generatedSizeMin"] = generatedSizeMin_;
+    updateProgram["generatedSizeRange"] = generatedSizeRange_;
 
     // Update remaining time to generate particles and then decide how many particles will be generated
     remainingTimeToGenerateSeconds_ -= deltaTime;
     if (remainingTimeToGenerateSeconds_ <= 0.0f)
     {
-        spUpdateParticles["numParticlesToGenerate"] = numParticlesToGenerate_;
-        spUpdateParticles["randomGeneratorSeed"] = generateRandomNumberGeneratorSeed();
+        updateProgram["numParticlesToGenerate"] = numParticlesToGenerate_;
+        updateProgram["initialRandomGeneratorSeed"] = generateRandomNumberGeneratorSeed();
         remainingTimeToGenerateSeconds_ += generateEverySeconds_;
     }
     else {
-        spUpdateParticles["numParticlesToGenerate"] = 0;
+        updateProgram["numParticlesToGenerate"] = 0;
     }
 }
 
 void FireParticleSystem::prepareRenderParticles()
 {
     const auto& tm = TextureManager::getInstance();
-    const auto& mm = MatrixManager::getInstance();
 
     // Get and use program for rendering snow particles
     auto& spRenderParticles = ShaderProgramManager::getInstance().getShaderProgram("fire_particle_system_render");
     spRenderParticles.useProgram();
-
-    spRenderParticles["matrices.mProj"] = mm.getProjectionMatrix();
-    spRenderParticles["matrices.mView"] = mm.getViewMatrix();
 
     // Calculate and set billboarding vectors from our flying camera
     calculateBillboardingVectors(flyingCamera_.getNormalizedViewVector(), flyingCamera_.getUpVector());
@@ -158,7 +161,7 @@ void FireParticleSystem::prepareRenderParticles()
     spRenderParticles["billboardVerticalVector"] = billboardVerticalVector_;
 
     // Set sampler, particles color and fog uniforms
-    spRenderParticles["gSampler"] = 0;
+    spRenderParticles["sampler"] = 0;
     spRenderParticles["particlesColor"] = particlesColor_;
     fogParameters_.setUniform(spRenderParticles, ShaderConstants::fogParams());
 
