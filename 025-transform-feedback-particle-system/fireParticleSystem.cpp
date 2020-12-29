@@ -72,8 +72,8 @@ bool FireParticleSystem::initializeShadersAndRecordedVariables()
     addRecordedFloat("outSize");
 
     // Create shader program for updating particles
-    sm.loadVertexShader("fire_particle_system_update", "data/shaders/tut-025-particle-system-tf/fire_update.vert");
-    sm.loadGeometryShader("fire_particle_system_update", "data/shaders/tut-025-particle-system-tf/fire_update.geom");
+    sm.loadVertexShader("fire_particle_system_update", "data/shaders/tut025-particle-system-tf/fire_update.vert");
+    sm.loadGeometryShader("fire_particle_system_update", "data/shaders/tut025-particle-system-tf/fire_update.geom");
     sm.tryLoadGeometryShader("random", "data/shaders/common/random.glsl");
 
     auto& updateProgram = spm.createShaderProgram("fire_particle_system_update");
@@ -88,9 +88,9 @@ bool FireParticleSystem::initializeShadersAndRecordedVariables()
     }
 
     // Create shader program for rendering particles
-    sm.loadVertexShader("fire_particle_system_render", "data/shaders/tut-025-particle-system-tf/fire_render.vert");
-    sm.loadGeometryShader("fire_particle_system_render", "data/shaders/tut-025-particle-system-tf/fire_render.geom");
-    sm.loadFragmentShader("fire_particle_system_render", "data/shaders/tut-025-particle-system-tf/fire_render.frag");
+    sm.loadVertexShader("fire_particle_system_render", "data/shaders/tut025-particle-system-tf/fire_render.vert");
+    sm.loadGeometryShader("fire_particle_system_render", "data/shaders/tut025-particle-system-tf/fire_render.geom");
+    sm.loadFragmentShader("fire_particle_system_render", "data/shaders/tut025-particle-system-tf/fire_render.frag");
 
     auto& renderProgram = ShaderProgramManager::getInstance().createShaderProgram("fire_particle_system_render");
     renderProgram.addShaderToProgram(sm.getVertexShader("fire_particle_system_render"));

@@ -29,8 +29,8 @@ SnowCoveredPlainGround::SnowCoveredPlainGround(const shader_structs::AmbientLigh
     std::call_once(prepareOnceFlag, []()
     {
         auto& sm = ShaderManager::getInstance();
-        sm.loadVertexShader("tut025_ground", "data/shaders/tut-025-particle-system-tf/ground_shader.vert");
-        sm.loadFragmentShader("tut025_ground", "data/shaders/tut-025-particle-system-tf/ground_shader.frag");
+        sm.loadVertexShader("tut025_ground", "data/shaders/tut025-particle-system-tf/ground_shader.vert");
+        sm.loadFragmentShader("tut025_ground", "data/shaders/tut025-particle-system-tf/ground_shader.frag");
 
         auto& groundProgram = ShaderProgramManager::getInstance().createShaderProgram("tut025_ground");
         groundProgram.addShaderToProgram(sm.getVertexShader("tut025_ground"));

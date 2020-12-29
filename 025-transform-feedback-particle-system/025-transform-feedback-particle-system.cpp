@@ -78,8 +78,8 @@ void OpenGLWindow::initializeScene()
         auto& spm = ShaderProgramManager::getInstance();
         auto& tm = TextureManager::getInstance();
 
-        sm.loadVertexShader("tut025_main", "data/shaders/tut-025-particle-system-tf/shader.vert");
-        sm.loadFragmentShader("tut025_main", "data/shaders/tut-025-particle-system-tf/shader.frag");
+        sm.loadVertexShader("tut025_main", "data/shaders/tut025-particle-system-tf/shader.vert");
+        sm.loadFragmentShader("tut025_main", "data/shaders/tut025-particle-system-tf/shader.frag");
         sm.loadFragmentShader(ShaderKeys::ambientLight(), "data/shaders/lighting/ambientLight.frag");
         sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
         sm.loadFragmentShader(ShaderKeys::pointLight(), "data/shaders/lighting/pointLight.frag");

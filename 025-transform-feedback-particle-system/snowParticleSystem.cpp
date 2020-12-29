@@ -54,8 +54,8 @@ bool SnowParticleSystem::initializeShadersAndRecordedVariables()
     addRecordedInt("outSnowflakeIndex");
 
     // Create shader program for updating particles
-    sm.loadVertexShader("snow_particle_system_update", "data/shaders/tut-025-particle-system-tf/snow_update.vert");
-    sm.loadGeometryShader("snow_particle_system_update", "data/shaders/tut-025-particle-system-tf/snow_update.geom");
+    sm.loadVertexShader("snow_particle_system_update", "data/shaders/tut025-particle-system-tf/snow_update.vert");
+    sm.loadGeometryShader("snow_particle_system_update", "data/shaders/tut025-particle-system-tf/snow_update.geom");
     sm.tryLoadGeometryShader("random", "data/shaders/common/random.glsl");
 
     auto& spUpdateParticles = spm.createShaderProgram("snow_particle_system_update");
@@ -70,9 +70,9 @@ bool SnowParticleSystem::initializeShadersAndRecordedVariables()
     }
 
     // Create shader program for rendering particles
-    sm.loadVertexShader("snow_particle_system_render", "data/shaders/tut-025-particle-system-tf/snow_render.vert");
-    sm.loadGeometryShader("snow_particle_system_render", "data/shaders/tut-025-particle-system-tf/snow_render.geom");
-    sm.loadFragmentShader("snow_particle_system_render", "data/shaders/tut-025-particle-system-tf/snow_render.frag");
+    sm.loadVertexShader("snow_particle_system_render", "data/shaders/tut025-particle-system-tf/snow_render.vert");
+    sm.loadGeometryShader("snow_particle_system_render", "data/shaders/tut025-particle-system-tf/snow_render.geom");
+    sm.loadFragmentShader("snow_particle_system_render", "data/shaders/tut025-particle-system-tf/snow_render.frag");
 
     auto& spRenderParticles = ShaderProgramManager::getInstance().createShaderProgram("snow_particle_system_render");
     spRenderParticles.addShaderToProgram(sm.getVertexShader("snow_particle_system_render"));
