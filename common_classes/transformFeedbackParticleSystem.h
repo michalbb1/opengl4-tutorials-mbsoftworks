@@ -170,7 +170,7 @@ private:
          * @param stride      Stride between two vertices
          * @param byteOffset  Byte offset where this variable in the buffer begins
          */
-        void enableAndSetupVertexAttribPointer(GLuint index, GLsizei stride, GLsizei byteOffset) const;
+        void enableAndSetupVertexAttribPointer(GLuint index, GLsizei stride, GLsizeiptr byteOffset) const;
     };
 
     std::vector<RecordedVariable> recordedVariables_; // List of recorded variables
