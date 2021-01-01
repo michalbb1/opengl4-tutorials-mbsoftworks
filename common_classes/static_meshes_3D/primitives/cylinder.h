@@ -1,13 +1,13 @@
 #pragma once
 
-// Common classes
+// Project
 #include "../staticMesh3D.h"
 
 namespace static_meshes_3D {
 
 /**
-* Cylinder static mesh with given radius, number of slices and height.
-*/
+ * Cylinder static mesh with given radius, number of slices and height.
+ */
 class Cylinder : public StaticMesh3D
 {
 public:

@@ -12,8 +12,8 @@
 namespace static_meshes_3D {
 
 /**
-    Sphere static mesh with given number of slices, stacks and radius.
-*/
+ * Sphere static mesh with given number of slices, stacks and radius.
+ */
 class Sphere : public StaticMeshIndexed3D
 {
 public:

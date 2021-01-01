@@ -51,6 +51,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "023-point-lights", "023-poi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "024-uniform-buffer-object", "024-uniform-buffer-object\024-uniform-buffer-object.vcxproj", "{C1E1C754-423A-445E-B263-ABC155D26672}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "025-transform-feedback-particle-system", "025-transform-feedback-particle-system\025-transform-feedback-particle-system.vcxproj", "{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -251,6 +253,14 @@ Global
 		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x64.Build.0 = Release|x64
 		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x86.ActiveCfg = Release|Win32
 		{C1E1C754-423A-445E-B263-ABC155D26672}.Release|x86.Build.0 = Release|Win32
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Debug|x64.ActiveCfg = Debug|x64
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Debug|x64.Build.0 = Debug|x64
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Debug|x86.ActiveCfg = Debug|Win32
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Debug|x86.Build.0 = Debug|Win32
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Release|x64.ActiveCfg = Release|x64
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Release|x64.Build.0 = Release|x64
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Release|x86.ActiveCfg = Release|Win32
+		{65BC1631-6FB7-4BC9-870B-7FE1EBED90F9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

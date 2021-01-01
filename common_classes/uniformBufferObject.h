@@ -7,8 +7,8 @@
 #include <glad/glad.h>
 
 /**
-  Wraps OpenGL's uniform buffer object to a higher level class.
-*/
+ * Wraps OpenGL's uniform buffer object to a convenient higher level class.
+ */
 class UniformBufferObject
 {
 public:
@@ -58,4 +58,14 @@ private:
     size_t _byteSize; // Holds buffer size in bytes
 
 	bool _isBufferCreated = false; // Flag telling if the buffer is created
+};
+
+/**
+ * Stores most common binding blocks used throughout the tutorials.
+ */
+class UniformBlockBindingPoints
+{
+public:
+    static const int MATRICES{ 0 };
+    static const int POINT_LIGHTS{ 1 };
 };
