@@ -45,8 +45,9 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
         glfwGetWindowSize(_window, &width, &height);
         onWindowSizeChanged(_window, width, height);
     }
-    _windows[_window] = this;
 
+    glfwSetScrollCallback(_window, onMouseWheelScrollStatic);
+    _windows[_window] = this;
     return true;
 }
 
@@ -196,5 +197,14 @@ void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int 
     {
         _windows[window]->recalculateProjectionMatrix();
         _windows[window]->onWindowSizeChanged(window, width, height);
+    }
+}
+
+void OpenGLWindow::onMouseWheelScrollStatic(GLFWwindow* window, double scrollOffsetX, double scrollOffsetY)
+{
+    if (_windows.count(window) != 0)
+    {
+        _windows[window]->recalculateProjectionMatrix();
+        _windows[window]->onMouseWheelScroll(scrollOffsetX, scrollOffsetY);
     }
 }

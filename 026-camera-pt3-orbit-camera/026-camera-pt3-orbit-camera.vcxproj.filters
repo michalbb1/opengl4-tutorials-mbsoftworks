@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\common_classes">
+      <UniqueIdentifier>{bf0e1904-570e-480f-8a3c-7760074227c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_3D">
+      <UniqueIdentifier>{b8ab225a-f0c5-4c61-ad3d-acddeb259edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_3D\primitives">
+      <UniqueIdentifier>{1648b2f7-1d26-48d7-b28a-46ae808ffccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D">
+      <UniqueIdentifier>{8ddd000e-f5a7-4ac1-9626-f7b39650d9bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\static_meshes_2D\primitives">
+      <UniqueIdentifier>{10beba17-c2ae-423c-81db-aa9270d40dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common_classes\shader_structs">
+      <UniqueIdentifier>{74f15599-2ad8-40f3-a890-cd9212be2e95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\glad">
+      <UniqueIdentifier>{8643f62d-b891-46c2-b612-494012457bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stb">
+      <UniqueIdentifier>{6670399d-cf91-4c61-8d16-5a71fb8b3f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes">
+      <UniqueIdentifier>{e5b37869-bfa0-4d45-9484-311348463457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_3D">
+      <UniqueIdentifier>{67687d93-2bcc-4c1e-b661-7c00a770094e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_3D\primitives">
+      <UniqueIdentifier>{ea8bec90-d324-4e8e-a698-da42f84cc56f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\shader_structs">
+      <UniqueIdentifier>{cb96e70a-10b3-4741-93c8-b9fd284a1491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_2D">
+      <UniqueIdentifier>{d099990b-9520-48a0-82d0-2937df11baab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common_classes\static_meshes_2D\primitives">
+      <UniqueIdentifier>{57463edf-5df0-460b-8b61-ee79b4bfcd53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\glad">
+      <UniqueIdentifier>{e50e5d76-d8d7-4132-90c5-357b2bdfe906}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\freeTypeFont.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\freeTypeFontManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\HUD.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\matrixManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\OpenGLWindow.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\ostreamUtils.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\sampler.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\samplerManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderProgram.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shaderProgramManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\stringUtils.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\texture.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\textureManager.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\uniform.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\vertexBufferObject.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\skybox.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.h">
+      <Filter>Header Files\common_classes\static_meshes_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h">
+      <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cylinder.h">
+      <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\sphere.h">
+      <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h">
+      <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h">
+      <Filter>Header Files\common_classes\static_meshes_2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h">
+      <Filter>Header Files\common_classes\static_meshes_2D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader_structs\ambientLight.h">
+      <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader_structs\diffuseLight.h">
+      <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader_structs\material.h">
+      <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h">
+      <Filter>Header Files\common_classes\shader_structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h">
+      <Filter>Header Files\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_image.h">
+      <Filter>Header Files\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD026.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_classes\orbitCamera.h">
+      <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="026-camera-pt3-orbit-camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common_classes\freeTypeFont.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\freeTypeFontManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\HUD.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\matrixManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\sampler.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\samplerManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderProgram.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shaderProgramManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\texture.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\textureManager.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\uniform.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\skybox.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cylinder.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\sphere.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp">
+      <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader_structs\material.cpp">
+      <Filter>Source Files\common_classes\shader_structs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader_structs\shaderStruct.cpp">
+      <Filter>Source Files\common_classes\shader_structs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp">
+      <Filter>Source Files\common_classes\static_meshes_2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp">
+      <Filter>Source Files\common_classes\static_meshes_2D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\glad\src\glad.c">
+      <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="026-camera-pt3-orbit-camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD026.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\orbitCamera.cpp">
+      <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader_structs\ambientLight.cpp">
+      <Filter>Source Files\common_classes\shader_structs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common_classes\shader_structs\diffuseLight.cpp">
+      <Filter>Source Files\common_classes\shader_structs</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

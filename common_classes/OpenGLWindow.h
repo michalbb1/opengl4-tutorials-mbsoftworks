@@ -103,6 +103,16 @@ public:
     void onWindowSizeChanged(GLFWwindow* window, int width, int height);
 
     /**
+     * Callback function that gets called, when the size of the window changes. This function is also
+     * left un-implemented and user should implement it.
+     *
+     * @param window  Pointer to GLFWwindow, size of which has changed
+     * @param width   New window width (in pixels)
+     * @param height  New window height (in pixels)
+     */
+    virtual void onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY) {}
+
+    /**
      * Closes application window and releases all resources. Also sets the error flag, if error has occured.
      *
      * @param errorHasOccured  Should be true, if an error has occured (default is false).
@@ -190,6 +200,10 @@ private:
     int _nextFPS = 0; // Next FPS, that is being counted and will update the _FPS
     bool _isVerticalSynchronizationEnabled = false; // Stores information, if vertical synchronization is enabled
 
+    bool _hasMouseBeenScrolled = false;
+    double _scrollOffsetX = 0.0;
+    double _scrollOffsetY = 0.0;
+
     /**
      * Updates frame times and FPS counters.
      */
@@ -199,6 +213,9 @@ private:
      * Static method that is set as callback to GLFW framework about window size changed.
      */
     static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);
+
+
+    static void onMouseWheelScrollStatic(GLFWwindow* window, double scrollOffsetX, double scrollOffsetY);
 
     static std::map<GLFWwindow*, OpenGLWindow*> _windows; // std::map used to map GLFWwindow pointers to OpenGLWindow (our class)
 };
