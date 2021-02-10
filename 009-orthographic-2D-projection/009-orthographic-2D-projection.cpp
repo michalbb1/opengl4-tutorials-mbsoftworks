@@ -1,6 +1,8 @@
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "009-orthographic-2D-projection.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -70,7 +72,7 @@ std::vector<HouseTransformation> houseTransformations
 	{glm::vec3(-121, 0, -54), glm::radians(45.0f)}
 };
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow009::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -186,7 +188,7 @@ void OpenGLWindow::initializeScene()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow009::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -297,16 +299,42 @@ void OpenGLWindow::renderScene()
 	}
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(1);
-
-	std::string windowTitleWithFPS = std::string("009.) Orthographic 2D Projection - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
-		+ "FPS: " + std::to_string(getFPS())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
-		+ ", Blending: " + (blendingEnabled ? "On" : "Off") + " (Press F4 to toggle)";
-
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow009::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    if (keyPressedOnce(GLFW_KEY_F4)) {
+        blendingEnabled = !blendingEnabled;
+    }
+
+    std::string windowTitleWithFPS = std::string("009.) Orthographic 2D Projection - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
+        + "FPS: " + std::to_string(getFPS())
+        + ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
+        + ", Blending: " + (blendingEnabled ? "On" : "Off") + " (Press F4 to toggle)";
+
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+}
+
+
+void OpenGLWindow009::releaseScene()
 {
 	groundProgram.deleteProgram();
 	mainProgram.deleteProgram();
@@ -335,34 +363,4 @@ void OpenGLWindow::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 	glDeleteVertexArrays(1, &hudVAO);
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-
-	if (keyPressedOnce(GLFW_KEY_F4)) {
-		blendingEnabled = !blendingEnabled;
-	}
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

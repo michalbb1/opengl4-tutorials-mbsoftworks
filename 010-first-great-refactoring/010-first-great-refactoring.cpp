@@ -1,9 +1,13 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "010-first-great-refactoring.h"
+#include "HUD010.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -21,8 +25,6 @@
 
 #include "../common_classes/static_meshes_3D/house.h"
 #include "../common_classes/static_meshes_3D/snowCoveredPlainGround.h"
-
-#include "HUD010.h"
 
 FlyingCamera camera(glm::vec3(-120.0f, 8.0f, 120.0f), glm::vec3(-120.0f, 8.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 std::unique_ptr<static_meshes_3D::House> house;
@@ -56,7 +58,7 @@ std::vector<HouseTransformation> houseTransformations
 	{glm::vec3(-121, 0, -54), glm::radians(45.0f)}
 };
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow010::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -92,7 +94,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow010::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -122,17 +124,42 @@ void OpenGLWindow::renderScene()
 
 	// Render HUD
 	hud->renderHUD();
-
-	// Update window title
-	std::string windowTitleWithFPS = std::string("010.) First Great Refactoring - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
-		+ "FPS: " + std::to_string(getFPS())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
-		+ ", Blending: " + (hud->isBlendingEnabled() ? "On" : "Off") + " (Press F4 to toggle)";
-
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow010::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    if (keyPressedOnce(GLFW_KEY_F4)) {
+        hud->toggleBlending();
+    }
+
+    // Update window title
+    std::string windowTitleWithFPS = std::string("010.) First Great Refactoring - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
+        + "FPS: " + std::to_string(getFPS())
+        + ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)"
+        + ", Blending: " + (hud->isBlendingEnabled() ? "On" : "Off") + " (Press F4 to toggle)";
+
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+}
+
+void OpenGLWindow010::releaseScene()
 {
 	ShaderManager::getInstance().clearShaderCache();
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
@@ -142,34 +169,4 @@ void OpenGLWindow::releaseScene()
 	house.reset();
 	snowCoveredPlainGround.reset();
 	hud.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-
-	if (keyPressedOnce(GLFW_KEY_F4)) {
-		hud->toggleBlending();
-	}
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

@@ -5,8 +5,8 @@
 #include "026-camera-pt3-orbit-camera.h"
 
 /**
-* Application entry point function.
-*/
+ * Application entry point function.
+ */
 int main()
 {
 	const std::string& windowTitle = "026.) Camera pt.3 - Orbit Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";

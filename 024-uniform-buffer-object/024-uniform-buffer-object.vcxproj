@@ -221,6 +221,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="024-uniform-buffer-object.h" />
     <ClInclude Include="HUD024.h" />
     <ClInclude Include="pointLightExtended.h" />
   </ItemGroup>

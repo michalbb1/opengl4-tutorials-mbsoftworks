@@ -1,11 +1,13 @@
-#include "../common_classes/OpenGLWindow.h"
+// GLM
+#include <glm/gtc/matrix_transform.hpp>
+
+// Project
+#include "004-entering-third-dimension.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/vertexBufferObject.h"
 #include "../common_classes/staticGeometry.h"
-
-#include <glm/gtc/matrix_transform.hpp>
 
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
@@ -16,7 +18,7 @@ GLuint mainVAO;
 
 float rotationAngleRad;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow004::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -45,8 +47,8 @@ void OpenGLWindow::initializeScene()
 	// Setup vertex positions first
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
-	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
+	shapesVBO.addData(static_geometry::cubeVertices);
+	shapesVBO.addData(static_geometry::pyramidVertices);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -55,15 +57,8 @@ void OpenGLWindow::initializeScene()
 	// Setup colors now
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
-	for(auto i = 0; i < 6; i++)
-	{
-		colorsVBO.addData(static_geometry::cubeFaceColors, sizeof(static_geometry::cubeFaceColors));
-	}
-
-	for (auto i = 0; i < 4; i++)
-	{
-		colorsVBO.addData(static_geometry::pyramidFaceColors, sizeof(static_geometry::pyramidFaceColors));
-	}
+	colorsVBO.addData(static_geometry::cubeFaceColors, 6);
+	colorsVBO.addData(static_geometry::pyramidFaceColors, 6);
 
 	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
@@ -74,7 +69,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow004::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -113,14 +108,21 @@ void OpenGLWindow::renderScene()
 		mainProgram["matrices.modelMatrix"] = modelMatrixPyramid;
 		glDrawArrays(GL_TRIANGLES, 36, 12); // Pyramid vertices start after cube, that is on index 36
 	}
-
-	rotationAngleRad += glm::radians(sof(90.0f));
-
-	std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow004::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    rotationAngleRad += glm::radians(sof(90.0f));
+
+    std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+}
+
+void OpenGLWindow004::releaseScene()
 {
 	mainProgram.deleteProgram();
 
@@ -131,15 +133,4 @@ void OpenGLWindow::releaseScene()
 	colorsVBO.deleteVBO();
 
 	glDeleteVertexArrays(1, &mainVAO);
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE))
-		closeWindow();
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

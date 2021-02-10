@@ -305,5 +305,8 @@
     <ClInclude Include="spaceStation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="022-cylinder-and-sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

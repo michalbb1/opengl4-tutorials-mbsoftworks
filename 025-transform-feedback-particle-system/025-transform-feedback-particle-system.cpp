@@ -8,7 +8,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // Project
-#include "../common_classes/OpenGLWindow.h"
+#include "025-transform-feedback-particle-system.h"
+#include "HUD025.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -30,8 +32,6 @@
 #include "snowCoveredPlainGround.h"
 #include "fireParticleSystem.h"
 #include "snowParticleSystem.h"
-
-#include "HUD025.h"
 
 FlyingCamera flyingCamera(glm::vec3(-160.0f, 15.0f, 150.0f), glm::vec3(-160.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
@@ -65,7 +65,7 @@ std::unique_ptr<UniformBufferObject> uboMatrices; // UBO for matrices
 std::unique_ptr<FireParticleSystem> fireParticleSystem;
 std::unique_ptr<SnowParticleSystem> snowParticleSystem;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow025::initializeScene()
 {
     try
     {
@@ -141,7 +141,7 @@ void OpenGLWindow::initializeScene()
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow025::renderScene()
 {
     const auto& spm = ShaderProgramManager::getInstance();
     const auto& tm = TextureManager::getInstance();
@@ -206,13 +206,8 @@ void OpenGLWindow::renderScene()
         fireParticleSystem->setGeneratedPositionMinMax(newGeneratedPositionMin, newGeneratedPositionMax);
     }
 
-    // Update and render fire
-    fireParticleSystem->updateParticles(sof(1.0f));
+    // Render particles
     fireParticleSystem->renderParticles();
-
-    // Update and render snow, also set generated position of snow to always revolve around player
-    snowParticleSystem->setGeneratedPositionMinMax(flyingCamera.getEye() + glm::vec3(-200.0f, 50.0f, -200.0f), flyingCamera.getEye() + glm::vec3(200.0f, 50.0f, 200.0f));
-    snowParticleSystem->updateParticles(sof(1.0f));
     snowParticleSystem->renderParticles();
 
     // Re-enable writing to depth buffer and disable blending
@@ -223,26 +218,7 @@ void OpenGLWindow::renderScene()
     hud->renderHUD(fireParticleSystem->getNumParticles(), snowParticleSystem->getNumParticles(), fogParameters.isEnabled, isFireDragged);
 }
 
-void OpenGLWindow::releaseScene()
-{
-    snowCoveredPlainGround.reset();
-    skybox.reset();
-    barnModel.reset();
-
-    hud.reset();
-    uboMatrices.reset();
-
-    fireParticleSystem.reset();
-    snowParticleSystem.reset();
-
-    ShaderProgramManager::getInstance().clearShaderProgramCache();
-    ShaderManager::getInstance().clearShaderCache();
-    TextureManager::getInstance().clearTextureCache();
-    SamplerManager::getInstance().clearSamplerCache();
-    FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
-}
-
-void OpenGLWindow::handleInput()
+void OpenGLWindow025::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();
@@ -280,14 +256,35 @@ void OpenGLWindow::handleInput()
     glfwGetWindowPos(getWindow(), &posX, &posY);
     glfwGetWindowSize(getWindow(), &width, &height);
     flyingCamera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-    
+
     flyingCamera.update([this](int keyCode) {return this->keyPressed(keyCode); },
         [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
         [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
         [this](float f) {return this->sof(f); });
+
+    // Update fire particles
+    fireParticleSystem->updateParticles(sof(1.0f));
+
+    // Update and render snow, also set generated position of snow to always revolve around player
+    snowParticleSystem->setGeneratedPositionMinMax(flyingCamera.getEye() + glm::vec3(-200.0f, 50.0f, -200.0f), flyingCamera.getEye() + glm::vec3(200.0f, 50.0f, 200.0f));
+    snowParticleSystem->updateParticles(sof(1.0f));
 }
 
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
+void OpenGLWindow025::releaseScene()
 {
-    glViewport(0, 0, width, height);
+    snowCoveredPlainGround.reset();
+    skybox.reset();
+    barnModel.reset();
+
+    hud.reset();
+    uboMatrices.reset();
+
+    fireParticleSystem.reset();
+    snowParticleSystem.reset();
+
+    ShaderProgramManager::getInstance().clearShaderProgramCache();
+    ShaderManager::getInstance().clearShaderCache();
+    TextureManager::getInstance().clearTextureCache();
+    SamplerManager::getInstance().clearSamplerCache();
+    FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 }

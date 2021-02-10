@@ -51,7 +51,7 @@ bool movingCamera = false;
 double prevMousePosX, prevMousePosY;
 double curMousePosX, curMousePosY;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow026::initializeScene()
 {
 	try
 	{
@@ -100,7 +100,7 @@ void OpenGLWindow::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow026::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -173,12 +173,9 @@ void OpenGLWindow::renderScene()
 	// Render HUD and restore normal drawing mode
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     hud->renderHUD(orbitCamera, isWireframeModeOn);
-
-    // Update light direction with camera everytime
-    diffuseLight.direction = orbitCamera.getNormalizedViewVector();
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow026::releaseScene()
 {
     cube.reset();
     cylinder.reset();
@@ -195,7 +192,7 @@ void OpenGLWindow::releaseScene()
 	hud.reset();
 }
 
-void OpenGLWindow::handleInput()
+void OpenGLWindow026::updateScene()
 {
 	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
 		closeWindow();
@@ -239,6 +236,9 @@ void OpenGLWindow::handleInput()
         movingCamera = false;
     }
 
+    // Update light direction with camera everytime
+    diffuseLight.direction = orbitCamera.getNormalizedViewVector();
+
     if (!rotatingCamera && !movingCamera) {
         return;
     }
@@ -262,11 +262,6 @@ void OpenGLWindow::handleInput()
         prevMousePosX = curMousePosX;
         prevMousePosY = curMousePosY;
     }
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }
 
 void OpenGLWindow026::onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY)

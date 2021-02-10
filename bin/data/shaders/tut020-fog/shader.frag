@@ -3,7 +3,6 @@
 #include "../lighting/ambientLight.frag"
 #include "../lighting/diffuseLight.frag"
 #include "../fog/fog.frag"
-#include "../common/utility.frag"
 
 layout(location = 0) out vec4 outputColor;
 
@@ -23,7 +22,7 @@ void main()
     vec3 normal = normalize(ioVertexNormal);
     vec4 textureColor = texture(sampler, ioVertexTexCoord);
     vec4 objectColor = textureColor*color;
-    vec3 lightColor = sumColors(getAmbientLightColor(ambientLight), getDiffuseLightColor(diffuseLight, normal));
+    vec3 lightColor = getAmbientLightColor(ambientLight) + getDiffuseLightColor(diffuseLight, normal);
 
     outputColor = objectColor*vec4(lightColor, 1.0);
     

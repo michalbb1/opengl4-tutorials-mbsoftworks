@@ -2,10 +2,11 @@
 #include <iostream>
 
 // Project
-#include "../common_classes/OpenGLWindow.h"
+#include "025-transform-feedback-particle-system.h"
 
 /**
  * Application entry point function.
+ * Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
  */
 int main()
 {
@@ -22,7 +23,7 @@ int main()
     bool showFullscreen = tolower(answer) == 'y';
 #endif
     
-    OpenGLWindow window;
+    OpenGLWindow025 window;
     if (!window.createOpenGLWindow(windowTitle, majorVersion, minorVersion, showFullscreen))
     {
         printf("Failed to create window with OpenGL context %d.%d! Shutting down...\n", majorVersion, minorVersion);

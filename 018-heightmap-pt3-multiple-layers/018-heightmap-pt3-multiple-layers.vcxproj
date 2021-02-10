@@ -184,6 +184,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="018-heightmap-pt3-multiple-layers.h" />
     <ClInclude Include="HUD018.h" />
   </ItemGroup>
   <ItemGroup>

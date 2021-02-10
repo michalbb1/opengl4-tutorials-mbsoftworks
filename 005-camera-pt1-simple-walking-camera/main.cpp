@@ -1,12 +1,13 @@
+// STL
 #include <iostream>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "005-camera-pt1-simple-walking-camera.h"
 
 /**
-  Application entry point function.
-  Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
-*/
-
+ * Application entry point function.
+ * Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
+ */
 int main()
 {
 	const std::string& windowTitle = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
@@ -22,7 +23,7 @@ int main()
 	bool showFullscreen = tolower(answer) == 'y';
 #endif
 	
-	OpenGLWindow window;
+	OpenGLWindow005 window;
 	if (!window.createOpenGLWindow(windowTitle, majorVersion, minorVersion, showFullscreen))
 	{
 		printf("Failed to create window with OpenGL context %d.%d! Shutting down...\n", majorVersion, minorVersion);

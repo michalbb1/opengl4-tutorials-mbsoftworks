@@ -43,7 +43,7 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
         // Therefore I call it manually
         int width, height;
         glfwGetWindowSize(_window, &width, &height);
-        onWindowSizeChanged(_window, width, height);
+        onWindowSizeChanged(width, height);
     }
 
     glfwSetScrollCallback(_window, onMouseWheelScrollStatic);
@@ -92,7 +92,7 @@ void OpenGLWindow::runApp()
 
         glfwSwapBuffers(_window);
         glfwPollEvents();
-        handleInput();
+        updateScene();
     }
 
     releaseScene();
@@ -168,6 +168,12 @@ OpenGLWindow* OpenGLWindow::getDefaultWindow()
     return _windows.size() == 0 ? nullptr : (*_windows.begin()).second;
 }
 
+void OpenGLWindow::onWindowSizeChanged(int width, int height)
+{
+    recalculateProjectionMatrix();
+    glViewport(0, 0, width, height);
+}
+
 void OpenGLWindow::recalculateProjectionMatrix()
 {
     int width, height;
@@ -195,8 +201,7 @@ void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int 
 {
     if (_windows.count(window) != 0)
     {
-        _windows[window]->recalculateProjectionMatrix();
-        _windows[window]->onWindowSizeChanged(window, width, height);
+        _windows[window]->onWindowSizeChanged(width, height);
     }
 }
 
@@ -204,7 +209,6 @@ void OpenGLWindow::onMouseWheelScrollStatic(GLFWwindow* window, double scrollOff
 {
     if (_windows.count(window) != 0)
     {
-        _windows[window]->recalculateProjectionMatrix();
         _windows[window]->onMouseWheelScroll(scrollOffsetX, scrollOffsetY);
     }
 }

@@ -180,6 +180,9 @@
     <ClInclude Include="..\common_classes\shader_structs\pointLight.h">
       <Filter>Header Files\common_classes\shader_structs</Filter>
     </ClInclude>
+    <ClInclude Include="023-point-lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">

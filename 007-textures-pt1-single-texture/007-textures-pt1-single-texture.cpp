@@ -1,6 +1,8 @@
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "007-textures-pt1-single-texture.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -27,7 +29,7 @@ Texture filterTextures[10];
 Sampler samplersShowcase[10];
 int groundSamplerIndex = 9;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow007::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -68,7 +70,7 @@ void OpenGLWindow::initializeScene()
 	texCoordsVBO.bindVBO();
 	texCoordsVBO.addRawData(static_geometry::plainGroundTexCoords, sizeof(static_geometry::plainGroundTexCoords));
 	texCoordsVBO.addRawData(static_geometry::cubeTexCoords, sizeof(static_geometry::cubeTexCoords), 6);
-	texCoordsVBO.addRawData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords));
+	texCoordsVBO.addRawData(static_geometry::pyramidTexCoords, sizeof(static_geometry::pyramidTexCoords), 4);
 	
 	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
@@ -79,7 +81,7 @@ void OpenGLWindow::initializeScene()
 
 	groundTexture.loadTexture2D("data/textures/clay.png");
 	houseTexture.loadTexture2D("data/textures/brick.png");
-	roofTexture.loadTexture2D("data/textures/test.jpg");
+	roofTexture.loadTexture2D("data/textures/prismarine_dark.png");
 
 	filterTextures[0].loadTexture2D("data/textures/tut007/mag_nearest_min_nearest.png");
 	filterTextures[1].loadTexture2D("data/textures/tut007/mag_nearest_min_bilinear.png");
@@ -138,7 +140,7 @@ void OpenGLWindow::initializeScene()
 	samplersShowcase[9].setMinificationFilter(MIN_FILTER_TRILINEAR);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow007::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -172,10 +174,9 @@ void OpenGLWindow::renderScene()
 		auto modelMatrixHouse = glm::mat4(1.0);
 		auto housePosition = startPointLeft + glm::vec3(0.0f, 0.0f, -i * 25.0f);
 		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
-        /*
+        
 		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
-		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixBottom = glm::scale(modelMatrixBottom, glm::vec3(houseBottomSize, houseBottomSize, houseBottomSize));
 		mainProgram["matrices.modelMatrix"] = modelMatrixBottom;
 		mainProgram["color"] = i == groundSamplerIndex ? glm::vec4(0.25f, 0.8f, 1.0f, 1.0f) : glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -185,7 +186,7 @@ void OpenGLWindow::renderScene()
 		glDrawArrays(GL_TRIANGLES, 28, 6);
 		
 		filterTextures[i].bind();
-		glDrawArrays(GL_TRIANGLES, 22, 6);*/
+		glDrawArrays(GL_TRIANGLES, 22, 6);
 
 		roofTexture.bind();
 		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 0.25f;
@@ -208,7 +209,7 @@ void OpenGLWindow::renderScene()
 		auto modelMatrixHouse = glm::mat4(1.0);
 		auto housePosition = startPointRight + glm::vec3(0.0f, 0.0f, -j * 25.0f);
 		modelMatrixHouse = glm::translate(modelMatrixHouse, housePosition);
-        /*
+        
 		// Render bottom cube of the house
 		glm::mat4 modelMatrixBottom = glm::translate(modelMatrixHouse, glm::vec3(0.0f, houseBottomSize / 2.0f, 0.0f));
 		//	modelMatrixBottom = glm::rotate(modelMatrixBottom, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -218,7 +219,7 @@ void OpenGLWindow::renderScene()
 
 		houseTexture.bind();
 		glDrawArrays(GL_TRIANGLES, 4, 12);
-		glDrawArrays(GL_TRIANGLES, 22, 12);*/
+		glDrawArrays(GL_TRIANGLES, 22, 12);
 
 		filterTextures[i].bind();
 		glDrawArrays(GL_TRIANGLES, 16, 6);
@@ -241,7 +242,7 @@ void OpenGLWindow::renderScene()
 	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow007::releaseScene()
 {
 	mainProgram.deleteProgram();
 
@@ -264,7 +265,7 @@ void OpenGLWindow::releaseScene()
 	glDeleteVertexArrays(1, &mainVAO);
 }
 
-void OpenGLWindow::handleInput()
+void OpenGLWindow007::updateScene()
 {
 	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
 		closeWindow();
@@ -283,9 +284,4 @@ void OpenGLWindow::handleInput()
 		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
 		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

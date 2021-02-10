@@ -1,12 +1,13 @@
+// STL
 #include <iostream>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "007-textures-pt1-single-texture.h"
 
 /**
-  Application entry point function.
-  Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
-*/
-
+ * Application entry point function.
+ * Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
+ */
 int main()
 {
 	const std::string& windowTitle = "007.) Textures pt. 1 - Single Texture - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
@@ -22,7 +23,7 @@ int main()
 	bool showFullscreen = tolower(answer) == 'y';
 #endif
 	
-	OpenGLWindow window;
+    OpenGLWindow007 window;
 	if (!window.createOpenGLWindow(windowTitle, majorVersion, minorVersion, showFullscreen))
 	{
 		printf("Failed to create window with OpenGL context %d.%d! Shutting down...\n", majorVersion, minorVersion);

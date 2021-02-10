@@ -302,5 +302,8 @@
     <ClInclude Include="pointLightExtended.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="024-uniform-buffer-object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

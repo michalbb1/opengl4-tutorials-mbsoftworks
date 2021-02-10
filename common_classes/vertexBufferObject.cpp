@@ -35,9 +35,14 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 void VertexBufferObject::addRawData(const void* ptrData, size_t dataSize, int repeat)
 {
     const auto bytesToAdd = dataSize * repeat;
-    if (_bytesAdded + bytesToAdd > _rawData.capacity())
+    const auto requiredCapacity = _bytesAdded + bytesToAdd;
+    if (requiredCapacity > _rawData.capacity())
     {
-        const auto newCapacity = _rawData.capacity() * 2;
+        auto newCapacity = _rawData.capacity() * 2;
+        while (newCapacity < requiredCapacity) {
+            newCapacity *= 2;
+        }
+
         std::vector<unsigned char> newRawData;
         newRawData.reserve(newCapacity);
         memcpy(newRawData.data(), _rawData.data(), _bytesAdded);

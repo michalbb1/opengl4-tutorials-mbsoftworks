@@ -139,6 +139,7 @@
     <ClInclude Include="..\common_classes\stringUtils.h" />
     <ClInclude Include="..\common_classes\uniform.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
+    <ClInclude Include="003-adding-colors.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

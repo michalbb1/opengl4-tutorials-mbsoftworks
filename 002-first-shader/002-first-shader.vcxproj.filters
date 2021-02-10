@@ -74,5 +74,8 @@
     <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="002-first-shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

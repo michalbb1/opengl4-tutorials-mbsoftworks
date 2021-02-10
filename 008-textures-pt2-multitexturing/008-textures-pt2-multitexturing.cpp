@@ -1,6 +1,8 @@
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "008-textures-pt2-multitexturing.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -60,7 +62,7 @@ std::vector<HouseTransformation> houseTransformations
 	{glm::vec3(-121, 0, -54), glm::radians(45.0f)}
 };
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow008::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -137,7 +139,7 @@ void OpenGLWindow::initializeScene()
 	mainSampler.setMinificationFilter(MIN_FILTER_TRILINEAR);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow008::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -209,16 +211,37 @@ void OpenGLWindow::renderScene()
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
 		glDrawArrays(GL_TRIANGLES, 40, 12);
 	}
-	
-	std::string windowTitleWithFPS = "008.) Textures pt. 2 - Multitexturing - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
-		+ std::to_string(getFPS())
-		+ ", Max texture units: " + std::to_string(Texture::getNumTextureImageUnits())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow008::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    std::string windowTitleWithFPS = "008.) Textures pt. 2 - Multitexturing - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+        + std::to_string(getFPS())
+        + ", Max texture units: " + std::to_string(Texture::getNumTextureImageUnits())
+        + ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
+
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+}
+
+void OpenGLWindow008::releaseScene()
 {
 	groundProgram.deleteProgram();
 	mainProgram.deleteProgram();
@@ -242,30 +265,4 @@ void OpenGLWindow::releaseScene()
 	mainSampler.deleteSampler();
 
 	glDeleteVertexArrays(1, &mainVAO);
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

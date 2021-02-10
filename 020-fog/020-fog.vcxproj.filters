@@ -281,5 +281,8 @@
     <ClInclude Include="..\common_classes\static_meshes_3D\heightmapWithFog.h">
       <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
+    <ClInclude Include="020-fog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

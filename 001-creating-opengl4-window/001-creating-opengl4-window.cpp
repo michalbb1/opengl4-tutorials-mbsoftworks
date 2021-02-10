@@ -1,29 +1,19 @@
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "001-creating-opengl4-window.h"
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow001::initializeScene()
 {
 	glClearColor(0, 0.5f, 1.0f, 1.0f);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow001::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow001::updateScene()
 {
-	// nothing to release at the moment
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE))
-	{
-		closeWindow();
-	}
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
 }

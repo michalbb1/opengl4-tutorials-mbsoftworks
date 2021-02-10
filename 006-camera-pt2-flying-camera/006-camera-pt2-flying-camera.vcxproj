@@ -144,6 +144,7 @@
     <ClInclude Include="..\common_classes\uniform.h" />
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
+    <ClInclude Include="006-camera-pt2-flying-camera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

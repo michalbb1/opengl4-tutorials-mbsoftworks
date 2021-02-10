@@ -163,6 +163,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="021-specular-highlight.h" />
     <ClInclude Include="HUD021.h" />
   </ItemGroup>
   <ItemGroup>
