@@ -287,7 +287,7 @@ void OpenGLWindow024::renderScene()
     hud->renderHUD(ambientLight, *pointLights.begin(), (int)pointLights.size());
 }
 
-void OpenGLWindow024::handleInput()
+void OpenGLWindow024::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

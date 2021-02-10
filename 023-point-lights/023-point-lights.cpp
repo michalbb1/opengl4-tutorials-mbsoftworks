@@ -236,7 +236,7 @@ void OpenGLWindow023::renderScene()
     hud->renderHUD(ambientLight, pointLightA);
 }
 
-void OpenGLWindow023::handleInput()
+void OpenGLWindow023::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

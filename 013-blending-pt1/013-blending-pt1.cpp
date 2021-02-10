@@ -173,7 +173,7 @@ void OpenGLWindow013::renderScene()
 	hud->renderHUD(turnDepthMaskOff);
 }
 
-void OpenGLWindow013::handleInput()
+void OpenGLWindow013::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

@@ -218,7 +218,7 @@ void OpenGLWindow025::renderScene()
     hud->renderHUD(fireParticleSystem->getNumParticles(), snowParticleSystem->getNumParticles(), fogParameters.isEnabled, isFireDragged);
 }
 
-void OpenGLWindow025::handleInput()
+void OpenGLWindow025::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

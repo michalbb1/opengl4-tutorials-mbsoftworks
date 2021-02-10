@@ -11,7 +11,7 @@ void OpenGLWindow001::renderScene()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLWindow001::handleInput()
+void OpenGLWindow001::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

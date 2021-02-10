@@ -194,7 +194,7 @@ void OpenGLWindow020::renderScene()
 	hud->renderHUD(fogParameters);
 }
 
-void OpenGLWindow020::handleInput()
+void OpenGLWindow020::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

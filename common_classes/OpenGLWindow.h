@@ -63,16 +63,16 @@ public:
     virtual void renderScene() {}
     
     /**
+     * Updates OpenGL scene - handles input in the application, updates variables etc. This function is not implemented,
+     * but it depends on the tutorial, what are the contents of this function.
+     */
+    virtual void updateScene() {}
+
+    /**
      * Releases OpenGL Scene, i.e. cleans up after itself and releases all used resources. This function
      * is not implemented, but it depends on the tutorial, what are the contents of this function.
      */
     virtual void releaseScene() {}
-
-    /**
-     * Handles input in the application. This function is not implemented, but it depends on
-     * the tutorial, what are the contents of this function.
-     */
-    virtual void handleInput() {}
 
     /**
      * Checks, if specified key is currently pressed.

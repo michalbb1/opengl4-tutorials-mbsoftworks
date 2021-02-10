@@ -202,7 +202,7 @@ void OpenGLWindow022::renderScene()
 	hud->renderHUD(diffuseLight.direction, displayNormals, updateSpaceEntities, sphereSlices, sphereStacks);
 }
 
-void OpenGLWindow022::handleInput()
+void OpenGLWindow022::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

@@ -194,7 +194,7 @@ void OpenGLWindow014::renderScene()
 	hud->renderHUD(ambientLight, diffuseLight);
 }
 
-void OpenGLWindow014::handleInput()
+void OpenGLWindow014::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

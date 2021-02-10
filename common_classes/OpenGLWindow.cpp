@@ -92,7 +92,7 @@ void OpenGLWindow::runApp()
 
         glfwSwapBuffers(_window);
         glfwPollEvents();
-        handleInput();
+        updateScene();
     }
 
     releaseScene();
@@ -170,6 +170,7 @@ OpenGLWindow* OpenGLWindow::getDefaultWindow()
 
 void OpenGLWindow::onWindowSizeChanged(int width, int height)
 {
+    recalculateProjectionMatrix();
     glViewport(0, 0, width, height);
 }
 
@@ -200,7 +201,6 @@ void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int 
 {
     if (_windows.count(window) != 0)
     {
-        _windows[window]->recalculateProjectionMatrix();
         _windows[window]->onWindowSizeChanged(width, height);
     }
 }
@@ -209,7 +209,6 @@ void OpenGLWindow::onMouseWheelScrollStatic(GLFWwindow* window, double scrollOff
 {
     if (_windows.count(window) != 0)
     {
-        _windows[window]->recalculateProjectionMatrix();
         _windows[window]->onMouseWheelScroll(scrollOffsetX, scrollOffsetY);
     }
 }

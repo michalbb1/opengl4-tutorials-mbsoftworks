@@ -203,7 +203,7 @@ void OpenGLWindow021::renderScene()
 	hud->renderHUD(material, diffuseLight.direction);
 }
 
-void OpenGLWindow021::handleInput()
+void OpenGLWindow021::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

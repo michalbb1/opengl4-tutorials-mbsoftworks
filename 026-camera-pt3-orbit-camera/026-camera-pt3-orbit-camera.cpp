@@ -192,7 +192,7 @@ void OpenGLWindow026::releaseScene()
 	hud.reset();
 }
 
-void OpenGLWindow026::handleInput()
+void OpenGLWindow026::updateScene()
 {
 	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
 		closeWindow();

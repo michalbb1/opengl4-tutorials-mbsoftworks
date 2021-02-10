@@ -229,7 +229,7 @@ void OpenGLWindow019::renderScene()
 	hud->renderHUD(displayNormals);
 }
 
-void OpenGLWindow019::handleInput()
+void OpenGLWindow019::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

@@ -61,7 +61,7 @@ void OpenGLWindow002::renderScene()
 	glDrawArrays(GL_TRIANGLE_STRIP, 3, 4);
 }
 
-void OpenGLWindow002::handleInput()
+void OpenGLWindow002::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

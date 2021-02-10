@@ -245,7 +245,7 @@ void OpenGLWindow015::renderScene()
 	hud->renderHUD(ambientLight, diffuseLight, displayNormals, normalLength);
 }
 
-void OpenGLWindow015::handleInput()
+void OpenGLWindow015::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

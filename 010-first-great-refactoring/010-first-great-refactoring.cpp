@@ -126,7 +126,7 @@ void OpenGLWindow010::renderScene()
 	hud->renderHUD();
 }
 
-void OpenGLWindow010::handleInput()
+void OpenGLWindow010::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

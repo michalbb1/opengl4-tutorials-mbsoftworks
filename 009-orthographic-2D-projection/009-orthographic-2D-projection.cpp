@@ -301,7 +301,7 @@ void OpenGLWindow009::renderScene()
 	glDepthMask(1);
 }
 
-void OpenGLWindow009::handleInput()
+void OpenGLWindow009::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();

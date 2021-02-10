@@ -265,7 +265,7 @@ void OpenGLWindow007::releaseScene()
 	glDeleteVertexArrays(1, &mainVAO);
 }
 
-void OpenGLWindow007::handleInput()
+void OpenGLWindow007::updateScene()
 {
 	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
 		closeWindow();

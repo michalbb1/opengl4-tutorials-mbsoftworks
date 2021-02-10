@@ -151,7 +151,7 @@ void OpenGLWindow006::renderScene()
 	}
 }
 
-void OpenGLWindow006::handleInput()
+void OpenGLWindow006::updateScene()
 {
     if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
         closeWindow();
