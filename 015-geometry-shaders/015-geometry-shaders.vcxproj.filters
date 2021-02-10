@@ -156,6 +156,9 @@
     <ClInclude Include="..\common_classes\static_meshes_3D\plainGround.h">
       <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
+    <ClInclude Include="015-geometry-shaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">

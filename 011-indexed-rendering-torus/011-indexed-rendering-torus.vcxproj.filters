@@ -42,9 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\plainGround.cpp">
       <Filter>Source Files\common_classes\static_meshes_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\pyramid.h">
       <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="011-indexed-rendering-torus.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -189,6 +189,9 @@
     <ClInclude Include="snowParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="025-transform-feedback-particle-system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\glad\src\glad.c">

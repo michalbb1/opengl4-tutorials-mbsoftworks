@@ -215,6 +215,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="022-cylinder-and-sphere.h" />
     <ClInclude Include="HUD022.h" />
     <ClInclude Include="planet.h" />
     <ClInclude Include="spaceStation.h" />

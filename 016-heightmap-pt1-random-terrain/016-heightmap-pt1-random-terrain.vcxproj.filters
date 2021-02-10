@@ -257,5 +257,8 @@
     <ClInclude Include="..\common_classes\static_meshes_3D\heightmap.h">
       <Filter>Header Files\common_classes\static_meshes_3D</Filter>
     </ClInclude>
+    <ClInclude Include="016-heightmap-pt1-random-terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

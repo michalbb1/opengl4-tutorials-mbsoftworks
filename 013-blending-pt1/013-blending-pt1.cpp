@@ -1,9 +1,14 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "013-blending-pt1.h"
+#include "HUD013.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -17,8 +22,6 @@
 #include "../common_classes/static_meshes_3D/plainGround.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
-
-#include "HUD013.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
@@ -52,8 +55,7 @@ std::vector<glm::vec3> cratePositions
 	glm::vec3(30.0f, 0.0f, 80.0f)
 };
 
-
-void OpenGLWindow::initializeScene()
+void OpenGLWindow013::initializeScene()
 {
 	glClearColor(0.02f, 0.682f, 1.0f, 1.0f);
 	try
@@ -93,7 +95,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow013::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -169,12 +171,37 @@ void OpenGLWindow::renderScene()
 
 	// Render HUD
 	hud->renderHUD(turnDepthMaskOff);
-
-	// Update rotation angle
-	rotationAngleRad += sof(glm::radians(45.0f));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow013::handleInput()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F4)) {
+        turnDepthMaskOff = !turnDepthMaskOff;
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update rotation angle
+    rotationAngleRad += sof(glm::radians(45.0f));
+}
+
+void OpenGLWindow013::releaseScene()
 {
 	ShaderManager::getInstance().clearShaderCache();
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
@@ -186,34 +213,4 @@ void OpenGLWindow::releaseScene()
 	pyramid.reset();
 	cube.reset();
 	plainGround.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F4)) {
-		turnDepthMaskOff = !turnDepthMaskOff;
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

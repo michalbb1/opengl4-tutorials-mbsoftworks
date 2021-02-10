@@ -31,7 +31,6 @@ public:
     DEFINE_SHADER_CONSTANT(diffuseLight, "diffuseLight");
     DEFINE_SHADER_CONSTANT(specularHighlight, "specularHighlight");
     DEFINE_SHADER_CONSTANT(pointLight, "pointLight");
-    DEFINE_SHADER_CONSTANT(utility, "utility");
     DEFINE_SHADER_CONSTANT(fog, "fog");
 };
 

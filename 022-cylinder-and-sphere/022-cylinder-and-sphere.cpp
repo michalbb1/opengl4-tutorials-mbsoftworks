@@ -6,7 +6,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Project
-#include "../common_classes/OpenGLWindow.h"
+#include "022-cylinder-and-sphere.h"
+#include "HUD022.h"
+#include "planet.h"
+#include "spaceStation.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -23,10 +27,6 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
-#include "HUD022.h"
-#include "planet.h"
-#include "spaceStation.h"
-
 FlyingCamera camera(glm::vec3(-100.0f, 25.0f, 120.0f), glm::vec3(-100.0f, 25.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
@@ -40,7 +40,7 @@ shader_structs::Material shinyMaterial(1.0f, 32.0f);
 int sphereSlices = 20;
 int sphereStacks = 20;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow022::initializeScene()
 {
 	try
 	{
@@ -124,7 +124,7 @@ std::vector<Planet> planets =
 
 SpaceStation spaceStation(glm::vec3(100.0f, 100.0f, -100.0f), 15.0f, 3.0f);
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow022::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -202,32 +202,15 @@ void OpenGLWindow::renderScene()
 	hud->renderHUD(diffuseLight.direction, displayNormals, updateSpaceEntities, sphereSlices, sphereStacks);
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow022::handleInput()
 {
-	cylinder.reset();
-	skybox.reset();
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
 
-	ShaderManager::getInstance().clearShaderCache();
-	ShaderProgramManager::getInstance().clearShaderProgramCache();
-	TextureManager::getInstance().clearTextureCache();
-	SamplerManager::getInstance().clearSamplerCache();
-	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
-
-    Planet::freeGeometry();
-    SpaceStation::freeGeometry();
-
-	hud.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
 
     if (keyPressedOnce(GLFW_KEY_N)) {
         displayNormals = !displayNormals;
@@ -271,18 +254,31 @@ void OpenGLWindow::handleInput()
         Planet::initializeGeometry(sphereSlices, sphereStacks);
     }
 
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
 }
 
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
+void OpenGLWindow022::releaseScene()
 {
-	glViewport(0, 0, width, height);
+	cylinder.reset();
+	skybox.reset();
+
+	ShaderManager::getInstance().clearShaderCache();
+	ShaderProgramManager::getInstance().clearShaderProgramCache();
+	TextureManager::getInstance().clearTextureCache();
+	SamplerManager::getInstance().clearSamplerCache();
+	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
+
+    Planet::freeGeometry();
+    SpaceStation::freeGeometry();
+
+	hud.reset();
 }
+

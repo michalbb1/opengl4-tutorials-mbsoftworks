@@ -1,9 +1,13 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "020-fog.h"
+#include "HUD020.h"
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -21,8 +25,6 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/fogParameters.h"
-
-#include "HUD020.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 25.0f);
 
@@ -49,7 +51,7 @@ std::vector<glm::vec3> medievalHousePositions
 	glm::vec3(-5.0f, 0.0f, 00.0f)
 };
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow020::initializeScene()
 {
 	try
 	{
@@ -61,7 +63,6 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader("tut020_fog_main", "data/shaders/tut020-fog/shader.frag");
 		sm.loadFragmentShader(ShaderKeys::ambientLight(), "data/shaders/lighting/ambientLight.frag");
 		sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
-		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 		sm.loadFragmentShader(ShaderKeys::fog(), "data/shaders/fog/fog.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
@@ -69,7 +70,6 @@ void OpenGLWindow::initializeScene()
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut020_fog_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
 		
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/jajsnow1", "jpg");
@@ -111,7 +111,7 @@ void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
 	column = int(heightmapWithFog->getColumns() * (position.x + halfWidth) / heightMapSize.x);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow020::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -194,7 +194,65 @@ void OpenGLWindow::renderScene()
 	hud->renderHUD(fogParameters);
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow020::handleInput()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F)) {
+        fogParameters.equation = (fogParameters.equation + 1) % 3;
+    }
+
+    if (keyPressedOnce(GLFW_KEY_X)) {
+        fogParameters.isEnabled = !fogParameters.isEnabled;
+    }
+
+    if (fogParameters.equation == shader_structs::FogParameters::FOG_EQUATION_LINEAR)
+    {
+        if (keyPressed(GLFW_KEY_1)) {
+            fogParameters.linearStart -= sof(10.0f);
+        }
+
+        if (keyPressed(GLFW_KEY_2)) {
+            fogParameters.linearStart += sof(10.0f);
+        }
+
+        if (keyPressed(GLFW_KEY_3)) {
+            fogParameters.linearEnd -= sof(10.0f);
+        }
+
+        if (keyPressed(GLFW_KEY_4)) {
+            fogParameters.linearEnd += sof(10.0f);
+        }
+    }
+    else
+    {
+        if (keyPressed(GLFW_KEY_1)) {
+            fogParameters.density -= sof(0.02f);
+        }
+
+        if (keyPressed(GLFW_KEY_2)) {
+            fogParameters.density += sof(0.02f);
+        }
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+}
+
+void OpenGLWindow020::releaseScene()
 {
 	skybox.reset();
 
@@ -209,67 +267,4 @@ void OpenGLWindow::releaseScene()
 
 	hud.reset();
 	heightmapWithFog.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F)) {
-		fogParameters.equation = (fogParameters.equation + 1) % 3;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		fogParameters.isEnabled = !fogParameters.isEnabled;
-	}
-
-	if (fogParameters.equation == shader_structs::FogParameters::FOG_EQUATION_LINEAR)
-	{
-		if (keyPressed(GLFW_KEY_1)) {
-			fogParameters.linearStart -= sof(10.0f);
-		}
-
-		if (keyPressed(GLFW_KEY_2)) {
-			fogParameters.linearStart += sof(10.0f);
-		}
-
-		if (keyPressed(GLFW_KEY_3)) {
-			fogParameters.linearEnd -= sof(10.0f);
-		}
-
-		if (keyPressed(GLFW_KEY_4)) {
-			fogParameters.linearEnd += sof(10.0f);
-		}
-	}
-	else
-	{
-		if (keyPressed(GLFW_KEY_1)) {
-			fogParameters.density -= sof(0.02f);
-		}
-
-		if (keyPressed(GLFW_KEY_2)) {
-			fogParameters.density += sof(0.02f);
-		}
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

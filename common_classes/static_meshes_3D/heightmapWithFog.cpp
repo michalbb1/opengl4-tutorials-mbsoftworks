@@ -39,9 +39,8 @@ void HeightmapWithFog::prepareMultiLayerShaderProgramWithFog()
     auto& sm = ShaderManager::getInstance();
     
     if (!sm.containsFragmentShader(ShaderKeys::ambientLight())
-        || !sm.containsFragmentShader(ShaderKeys::diffuseLight())
-        || !sm.containsFragmentShader(ShaderKeys::utility())) {
-        throw std::runtime_error("Please load fragment shaders for ambient light, diffuse light and utility before calling this method!");
+        || !sm.containsFragmentShader(ShaderKeys::diffuseLight())) {
+        throw std::runtime_error("Please load fragment shaders for ambient light and diffuse light before calling this method!");
     }
 
     sm.loadVertexShader(MULTILAYER_SHADER_PROGRAM_WITH_FOG_KEY, "data/shaders/heightmap/multilayer_fog.vert");
@@ -55,7 +54,6 @@ void HeightmapWithFog::prepareMultiLayerShaderProgramWithFog()
 
     multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
     multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
-    multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
     multiLayerHeightmapShaderProgramWithFog.addShaderToProgram(sm.getFragmentShader(ShaderKeys::fog()));
 }
 

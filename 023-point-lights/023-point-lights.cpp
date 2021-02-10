@@ -1,9 +1,14 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "023-point-lights.h"
+#include "HUD023.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -25,8 +30,6 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/shader_structs/pointLight.h"
-
-#include "HUD023.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
 
@@ -62,7 +65,7 @@ std::vector<glm::vec3> barnPositions
 
 float rotationAngle; // Rotation angle used to animate tori
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow023::initializeScene()
 {
 	try
 	{
@@ -76,7 +79,6 @@ void OpenGLWindow::initializeScene()
         sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
 		sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
         sm.loadFragmentShader(ShaderKeys::pointLight(), "data/shaders/lighting/pointLight.frag");
-		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut023_main"));
@@ -118,7 +120,7 @@ void OpenGLWindow::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow023::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -232,41 +234,23 @@ void OpenGLWindow::renderScene()
 
 	// Render HUD
     hud->renderHUD(ambientLight, pointLightA);
-	
-	// Update variables
-	rotationAngle += sof(glm::radians(30.0f));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow023::handleInput()
 {
-	torus.reset();
-	skybox.reset();
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
 
-	ShaderManager::getInstance().clearShaderCache();
-	ShaderProgramManager::getInstance().clearShaderProgramCache();
-	TextureManager::getInstance().clearTextureCache();
-	SamplerManager::getInstance().clearSamplerCache();
-	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
 
-    plainGround.reset();
-	hud.reset();
-}
+    if (keyPressedOnce(GLFW_KEY_X)) {
+        shinyMaterial.isEnabled = !shinyMaterial.isEnabled;
+    }
 
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		shinyMaterial.isEnabled = !shinyMaterial.isEnabled;
-	}
-
-	if (keyPressed(GLFW_KEY_1))
+    if (keyPressed(GLFW_KEY_1))
     {
         pointLightA.constantAttenuation -= sof(0.2f);
         if (pointLightA.constantAttenuation < 0.0f) {
@@ -274,13 +258,13 @@ void OpenGLWindow::handleInput()
         }
 
         pointLightB.constantAttenuation = pointLightA.constantAttenuation;
-	}
+    }
 
-	if (keyPressed(GLFW_KEY_2))
+    if (keyPressed(GLFW_KEY_2))
     {
         pointLightA.constantAttenuation += sof(0.2f);
         pointLightB.constantAttenuation = pointLightA.constantAttenuation;
-	}
+    }
 
     if (keyPressed(GLFW_KEY_3))
     {
@@ -330,18 +314,31 @@ void OpenGLWindow::handleInput()
         }
     }
 
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update variables
+    rotationAngle += sof(glm::radians(30.0f));
 }
 
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
+void OpenGLWindow023::releaseScene()
 {
-	glViewport(0, 0, width, height);
+	torus.reset();
+	skybox.reset();
+
+	ShaderManager::getInstance().clearShaderCache();
+	ShaderProgramManager::getInstance().clearShaderProgramCache();
+	TextureManager::getInstance().clearTextureCache();
+	SamplerManager::getInstance().clearSamplerCache();
+	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
+
+    plainGround.reset();
+	hud.reset();
 }

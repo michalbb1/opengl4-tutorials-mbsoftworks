@@ -178,6 +178,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="025-transform-feedback-particle-system.h" />
     <ClInclude Include="fireParticleSystem.h" />
     <ClInclude Include="HUD025.h" />
     <ClInclude Include="snowCoveredPlainGround.h" />

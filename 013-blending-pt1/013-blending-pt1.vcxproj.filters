@@ -60,9 +60,6 @@
     <ClCompile Include="HUD013.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -134,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp">
       <Filter>Source Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h">
       <Filter>Header Files\common_classes\static_meshes_3D\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="013-blending-pt1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

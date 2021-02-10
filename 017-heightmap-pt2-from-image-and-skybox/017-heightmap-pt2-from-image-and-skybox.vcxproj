@@ -87,6 +87,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="017-heightmap-pt2-from-image-and-skybox.h" />
     <ClInclude Include="HUD017.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -54,25 +54,25 @@ public:
      * Initializes OpenGL Scene. This function is not implemented here, but it depends on
      * the tutorial, what are the contents of this function.
      */
-    void initializeScene();
+    virtual void initializeScene() {}
     
     /**
      * Performs rendering of OpenGL Scene. This function is not implemented, but it depends on
      * the tutorial, what are the contents of this function.
      */
-    void renderScene();
+    virtual void renderScene() {}
     
     /**
      * Releases OpenGL Scene, i.e. cleans up after itself and releases all used resources. This function
      * is not implemented, but it depends on the tutorial, what are the contents of this function.
      */
-    void releaseScene();
+    virtual void releaseScene() {}
 
     /**
      * Handles input in the application. This function is not implemented, but it depends on
      * the tutorial, what are the contents of this function.
      */
-    void handleInput();
+    virtual void handleInput() {}
 
     /**
      * Checks, if specified key is currently pressed.
@@ -91,26 +91,6 @@ public:
      * @return True, if key was pressed once, or false otherwise.
      */
     bool keyPressedOnce(int keyCode);
-
-    /**
-     * Callback function that gets called, when the size of the window changes. This function is also
-     * left un-implemented and user should implement it.
-     *
-     * @param window  Pointer to GLFWwindow, size of which has changed
-     * @param width   New window width (in pixels)
-     * @param height  New window height (in pixels)
-     */
-    void onWindowSizeChanged(GLFWwindow* window, int width, int height);
-
-    /**
-     * Callback function that gets called, when the size of the window changes. This function is also
-     * left un-implemented and user should implement it.
-     *
-     * @param window  Pointer to GLFWwindow, size of which has changed
-     * @param width   New window width (in pixels)
-     * @param height  New window height (in pixels)
-     */
-    virtual void onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY) {}
 
     /**
      * Closes application window and releases all resources. Also sets the error flag, if error has occured.
@@ -184,6 +164,26 @@ public:
      */
     static OpenGLWindow* getDefaultWindow();
 
+protected:
+    /**
+     * Callback function that gets called, when the size of the window changes. This function is also
+     * left un-implemented and user should implement it.
+     *
+     * @param width   New window width (in pixels)
+     * @param height  New window height (in pixels)
+     */
+    virtual void onWindowSizeChanged(int width, int height);
+
+    /**
+     * Callback function that gets called, when the size of the window changes. This function is also
+     * left un-implemented and user should implement it.
+     *
+     * @param window  Pointer to GLFWwindow, size of which has changed
+     * @param width   New window width (in pixels)
+     * @param height  New window height (in pixels)
+     */
+    virtual void onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY) {}
+
 private:
     GLFWwindow* _window = nullptr; // Pointer to GLFWwindow, nullptr by default
     bool _keyWasPressed[512]; // Array of bools, used by keyPressedOnce function
@@ -213,7 +213,6 @@ private:
      * Static method that is set as callback to GLFW framework about window size changed.
      */
     static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);
-
 
     static void onMouseWheelScrollStatic(GLFWwindow* window, double scrollOffsetX, double scrollOffsetY);
 
