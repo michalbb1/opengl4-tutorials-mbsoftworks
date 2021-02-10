@@ -80,5 +80,8 @@
     <ClInclude Include="..\common_classes\staticGeometry.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="004-entering-third-dimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

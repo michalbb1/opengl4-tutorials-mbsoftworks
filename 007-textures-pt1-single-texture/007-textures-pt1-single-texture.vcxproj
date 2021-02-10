@@ -134,6 +134,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="007-textures-pt1-single-texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp" />

@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="..\common_classes\OpenGLWindow.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
+    <ClInclude Include="001-creating-opengl4-window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

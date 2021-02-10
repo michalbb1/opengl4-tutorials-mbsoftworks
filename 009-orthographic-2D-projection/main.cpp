@@ -1,12 +1,13 @@
+// STL
 #include <iostream>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "009-orthographic-2D-projection.h"
 
 /**
-  Application entry point function.
-  Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
-*/
-
+ * Application entry point function.
+ * Uses MessageBox function on Windows systems to ask about fullscreen mode and console query on Unix systems.
+ */
 int main()
 {
 	const std::string& windowTitle = "009.) Orthographic 2D Projection - Tutorial by Michal Bubnar (www.mbsoftworks.sk)";
@@ -22,7 +23,7 @@ int main()
 	bool showFullscreen = tolower(answer) == 'y';
 #endif
 	
-	OpenGLWindow window;
+    OpenGLWindow009 window;
 	if (!window.createOpenGLWindow(windowTitle, majorVersion, minorVersion, showFullscreen))
 	{
 		printf("Failed to create window with OpenGL context %d.%d! Shutting down...\n", majorVersion, minorVersion);

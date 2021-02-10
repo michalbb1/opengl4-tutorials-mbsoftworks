@@ -63,12 +63,12 @@
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Header Files\stb</Filter>
     </ClInclude>
+    <ClInclude Include="007-textures-pt1-single-texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="007-textures-pt1-single-texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
@@ -100,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="..\common_classes\sampler.cpp">
       <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

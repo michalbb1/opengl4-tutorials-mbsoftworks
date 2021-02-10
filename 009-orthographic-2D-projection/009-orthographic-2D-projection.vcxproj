@@ -149,6 +149,7 @@
     <ClInclude Include="..\common_classes\vertexBufferObject.h" />
     <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="009-orthographic-2D-projection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

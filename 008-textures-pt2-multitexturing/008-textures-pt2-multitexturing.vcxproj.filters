@@ -63,6 +63,9 @@
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Header Files\stb</Filter>
     </ClInclude>
+    <ClInclude Include="008-textures-pt2-multitexturing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
@@ -98,7 +101,7 @@
     <ClCompile Include="008-textures-pt2-multitexturing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

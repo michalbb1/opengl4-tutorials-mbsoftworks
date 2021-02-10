@@ -1,6 +1,8 @@
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "005-camera-pt1-simple-walking-camera.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -18,7 +20,7 @@ GLuint mainVAO;
 SimpleWalkingCamera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 float rotationAngleRad; // in radians
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow005::initializeScene()
 {
 	glClearColor(0.0f, 0.28f, 0.57f, 1.0f);
 
@@ -47,9 +49,9 @@ void OpenGLWindow::initializeScene()
 	// Setup vertex positions first
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(static_geometry::plainGroundVertices, sizeof(static_geometry::plainGroundVertices));
-	shapesVBO.addData(static_geometry::cubeVertices, sizeof(static_geometry::cubeVertices));
-	shapesVBO.addData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
+	shapesVBO.addData(static_geometry::plainGroundVertices);
+	shapesVBO.addData(static_geometry::cubeVertices);
+	shapesVBO.addData(static_geometry::pyramidVertices);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -59,18 +61,9 @@ void OpenGLWindow::initializeScene()
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
 
-	colorsVBO.addData(static_geometry::plainGroundColors, sizeof(static_geometry::plainGroundColors));
-
-	for(auto i = 0; i < 6; i++)
-	{
-		colorsVBO.addData(static_geometry::cubeFaceColors, sizeof(static_geometry::cubeFaceColors));
-	}
-
-	for (auto i = 0; i < 4; i++)
-	{
-		colorsVBO.addData(static_geometry::pyramidFaceColors, sizeof(static_geometry::pyramidFaceColors));
-	}
-
+	colorsVBO.addData(static_geometry::plainGroundColors);
+	colorsVBO.addData(static_geometry::cubeFaceColors, 6);
+    colorsVBO.addData(static_geometry::pyramidFaceColors, 4);
 	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
@@ -80,7 +73,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow005::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -155,16 +148,28 @@ void OpenGLWindow::renderScene()
 		mainProgram["matrices.modelMatrix"] = modelMatrixTop;
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 	}
-
-	rotationAngleRad += glm::radians(sof(45.0f));
-
-	std::string windowTitleWithFPS = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
-		+ std::to_string(getFPS()) +
-		", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow005::handleInput()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return this->sof(f); });
+    rotationAngleRad += glm::radians(sof(45.0f));
+
+    std::string windowTitleWithFPS = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+        + std::to_string(getFPS()) +
+        ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+}
+
+void OpenGLWindow005::releaseScene()
 {
 	mainProgram.deleteProgram();
 
@@ -177,20 +182,4 @@ void OpenGLWindow::releaseScene()
 	glDeleteVertexArrays(1, &mainVAO);
 }
 
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
 
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}

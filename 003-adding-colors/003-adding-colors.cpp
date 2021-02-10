@@ -1,4 +1,5 @@
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "003-adding-colors.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -11,7 +12,7 @@ VertexBufferObject colorsVBO;
 
 GLuint mainVAO;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow003::initializeScene()
 {
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
@@ -45,8 +46,8 @@ void OpenGLWindow::initializeScene()
 	
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle, sizeof(vTriangle));
-	shapesVBO.addData(vQuad, sizeof(vQuad));
+	shapesVBO.addData(vTriangle);
+	shapesVBO.addData(vQuad);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -54,15 +55,15 @@ void OpenGLWindow::initializeScene()
 
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
-	colorsVBO.addData(vTriangleColors, sizeof(glm::vec3) * 3);
-	colorsVBO.addData(vQuadColors, sizeof(glm::vec3) * 4);
+	colorsVBO.addData(vTriangleColors);
+	colorsVBO.addData(vQuadColors);
 	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow003::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -73,7 +74,13 @@ void OpenGLWindow::renderScene()
 	glDrawArrays(GL_TRIANGLE_STRIP, 3, 4);
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow003::handleInput()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE))
+        closeWindow();
+}
+
+void OpenGLWindow003::releaseScene()
 {
 	mainProgram.deleteProgram();
 
@@ -84,15 +91,4 @@ void OpenGLWindow::releaseScene()
 	colorsVBO.deleteVBO();
 
 	glDeleteVertexArrays(1, &mainVAO);
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE))
-		closeWindow();
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }
