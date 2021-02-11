@@ -53,6 +53,8 @@ std::vector<glm::vec3> medievalHousePositions
 	glm::vec3(-5.0f, 0.0f, 00.0f)
 };
 
+const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
+
 void OpenGLWindow019::initializeScene()
 {
 	try
@@ -109,17 +111,6 @@ void OpenGLWindow019::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
-
-void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
-{
-	const auto halfWidth = heightMapSize.x / 2.0f;
-	const auto halfDepth = heightMapSize.z / 2.0f;
-
-	row = int(heightmap->getRows() * (position.z + halfDepth) / heightMapSize.z);
-	column = int(heightmap->getColumns() * (position.x + halfWidth) / heightMapSize.x);
-}
-
 void OpenGLWindow019::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
@@ -157,9 +148,8 @@ void OpenGLWindow019::renderScene()
 	for (const auto& position : classicHousePositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, renderedHeight, 0.0f));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		classicHouseMatrices.push_back(model);
 
@@ -173,9 +163,8 @@ void OpenGLWindow019::renderScene()
 	for (const auto& position : medievalHousePositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, renderedHeight, 0.0f));
 		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 		medievalHouseMatrices.push_back(model);
 

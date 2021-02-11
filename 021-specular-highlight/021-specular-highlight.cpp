@@ -29,7 +29,7 @@
 
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 25.0f);
 
-std::unique_ptr<static_meshes_3D::Heightmap> heightmapWithFog;
+std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
 std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<HUD021> hud;
@@ -46,6 +46,10 @@ std::vector<glm::vec3> tripleToriPositions
 	glm::vec3(-80.0f, 0.0f, 80.0f),
 	glm::vec3(82.0f, 0.0f, 75.0f)
 };
+
+const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
+bool isDirectionLocked = true;
+float rotationAngle;
 
 void OpenGLWindow021::initializeScene()
 {
@@ -80,7 +84,7 @@ void OpenGLWindow021::initializeScene()
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 8.0f, 2.0f, true, true, true);
 
 		static_meshes_3D::Heightmap::prepareMultiLayerShaderProgram();
-		heightmapWithFog = std::make_unique<static_meshes_3D::Heightmap>("data/heightmaps/tut019.png", true, true, true);
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>("data/heightmaps/tut019.png", true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -94,19 +98,6 @@ void OpenGLWindow021::initializeScene()
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-}
-
-const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
-bool isDirectionLocked = true;
-float rotationAngle;
-
-void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
-{
-	const auto halfWidth = heightMapSize.x / 2.0f;
-	const auto halfDepth = heightMapSize.z / 2.0f;
-
-	row = int(heightmapWithFog->getRows() * (position.z + halfDepth) / heightMapSize.z);
-	column = int(heightmapWithFog->getColumns() * (position.x + halfWidth) / heightMapSize.x);
 }
 
 void OpenGLWindow021::renderScene()
@@ -154,9 +145,8 @@ void OpenGLWindow021::renderScene()
 	int i = 0;
 	for (const auto& position : tripleToriPositions)
 	{
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		const auto translateY = heightmapWithFog->getHeight(row, column)*heightMapSize.y + 11.0f;
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		const auto translateY = renderedHeight + 11.0f;
 
 		auto basicModelMatrix = glm::translate(glm::mat4(1.0f), position);
 		basicModelMatrix = glm::translate(basicModelMatrix, glm::vec3(0.0f, translateY, 0.0f));
@@ -197,7 +187,7 @@ void OpenGLWindow021::renderScene()
 
 	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
 	heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-	heightmapWithFog->renderMultilayered({"snow", "rocky_terrain", "snow"}, {0.2f, 0.3f, 0.55f, 0.7f});
+	heightmap->renderMultilayered({"snow", "rocky_terrain", "snow"}, {0.2f, 0.3f, 0.55f, 0.7f});
 
 	// Render HUD
 	hud->renderHUD(material, diffuseLight.direction);
@@ -263,5 +253,5 @@ void OpenGLWindow021::releaseScene()
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
 	hud.reset();
-	heightmapWithFog.reset();
+	heightmap.reset();
 }

@@ -60,6 +60,8 @@ std::vector<glm::vec3> toriPositions
 	glm::vec3(30.0f, 0.0f, 80.0f)
 };
 
+const glm::vec3 heightMapSize(200.0f, 20.0f, 200.0f);
+
 void OpenGLWindow017::initializeScene()
 {
 	try
@@ -116,17 +118,6 @@ void OpenGLWindow017::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-const glm::vec3 heightMapSize(200.0f, 20.0f, 200.0f);
-
-void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
-{
-	const auto halfWidth = heightMapSize.x / 2.0f;
-	const auto halfDepth = heightMapSize.z / 2.0f;
-
-	row = int(heightmap->getRows() * (position.z + halfDepth) / heightMapSize.z);
-	column = int(heightmap->getColumns() * (position.x + halfWidth) / heightMapSize.x);
-}
-
 void OpenGLWindow017::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
@@ -171,9 +162,8 @@ void OpenGLWindow017::renderScene()
 	{
 		const auto crateSize = 8.0f;
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, 1.5f + crateSize / 2.0f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f + crateSize / 2.0f + renderedHeight, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -190,9 +180,8 @@ void OpenGLWindow017::renderScene()
 	for (const auto& position : toriPositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, 4.5f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, 4.5f + renderedHeight, 0.0f));
 		model = glm::rotate(model, rotationAngleRad + 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		torusModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
