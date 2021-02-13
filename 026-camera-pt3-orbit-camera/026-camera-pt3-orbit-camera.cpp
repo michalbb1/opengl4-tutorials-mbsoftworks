@@ -245,8 +245,8 @@ void OpenGLWindow026::updateScene()
 
     // Only if we're rotating or moving we should calculate delta of mouse movement
     glfwGetCursorPos(this->getWindow(), &curMousePosX, &curMousePosY);
-    const auto deltaX = float(curMousePosX - prevMousePosX);
-    const auto deltaY = float(curMousePosY - prevMousePosY);
+    const auto deltaX = static_cast<float>(curMousePosX - prevMousePosX);
+    const auto deltaY = static_cast<float>(curMousePosY - prevMousePosY);
 
     if (rotatingCamera)
     {
@@ -266,5 +266,5 @@ void OpenGLWindow026::updateScene()
 
 void OpenGLWindow026::onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY)
 {
-    orbitCamera.zoom(float(scrollOffsetY) * 0.5f);
+    orbitCamera.zoom(static_cast<float>(scrollOffsetY) * 0.5f);
 }

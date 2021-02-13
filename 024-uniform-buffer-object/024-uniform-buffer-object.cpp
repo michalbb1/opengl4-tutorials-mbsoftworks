@@ -212,7 +212,7 @@ void OpenGLWindow024::renderScene()
     SamplerManager::getInstance().getSampler("main").bind();
 	mainProgram[ShaderConstants::eyePosition()] = camera.getEye();
 	shinyMaterial.setUniform(mainProgram, ShaderConstants::material());
-    mainProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
+    mainProgram[ShaderConstants::numPointLights()] = static_cast<int>(pointLights.size());
 	TextureManager::getInstance().getTexture("scifi_metal").bind(0);
 
 	// Render triple tori on their positions
@@ -276,7 +276,7 @@ void OpenGLWindow024::renderScene()
     shader_structs::DiffuseLight::none().setUniform(heightmapShaderProgram, ShaderConstants::diffuseLight());
 
     // Set number of point lights
-    heightmapShaderProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
+    heightmapShaderProgram[ShaderConstants::numPointLights()] = static_cast<int>(pointLights.size());
 
     // Finally set heightmap model matrix and render it
     const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
@@ -284,7 +284,7 @@ void OpenGLWindow024::renderScene()
     heightmap->renderMultilayered({ "cobblestone_mossy", "grass", "rocky_terrain" }, { 0.2f, 0.3f, 0.55f, 0.7f });
 
 	// Render HUD
-    hud->renderHUD(ambientLight, *pointLights.begin(), (int)pointLights.size());
+    hud->renderHUD(ambientLight, *pointLights.begin(), static_cast<int>(pointLights.size()));
 }
 
 void OpenGLWindow024::updateScene()

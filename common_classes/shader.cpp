@@ -19,16 +19,16 @@ bool Shader::loadShaderFromFile(const std::string& fileName, GLenum shaderType)
     if(!getLinesFromFile(fileName, fileLines))
         return false;
 
-    const char** sProgram = new const char*[fileLines.size()];
-    for (int i = 0; i < int(fileLines.size()); i++)
-        sProgram[i] = fileLines[i].c_str();
+    const char** programSource = new const char*[fileLines.size()];
+    for (size_t i = 0; i < fileLines.size(); i++)
+        programSource[i] = fileLines[i].c_str();
     
     _shaderID = glCreateShader(shaderType);
 
-    glShaderSource(_shaderID, (GLsizei)fileLines.size(), sProgram, NULL);
+    glShaderSource(_shaderID, static_cast<GLsizei>(fileLines.size()), programSource, nullptr);
     glCompileShader(_shaderID);
 
-    delete[] sProgram;
+    delete[] programSource;
 
     int compilationStatus;
     glGetShaderiv(_shaderID, GL_COMPILE_STATUS, &compilationStatus);
@@ -71,7 +71,7 @@ GLenum Shader::getShaderType() const
     return _shaderType;
 }
 
-bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile)
+bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile) const
 {
     std::ifstream file(fileName);
 
@@ -86,7 +86,7 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
     auto normFileName = string_utils::normalizeSlashes(fileName, slashCharacter);
 
     size_t slashIndex = -1;
-    for (int i = int(fileName.size()) - 1; i >= 0; i--)
+    for (int i = static_cast<int>(fileName.size()) - 1; i >= 0; i--)
     {
         if (fileName[i] == slashCharacter)
         {

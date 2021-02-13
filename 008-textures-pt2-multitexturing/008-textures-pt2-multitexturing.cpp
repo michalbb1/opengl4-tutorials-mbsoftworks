@@ -109,7 +109,7 @@ void OpenGLWindow008::initializeScene()
 	shapesVBO.addRawData(static_geometry::pyramidVertices, sizeof(static_geometry::pyramidVertices));
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), static_cast<void*>(0));
 
 	// Setup texture coordinates next
 	texCoordsVBO.createVBO();
@@ -120,7 +120,7 @@ void OpenGLWindow008::initializeScene()
 	
 	texCoordsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), static_cast<void*>(0));
 
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);

@@ -51,7 +51,7 @@ void Cylinder::initializeData()
     _vbo.createVBO(getVertexByteSize() * _numVerticesTotal);
 
     // Pre-calculate sines / cosines for given number of slices
-    const auto sliceAngleStep = 2.0f * glm::pi<float>() / float(_numSlices);
+    const auto sliceAngleStep = 2.0f * glm::pi<float>() / static_cast<float>(_numSlices);
     auto currentSliceAngle = 0.0f;
     std::vector<float> sines, cosines;
     for (auto i = 0; i <= _numSlices; i++)
@@ -106,7 +106,7 @@ void Cylinder::initializeData()
     {
         // Pre-calculate step size in texture coordinate U
         // I have decided to map the texture twice around cylinder, looks fine
-        const auto sliceTextureStepU = 2.0f / float(_numSlices);
+        const auto sliceTextureStepU = 2.0f / static_cast<float>(_numSlices);
 
         auto currentSliceTexCoordU = 0.0f;
         for (auto i = 0; i <= _numSlices; i++)

@@ -5,7 +5,6 @@
 // Project
 #include "plainGround.h"
 
-#include "../textureManager.h"
 #include "../shaderProgramManager.h"
 
 namespace static_meshes_3D {
@@ -50,8 +49,8 @@ void PlainGround::initializeData()
     glGenVertexArrays(1, &_vao);
     glBindVertexArray(_vao);
 
-    const int numVertices = 4;
-    int vertexByteSize = getVertexByteSize();
+    const auto numVertices = 4;
+    const auto vertexByteSize = getVertexByteSize();
     _vbo.createVBO(vertexByteSize * numVertices);
     _vbo.bindVBO();
 

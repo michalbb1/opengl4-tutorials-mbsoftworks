@@ -3,11 +3,7 @@
 // STL
 #include <string>
 
-// GLM
-#include <glm/glm.hpp>
-
 // Project
-#include "stringUtils.h"
 #include "OpenGLWindow.h"
 #include "static_meshes_2D/primitives/quad.h"
 #include "shaderProgram.h"

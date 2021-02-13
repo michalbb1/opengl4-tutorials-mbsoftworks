@@ -75,32 +75,30 @@ void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
     _bytesAdded = 0;
 }
 
-void* VertexBufferObject::mapBufferToMemory(GLenum usageHint)
+void* VertexBufferObject::mapBufferToMemory(GLenum usageHint) const
 {
-    if (!_isDataUploaded)
-    {
+    if (!_isDataUploaded) {
         return nullptr;
     }
 
     return glMapBuffer(_bufferType, usageHint);
 }
 
-void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length)
+void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length) const
 {
-    if (!_isDataUploaded)
-    {
+    if (!_isDataUploaded) {
         return nullptr;
     }
 
     return glMapBufferRange(_bufferType, offset, length, usageHint);
 }
 
-void VertexBufferObject::unmapBuffer()
+void VertexBufferObject::unmapBuffer() const
 {
     glUnmapBuffer(_bufferType);
 }
 
-GLuint VertexBufferObject::getBufferID()
+GLuint VertexBufferObject::getBufferID() const
 {
     return _bufferID;
 }

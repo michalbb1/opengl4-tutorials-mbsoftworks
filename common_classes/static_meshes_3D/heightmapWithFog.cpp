@@ -2,10 +2,6 @@
 #include <iostream>
 #include <random>
 
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 // Project
 #include "heightmapWithFog.h"
 
@@ -81,14 +77,14 @@ void HeightmapWithFog::renderMultilayered(const std::vector<std::string>& textur
     // Bind chosen textures first
     const auto& tm = TextureManager::getInstance();
     auto& heightmapShaderProgram = getMultiLayerShaderProgramWithFog();
-    for (auto i = 0; i < int(textureKeys.size()); i++)
+    for (auto i = 0; i < static_cast<int>(textureKeys.size()); i++)
     {
         tm.getTexture(textureKeys[i]).bind(i);
         heightmapShaderProgram[Heightmap::ShaderConstants::terrainSampler(i)] = i;
     }
 
     // Set uniform levels
-    heightmapShaderProgram[Heightmap::ShaderConstants::numLevels()] = int(levels.size());
+    heightmapShaderProgram[Heightmap::ShaderConstants::numLevels()] = static_cast<int>(levels.size());
     heightmapShaderProgram[Heightmap::ShaderConstants::levels()] = levels;
 
     // Finally render heightmap

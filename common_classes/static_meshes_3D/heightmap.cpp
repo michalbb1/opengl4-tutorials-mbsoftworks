@@ -69,8 +69,8 @@ void Heightmap::createFromHeightData(const std::vector<std::vector<float>>& heig
     }
 
     _heightData = heightData;
-    _rows = int(_heightData.size());
-    _columns = int(_heightData[0].size());
+    _rows = static_cast<int>(_heightData.size());
+    _columns = static_cast<int>(_heightData[0].size());
     _numVertices = _rows * _columns;
 
     // First, prepare VAO and VBO for vertex data
@@ -144,14 +144,14 @@ void Heightmap::renderMultilayered(const std::vector<std::string>& textureKeys, 
     // Bind chosen textures first
     const auto& tm = TextureManager::getInstance();
     auto& heightmapShaderProgram = getMultiLayerShaderProgram();
-    for (auto i = 0; i < int(textureKeys.size()); i++)
+    for (auto i = 0; i < static_cast<int>(textureKeys.size()); i++)
     {
         tm.getTexture(textureKeys[i]).bind(i);
         heightmapShaderProgram[Heightmap::ShaderConstants::terrainSampler(i)] = i;
     }
 
     // Set uniform levels
-    heightmapShaderProgram[Heightmap::ShaderConstants::numLevels()] = int(levels.size());
+    heightmapShaderProgram[Heightmap::ShaderConstants::numLevels()] = static_cast<int>(levels.size());
     heightmapShaderProgram[Heightmap::ShaderConstants::levels()] = levels;
 
     // Finally render heightmap
@@ -194,8 +194,8 @@ float Heightmap::getRenderedHeightAtPosition(const glm::vec3& renderSize, const 
     const auto halfWidth = renderSize.x / 2.0f;
     const auto halfDepth = renderSize.z / 2.0f;
 
-    const auto row = int(_rows * (position.z + halfDepth) / renderSize.z);
-    const auto column = int(_columns * (position.x + halfWidth) / renderSize.x);
+    const auto row = static_cast<int>(_rows * (position.z + halfDepth) / renderSize.z);
+    const auto column = static_cast<int>(_columns * (position.x + halfWidth) / renderSize.x);
 
     return getHeight(row, column) * renderSize.y;
 }
@@ -228,7 +228,7 @@ std::vector<std::vector<float>> Heightmap::generateRandomHeightData(const HillAl
                 const auto r2 = hillRadius * hillRadius; // r*r term
                 const auto x2x1 = hillCenterCol - c; // (x2-x1) term
                 const auto y2y1 = hillCenterRow - r; // (y2-y1) term
-                const auto height = float(r2 - x2x1 * x2x1 - y2y1 * y2y1);
+                const auto height = static_cast<float>(r2 - x2x1 * x2x1 - y2y1 * y2y1);
                 if (height < 0.0f) {
                     continue;
                 }
@@ -261,7 +261,7 @@ std::vector<std::vector<float>> Heightmap::getHeightDataFromImage(const std::str
     {
         for (auto j = 0; j < width; j++)
         {
-            result[i][j] = float(*pixelPtr) / 255.0f;
+            result[i][j] = static_cast<float>(*pixelPtr) / 255.0f;
             pixelPtr += bytesPerPixel;
         }
     }
@@ -278,8 +278,8 @@ void Heightmap::setUpVertices()
     {
         for (auto j = 0; j < _columns; j++)
         {
-            const auto factorRow = float(i) / float(_rows - 1);
-            const auto factorColumn = float(j) / float(_columns - 1);
+            const auto factorRow = static_cast<float>(i) / static_cast<float>(_rows - 1);
+            const auto factorColumn = static_cast<float>(j) / static_cast<float>(_columns - 1);
             const auto& fVertexHeight = _heightData[i][j];
             _vertices[i][j] = glm::vec3(-0.5f + factorColumn, fVertexHeight, -0.5f + factorRow);
         }

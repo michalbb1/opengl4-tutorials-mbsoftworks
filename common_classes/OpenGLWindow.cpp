@@ -8,7 +8,7 @@ std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
 OpenGLWindow::OpenGLWindow()
 {
-    for (bool& kwp : _keyWasPressed)
+    for (auto& kwp : _keyWasPressed)
     {
         kwp = false;
     }
@@ -134,7 +134,7 @@ glm::mat4 OpenGLWindow::getOrthoProjectionMatrix() const
 
 float OpenGLWindow::sof(float value) const
 {
-    return value * float(_timeDelta);
+    return value * static_cast<float>(_timeDelta);
 }
 
 double OpenGLWindow::sof(double value) const
@@ -178,8 +178,8 @@ void OpenGLWindow::recalculateProjectionMatrix()
 {
     int width, height;
     glfwGetWindowSize(getWindow(), &width, &height);
-    _projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1500.0f);
-    _orthoMatrix = glm::ortho(0.0f, float(width), 0.0f, float(height));
+    _projectionMatrix = glm::perspective(45.0f, static_cast<float>(width) / static_cast<float>(height), 0.5f, 1500.0f);
+    _orthoMatrix = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
 }
 
 void OpenGLWindow::updateDeltaTimeAndFPS()

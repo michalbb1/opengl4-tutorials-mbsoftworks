@@ -1,8 +1,5 @@
 #pragma once
 
-// GLAD
-#include <glad/glad.h>
-
 // GLM
 #include <glm/glm.hpp>
 

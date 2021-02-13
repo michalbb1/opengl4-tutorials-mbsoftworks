@@ -114,7 +114,7 @@ private:
      *
      * @return True, if the loading has been successful, or false otherwise.
      */
-    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false);
+    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false) const;
 
     GLuint _shaderID; // OpenGL-assigned shader ID
     GLenum _shaderType; // Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...)

@@ -1,8 +1,5 @@
 #pragma once
 
-// STL
-#include <vector>
-
 // GLAD
 #include <glad/glad.h>
 
@@ -41,7 +38,7 @@ public:
      *
      * @param bindingPoint  Binding point to bind whole buffer to
      */
-    void bindBufferBaseToBindingPoint(const GLuint bindingPoint);
+    void bindBufferBaseToBindingPoint(const GLuint bindingPoint) const;
 
     /**
     * Gets OpenGL-assigned buffer ID.

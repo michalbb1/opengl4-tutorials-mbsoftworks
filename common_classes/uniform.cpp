@@ -82,7 +82,7 @@ Uniform& Uniform::operator=(const float floatValue)
 
 Uniform& Uniform::operator=(const std::vector<float>& floatValues)
 {
-    set(floatValues.data(), int(floatValues.size()));
+    set(floatValues.data(), static_cast<int>(floatValues.size()));
     return *this;
 }
 
@@ -169,5 +169,5 @@ void Uniform::set(const glm::mat4& matrix)
 
 void Uniform::set(const glm::mat4* matrices, int count)
 {
-    glUniformMatrix4fv(_location, 1, false, (GLfloat*)matrices);
+    glUniformMatrix4fv(_location, count, false, (GLfloat*)matrices);
 }

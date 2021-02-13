@@ -56,21 +56,21 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 
     if (hasPositions())
     {
-        for (auto i = 0; i < scene->mNumMeshes; i++)
+        for (size_t i = 0; i < scene->mNumMeshes; i++)
         {
             const auto meshPtr = scene->mMeshes[i];
             auto vertexCountMesh = 0;
             _meshStartIndices.push_back(vertexCount);
             _meshMaterialIndices.push_back(meshPtr->mMaterialIndex);
 
-            for (auto j = 0; j < meshPtr->mNumFaces; j++)
+            for (size_t j = 0; j < meshPtr->mNumFaces; j++)
             {
                 const auto& face = meshPtr->mFaces[j];
                 if (face.mNumIndices != 3) {
                     continue; // Skip non-triangle faces for now
                 }
 
-                for (auto k = 0; k < face.mNumIndices; k++)
+                for (size_t k = 0; k < face.mNumIndices; k++)
                 {
                     const auto& position = meshPtr->mVertices[face.mIndices[k]];
                     _vbo.addData(glm::vec3(modelTransformMatrix * glm::vec4(position.x, position.y, position.z, 1.0f)));
@@ -86,17 +86,17 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
 
     if (hasTextureCoordinates())
     {
-        for (auto i = 0; i < scene->mNumMeshes; i++)
+        for (size_t i = 0; i < scene->mNumMeshes; i++)
         {
             const auto meshPtr = scene->mMeshes[i];
-            for (auto j = 0; j < meshPtr->mNumFaces; j++)
+            for (size_t j = 0; j < meshPtr->mNumFaces; j++)
             {
                 const auto& face = meshPtr->mFaces[j];
                 if (face.mNumIndices != 3) {
                     continue; // Skip non-triangle faces for now
                 }
 
-                for (auto k = 0; k < face.mNumIndices; k++)
+                for (size_t k = 0; k < face.mNumIndices; k++)
                 {
                     const auto& textureCoord = meshPtr->mTextureCoords[0][face.mIndices[k]];
                     _vbo.addRawData(&textureCoord, sizeof(aiVector2D));
@@ -108,17 +108,17 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
     if (hasNormals())
     {
         const auto normalMatrix = glm::transpose(glm::inverse(glm::mat3(modelTransformMatrix)));
-        for (auto i = 0; i < scene->mNumMeshes; i++)
+        for (size_t i = 0; i < scene->mNumMeshes; i++)
         {
             const auto meshPtr = scene->mMeshes[i];
-            for (auto j = 0; j < meshPtr->mNumFaces; j++)
+            for (size_t j = 0; j < meshPtr->mNumFaces; j++)
             {
                 const auto& face = meshPtr->mFaces[j];
                 if (face.mNumIndices != 3) {
                     continue; // Skip non-triangle faces for now
                 }
 
-                for (auto k = 0; k < face.mNumIndices; k++)
+                for (size_t k = 0; k < face.mNumIndices; k++)
                 {
                     const auto& normal = meshPtr->HasNormals() ? meshPtr->mNormals[face.mIndices[k]] : aiVector3D(0.0f, 1.0f, 0.0f);
                     _vbo.addData(glm::normalize(normalMatrix * glm::vec3(normal.x, normal.y, normal.z)));
@@ -127,7 +127,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
         }
     }
 
-    for(auto i = 0; i < scene->mNumMaterials; i++)
+    for(size_t i = 0; i < scene->mNumMaterials; i++)
     {
         const auto materialPtr = scene->mMaterials[i];
         aiString aiTexturePath;
@@ -138,7 +138,7 @@ bool AssimpModel::loadModelFromFile(const std::string& filePath, const std::stri
             if (materialPtr->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
             {
                 const std::string textureFileName = aiStringToStdString(aiTexturePath);
-                loadMaterialTexture(i, textureFileName);
+                loadMaterialTexture(static_cast<int>(i), textureFileName);
             }
         }
     }
@@ -163,7 +163,7 @@ void AssimpModel::render() const
     glBindVertexArray(_vao);
 
     std::string lastUsedTextureKey = "";
-    for(auto i = 0; i < _meshStartIndices.size(); i++)
+    for(size_t i = 0; i < _meshStartIndices.size(); i++)
     {
         const auto usedMaterialIndex = _meshMaterialIndices[i];
         if (_materialTextureKeys.count(usedMaterialIndex) > 0)
@@ -172,6 +172,8 @@ void AssimpModel::render() const
             if (textureKey != lastUsedTextureKey) {
                 TextureManager::getInstance().getTexture(textureKey).bind();
             }
+
+            lastUsedTextureKey = textureKey;
         }
 
         glDrawArrays(GL_TRIANGLES, _meshStartIndices[i], _meshVerticesCount[i]);
@@ -185,7 +187,7 @@ void AssimpModel::renderPoints() const
     }
 
     glBindVertexArray(_vao);
-    for (auto i = 0; i < _meshStartIndices.size(); i++) {
+    for (size_t i = 0; i < _meshStartIndices.size(); i++) {
         glDrawArrays(GL_POINTS, _meshStartIndices[i], _meshVerticesCount[i]);
     }
 }

@@ -238,7 +238,7 @@ void TransformFeedbackParticleSystem::generateOpenGLObjects()
         glBindBuffer(GL_ARRAY_BUFFER, particlesVBOs_[i]);
 
         GLsizeiptr byteOffset = 0;
-        for (auto j = 0; j < int(recordedVariables_.size()); j++)
+        for (size_t j = 0; j < recordedVariables_.size(); j++)
         {
             recordedVariables_[j].enableAndSetupVertexAttribPointer(j, particleByteSize, byteOffset);
             byteOffset += recordedVariables_[j].getByteSize();
@@ -253,7 +253,7 @@ void TransformFeedbackParticleSystem::generateOpenGLObjects()
         glBindBuffer(GL_ARRAY_BUFFER, particlesVBOs_[i]);
 
         GLsizeiptr byteOffset = 0;
-        for (auto j = 0; j < int(recordedVariables_.size()); j++)
+        for (size_t j = 0; j < recordedVariables_.size(); j++)
         {
             // Enable vertex attribute only if it's needed for rendering
             // Some properties (like type of particle or velocity might not be needed)

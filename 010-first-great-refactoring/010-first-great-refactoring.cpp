@@ -11,7 +11,6 @@
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
-#include "../common_classes/vertexBufferObject.h"
 #include "../common_classes/staticGeometry.h"
 #include "../common_classes/flyingCamera.h"
 #include "../common_classes/texture.h"

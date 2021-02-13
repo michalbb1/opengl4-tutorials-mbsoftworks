@@ -8,7 +8,6 @@
 
 // Project
 #include "../shaderProgram.h"
-#include "staticMesh3D.h"
 #include "primitives/cube.h"
 
 namespace static_meshes_3D {
@@ -43,7 +42,7 @@ private:
      *
      * @return Combined directory path, side name and image extension.
      */
-    std::string getSideFileName(const int sideBit) const;
+    static std::string getSideFileName(const int sideBit);
 
     /**
      * Gets texture key of a specified skybox side.

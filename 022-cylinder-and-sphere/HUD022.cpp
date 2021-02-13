@@ -4,7 +4,6 @@
 // Project
 #include "HUD022.h"
 
-#include "../common_classes/textureManager.h"
 #include "../common_classes/matrixManager.h"
 #include "../common_classes/ostreamUtils.h"
 

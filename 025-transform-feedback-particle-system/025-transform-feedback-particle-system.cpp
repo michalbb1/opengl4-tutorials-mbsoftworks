@@ -1,7 +1,6 @@
 // STL
 #include <iostream>
 #include <memory>
-#include <deque>
 
 // GLM
 #include <glm/gtc/matrix_transform.hpp>
