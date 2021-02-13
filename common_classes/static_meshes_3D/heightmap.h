@@ -12,11 +12,8 @@
 // Project
 #include "../shaderProgram.h"
 #include "../vertexBufferObject.h"
-#include "../texture.h"
 
 #include "staticMeshIndexed3D.h"
-#include "primitives/cube.h"
-#include "primitives/pyramid.h"
 
 namespace static_meshes_3D {
 

@@ -1,4 +1,5 @@
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "002-first-shader.h"
 
 #include "../common_classes/shader.h"
 #include "../common_classes/shaderProgram.h"
@@ -10,7 +11,7 @@ VertexBufferObject shapesVBO;
 
 GLuint mainVAO;
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow002::initializeScene()
 {
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
@@ -49,7 +50,7 @@ void OpenGLWindow::initializeScene()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow002::renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -60,7 +61,14 @@ void OpenGLWindow::renderScene()
 	glDrawArrays(GL_TRIANGLE_STRIP, 3, 4);
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow002::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+}
+
+void OpenGLWindow002::releaseScene()
 {
 	mainProgram.deleteProgram();
 
@@ -70,15 +78,4 @@ void OpenGLWindow::releaseScene()
 	shapesVBO.deleteVBO();
 
 	glDeleteVertexArrays(1, &mainVAO);
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE))
-		closeWindow();
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

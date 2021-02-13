@@ -1,11 +1,17 @@
+// STL
 #include <iostream>
 #include <memory>
 #include <deque>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "024-uniform-buffer-object.h"
+#include "HUD024.h"
+#include "pointLightExtended.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -29,11 +35,6 @@
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/shader_structs/pointLight.h"
 
-#include "pointLightExtended.h"
-#include "HUD024.h"
-
-constexpr int MATRICES_BLOCK_BINDING_POINT = 0;
-constexpr int POINT_LIGHTS_BLOCK_BINDING_POINT = 1;
 constexpr int MAX_POINT_LIGHTS = 20;
 
 FlyingCamera camera(glm::vec3(160.0f, 50.0f, -150.0f), glm::vec3(160.0f, 50.0f, -149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
@@ -74,17 +75,19 @@ std::unique_ptr<UniformBufferObject> uboMatrices; // UBO for matrices
 std::deque<PointLightExtended> pointLights; // All point lights are stored here
 std::unique_ptr<UniformBufferObject> uboPointLights; // UBO for point lights
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow024::initializeScene()
 {
 	try
 	{
+		// Create UBO for matrices and bind it to the MATRICES_BLOCK_BINDING_POINT
         uboMatrices = std::make_unique<UniformBufferObject>();
         uboMatrices->createUBO(sizeof(glm::mat4) * 2);
-        uboMatrices->bindBufferBaseToBindingPoint(MATRICES_BLOCK_BINDING_POINT);
+        uboMatrices->bindBufferBaseToBindingPoint(UniformBlockBindingPoints::MATRICES);
 
+		// Create UBO for point lights and bind it to the POINT_LIGHTS_BLOCK_BINDING_POINT
         uboPointLights = std::make_unique<UniformBufferObject>();
         uboPointLights->createUBO(MAX_POINT_LIGHTS * shader_structs::PointLight::getDataSizeStd140());
-        uboPointLights->bindBufferBaseToBindingPoint(POINT_LIGHTS_BLOCK_BINDING_POINT);
+        uboPointLights->bindBufferBaseToBindingPoint(UniformBlockBindingPoints::POINT_LIGHTS);
 
 		auto& sm = ShaderManager::getInstance();
 		auto& spm = ShaderProgramManager::getInstance();
@@ -96,7 +99,6 @@ void OpenGLWindow::initializeScene()
         sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
 		sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
         sm.loadFragmentShader(ShaderKeys::pointLight(), "data/shaders/lighting/pointLight.frag");
-		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut024_main"));
@@ -106,17 +108,16 @@ void OpenGLWindow::initializeScene()
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::specularHighlight()));
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::pointLight()));
         
-        auto& customMultilayerHeightmapShaderProgram = spm.createShaderProgram(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY);
+        auto& heightmapShaderProgram = spm.createShaderProgram(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY);
         sm.loadVertexShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/tut024-ubos/multilayer_heightmap.vert");
         sm.loadFragmentShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY, "data/shaders/tut024-ubos/multilayer_heightmap.frag");
 
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getVertexShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
+        heightmapShaderProgram.addShaderToProgram(sm.getVertexShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
+        heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(static_meshes_3D::Heightmap::MULTILAYER_SHADER_PROGRAM_KEY));
 
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::pointLight()));
-        customMultilayerHeightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::utility()));
+        heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
+        heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
+        heightmapShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::pointLight()));
 		 
 		skybox = std::make_unique<static_meshes_3D::Skybox>("data/skyboxes/jajsundown1", "jpg");
 		hud = std::make_unique<HUD024>(*this);
@@ -141,13 +142,12 @@ void OpenGLWindow::initializeScene()
 		spm.linkAllPrograms();
 
         // Bind uniform blocks with binding points for main program
-        auto& mainProgram = spm.getShaderProgram("main");
-        mainProgram.bindUniformBlockToBindingPoint("MatricesBlock", MATRICES_BLOCK_BINDING_POINT);
-        mainProgram.bindUniformBlockToBindingPoint("PointLightsBlock", POINT_LIGHTS_BLOCK_BINDING_POINT);
+		mainShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", UniformBlockBindingPoints::MATRICES);
+		mainShaderProgram.bindUniformBlockToBindingPoint("PointLightsBlock", UniformBlockBindingPoints::POINT_LIGHTS);
        
         // Bind uniform blocks with binding points for custom multilayer heightmap shader program
-        customMultilayerHeightmapShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", MATRICES_BLOCK_BINDING_POINT);
-        customMultilayerHeightmapShaderProgram.bindUniformBlockToBindingPoint("PointLightsBlock", POINT_LIGHTS_BLOCK_BINDING_POINT);
+        heightmapShaderProgram.bindUniformBlockToBindingPoint("MatricesBlock", UniformBlockBindingPoints::MATRICES);
+        heightmapShaderProgram.bindUniformBlockToBindingPoint("PointLightsBlock", UniformBlockBindingPoints::POINT_LIGHTS);
 	}
 	catch (const std::runtime_error& ex)
 	{
@@ -165,7 +165,7 @@ void OpenGLWindow::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow024::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -212,7 +212,7 @@ void OpenGLWindow::renderScene()
     SamplerManager::getInstance().getSampler("main").bind();
 	mainProgram[ShaderConstants::eyePosition()] = camera.getEye();
 	shinyMaterial.setUniform(mainProgram, ShaderConstants::material());
-    mainProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
+    mainProgram[ShaderConstants::numPointLights()] = static_cast<int>(pointLights.size());
 	TextureManager::getInstance().getTexture("scifi_metal").bind(0);
 
 	// Render triple tori on their positions
@@ -276,7 +276,7 @@ void OpenGLWindow::renderScene()
     shader_structs::DiffuseLight::none().setUniform(heightmapShaderProgram, ShaderConstants::diffuseLight());
 
     // Set number of point lights
-    heightmapShaderProgram[ShaderConstants::numPointLights()] = (int)pointLights.size();
+    heightmapShaderProgram[ShaderConstants::numPointLights()] = static_cast<int>(pointLights.size());
 
     // Finally set heightmap model matrix and render it
     const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
@@ -284,43 +284,22 @@ void OpenGLWindow::renderScene()
     heightmap->renderMultilayered({ "cobblestone_mossy", "grass", "rocky_terrain" }, { 0.2f, 0.3f, 0.55f, 0.7f });
 
 	// Render HUD
-    hud->renderHUD(ambientLight, *pointLights.begin(), (int)pointLights.size());
-	
-	// Update variables
-	rotationAngle += sof(glm::radians(30.0f));
+    hud->renderHUD(ambientLight, *pointLights.begin(), static_cast<int>(pointLights.size()));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow024::updateScene()
 {
-	torus.reset();
-	skybox.reset();
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
 
-	ShaderManager::getInstance().clearShaderCache();
-	ShaderProgramManager::getInstance().clearShaderProgramCache();
-	TextureManager::getInstance().clearTextureCache();
-	SamplerManager::getInstance().clearSamplerCache();
-	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
 
-    uboMatrices.reset();
-    uboPointLights.reset();
-
-    heightmap.reset();
-	hud.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		shinyMaterial.isEnabled = !shinyMaterial.isEnabled;
-	}
+    if (keyPressedOnce(GLFW_KEY_X)) {
+        shinyMaterial.isEnabled = !shinyMaterial.isEnabled;
+    }
 
     auto& firstPointLight = *pointLights.begin();
 
@@ -410,23 +389,39 @@ void OpenGLWindow::handleInput()
 
     if (keyPressedOnce('R'))
     {
-        while(pointLights.size() != 1) {
+        while (pointLights.size() != 1) {
             pointLights.pop_front();
         }
     }
 
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update variables
+    rotationAngle += sof(glm::radians(30.0f));
 }
 
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
+void OpenGLWindow024::releaseScene()
 {
-	glViewport(0, 0, width, height);
+	torus.reset();
+	skybox.reset();
+
+	ShaderManager::getInstance().clearShaderCache();
+	ShaderProgramManager::getInstance().clearShaderProgramCache();
+	TextureManager::getInstance().clearTextureCache();
+	SamplerManager::getInstance().clearSamplerCache();
+	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
+
+    uboMatrices.reset();
+    uboPointLights.reset();
+
+    heightmap.reset();
+	hud.reset();
 }

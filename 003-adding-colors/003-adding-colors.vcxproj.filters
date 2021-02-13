@@ -71,5 +71,8 @@
     <ClInclude Include="..\common_classes\uniform.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="003-adding-colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

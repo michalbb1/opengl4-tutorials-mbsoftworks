@@ -58,8 +58,8 @@ void Pyramid::initializeData()
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 
-	const int numVertices = 12;
-	int vertexByteSize = getVertexByteSize();	
+	const auto numVertices = 12;
+    const auto vertexByteSize = getVertexByteSize();	
 	_vbo.createVBO(vertexByteSize * numVertices);
 	_vbo.bindVBO();
 	

@@ -66,7 +66,7 @@ public:
      *
      * @return Pointer to the mapped data, or nullptr, if something fails.
      */
-    void* mapBufferToMemory(GLenum usageHint);
+    void* mapBufferToMemory(GLenum usageHint) const;
 
     /**
      * Maps buffer sub-data to a memory pointer.
@@ -77,17 +77,17 @@ public:
      * 
      * @return Pointer to the mapped data, or nullptr, if something fails.
      */
-    void* mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length);
+    void* mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length) const;
 
     /**
      * Unmaps buffer from memory (must have been mapped previously).
      */
-    void unmapBuffer();
+    void unmapBuffer() const;
 
     /**
      * Gets OpenGL-assigned buffer ID.
      */
-    GLuint getBufferID();
+    GLuint getBufferID() const;
 
     /**
      * Gets buffer size (in bytes).

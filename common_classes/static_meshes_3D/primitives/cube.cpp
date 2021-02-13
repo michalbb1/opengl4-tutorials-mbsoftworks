@@ -101,8 +101,8 @@ void Cube::initializeData()
     glGenVertexArrays(1, &_vao);
     glBindVertexArray(_vao);
 
-    const int numVertices = 36;
-    int vertexByteSize = getVertexByteSize();	
+    const auto numVertices = 36;
+    const auto vertexByteSize = getVertexByteSize();
     _vbo.createVBO(vertexByteSize * numVertices);
     _vbo.bindVBO();
     

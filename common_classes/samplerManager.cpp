@@ -1,3 +1,6 @@
+// STL
+#include <stdexcept>
+
 // Project
 #include "samplerManager.h"
 
@@ -7,11 +10,11 @@ SamplerManager& SamplerManager::getInstance()
     return sm;
 }
 
-Sampler& SamplerManager::createSampler(const std::string & key, const MagnificationFilter magnificationFilter, const MinificationFilter minificationFilter)
+Sampler& SamplerManager::createSampler(const std::string& key, const MagnificationFilter magnificationFilter, const MinificationFilter minificationFilter)
 {
     if (containsSampler(key))
     {
-        auto msg = "Sampler with key '" + key + "' already exists!";
+        const auto msg = "Sampler with key '" + key + "' already exists!";
         throw std::runtime_error(msg.c_str());
     }
 
@@ -29,7 +32,7 @@ Sampler& SamplerManager::getSampler(const std::string& key) const
 {
     if (!containsSampler(key))
     {
-        auto msg = "Attempting to get non-existing sampler with key '" + key + "'!";
+        const auto msg = "Attempting to get non-existing sampler with key '" + key + "'!";
         throw std::runtime_error(msg.c_str());
     }
 

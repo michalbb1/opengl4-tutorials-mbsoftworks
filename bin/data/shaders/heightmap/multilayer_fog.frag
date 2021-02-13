@@ -4,7 +4,6 @@ precision highp float;
 
 #include "../lighting/ambientLight.frag"
 #include "../lighting/diffuseLight.frag"
-#include "../common/utility.frag"
 #include "../fog/fog.frag"
 
 layout(location = 0) out vec4 outputColor;
@@ -68,7 +67,7 @@ void main()
     }
 
     vec4 objectColor = textureColor*color;
-    vec3 lightColor = sumColors(getAmbientLightColor(ambientLight), getDiffuseLightColor(diffuseLight, normal));
+    vec3 lightColor = getAmbientLightColor(ambientLight) + getDiffuseLightColor(diffuseLight, normal);
 
     outputColor = objectColor*vec4(lightColor, 1.0);
     

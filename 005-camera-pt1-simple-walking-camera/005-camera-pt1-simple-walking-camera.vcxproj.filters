@@ -30,9 +30,6 @@
     <ClCompile Include="005-camera-pt1-simple-walking-camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
     </ClCompile>
@@ -56,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="..\common_classes\simpleWalkingCamera.cpp">
       <Filter>Source Files\common_classes</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\simpleWalkingCamera.h">
       <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="005-camera-pt1-simple-walking-camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

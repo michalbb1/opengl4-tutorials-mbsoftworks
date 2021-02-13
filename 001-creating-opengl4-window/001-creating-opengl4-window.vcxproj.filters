@@ -47,5 +47,8 @@
     <ClInclude Include="..\common_classes\OpenGLWindow.h">
       <Filter>Header Files\common_classes</Filter>
     </ClInclude>
+    <ClInclude Include="001-creating-opengl4-window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,12 +1,8 @@
 #pragma once
 
-// STL
-#include <string>
-
 // Project
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/HUD.h"
-#include "../common_classes/texture.h"
 
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/pointLight.h"

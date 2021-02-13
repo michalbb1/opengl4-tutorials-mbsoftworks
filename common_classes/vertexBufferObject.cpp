@@ -35,9 +35,14 @@ void VertexBufferObject::bindVBO(GLenum bufferType)
 void VertexBufferObject::addRawData(const void* ptrData, size_t dataSize, int repeat)
 {
     const auto bytesToAdd = dataSize * repeat;
-    if (_bytesAdded + bytesToAdd > _rawData.capacity())
+    const auto requiredCapacity = _bytesAdded + bytesToAdd;
+    if (requiredCapacity > _rawData.capacity())
     {
-        const auto newCapacity = _rawData.capacity() * 2;
+        auto newCapacity = _rawData.capacity() * 2;
+        while (newCapacity < requiredCapacity) {
+            newCapacity *= 2;
+        }
+
         std::vector<unsigned char> newRawData;
         newRawData.reserve(newCapacity);
         memcpy(newRawData.data(), _rawData.data(), _bytesAdded);
@@ -70,32 +75,30 @@ void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
     _bytesAdded = 0;
 }
 
-void* VertexBufferObject::mapBufferToMemory(GLenum usageHint)
+void* VertexBufferObject::mapBufferToMemory(GLenum usageHint) const
 {
-    if (!_isDataUploaded)
-    {
+    if (!_isDataUploaded) {
         return nullptr;
     }
 
     return glMapBuffer(_bufferType, usageHint);
 }
 
-void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length)
+void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length) const
 {
-    if (!_isDataUploaded)
-    {
+    if (!_isDataUploaded) {
         return nullptr;
     }
 
     return glMapBufferRange(_bufferType, offset, length, usageHint);
 }
 
-void VertexBufferObject::unmapBuffer()
+void VertexBufferObject::unmapBuffer() const
 {
     glUnmapBuffer(_bufferType);
 }
 
-GLuint VertexBufferObject::getBufferID()
+GLuint VertexBufferObject::getBufferID() const
 {
     return _bufferID;
 }

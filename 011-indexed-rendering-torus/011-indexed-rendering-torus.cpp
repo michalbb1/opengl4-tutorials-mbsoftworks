@@ -1,9 +1,12 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "011-indexed-rendering-torus.h"
 
 #include "../common_classes/flyingCamera.h"
 
@@ -37,7 +40,7 @@ std::vector<glm::vec3> objectPositions
 	glm::vec3(30.0f, 0.0f, 50.0f)
 };
 
-void OpenGLWindow::initializeScene()
+void OpenGLWindow011::initializeScene()
 {
 	glClearColor(0.18f, 0.0f, 0.356f, 1.0f);
 
@@ -76,7 +79,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-void OpenGLWindow::renderScene()
+void OpenGLWindow011::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -123,19 +126,40 @@ void OpenGLWindow::renderScene()
 		TextureManager::getInstance().getTexture("metal").bind(0);
 		torus->render();
 	}
-
-	// Update window title
-	std::string windowTitleWithFPS = std::string("011.) Indexed Rendering of Torus - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
-		+ "FPS: " + std::to_string(getFPS())
-		+ ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
-
-	glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
-	
-	// Update rotation angle
-	rotationAngleRad += sof(glm::radians(135.0f));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow011::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update window title
+    std::string windowTitleWithFPS = std::string("011.) Indexed Rendering of Torus - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - ")
+        + "FPS: " + std::to_string(getFPS())
+        + ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
+
+    glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
+
+    // Update rotation angle
+    rotationAngleRad += sof(glm::radians(135.0f));
+}
+
+void OpenGLWindow011::releaseScene()
 {
 	ShaderManager::getInstance().clearShaderCache();
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
@@ -145,30 +169,4 @@ void OpenGLWindow::releaseScene()
 	pyramid.reset();
 	torus.reset();
 	plainGround.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

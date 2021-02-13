@@ -33,9 +33,6 @@
     <ClCompile Include="009-orthographic-2D-projection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_windows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common_classes\flyingCamera.cpp">
       <Filter>Source Files\common_classes</Filter>
     </ClCompile>
@@ -65,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="..\dependencies\glad\src\glad.c">
       <Filter>Source Files\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\common_classes\OpenGLWindow.h">
       <Filter>Header Files\common_classes</Filter>
+    </ClInclude>
+    <ClInclude Include="009-orthographic-2D-projection.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

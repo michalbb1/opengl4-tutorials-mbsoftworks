@@ -183,7 +183,7 @@ source_group("Source Files\\common_classes\\static_meshes_3D" FILES ${COMMON_CLA
 source_group("Source Files\\common_classes\\static_meshes_3D\\primitives" FILES ${COMMON_CLASSES_STATIC_MESHES_3D_PRIMITIVES_SOURCE_FILES})
 source_group("Source Files\\glad" FILES ${GLAD_SOURCE_FILES})
 
-source_group("Header Files" FILES ${TUTORIAL_025_SOURCE_FILES})
+source_group("Header Files" FILES ${TUTORIAL_025_HEADER_FILES})
 source_group("Header Files\\common_classes" FILES ${COMMON_CLASSES_HEADER_FILES})
 source_group("Header Files\\glad" FILES ${GLAD_HEADER_FILES})
 source_group("Header Files\\common_classes\\shader_structs" FILES ${COMMON_CLASSES_SHADER_STRUCTS_HEADER_FILES})

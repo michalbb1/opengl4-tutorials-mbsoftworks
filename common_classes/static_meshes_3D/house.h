@@ -4,13 +4,9 @@
 #include <string>
 
 // GLM
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 // Project
-#include "../vertexBufferObject.h"
-#include "../texture.h"
-
 #include "staticMesh3D.h"
 #include "primitives/cube.h"
 #include "primitives/pyramid.h"

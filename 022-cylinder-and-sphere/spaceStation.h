@@ -1,12 +1,10 @@
 #pragma once
 
 // STL
-#include <string>
 #include <memory>
 
 // Project
 #include "../common_classes/OpenGLWindow.h"
-#include "../common_classes/texture.h"
 
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/static_meshes_3D/primitives/sphere.h"

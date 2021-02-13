@@ -59,8 +59,8 @@ void HUDBase::renderTexturedQuad2D(int x, int y, int renderedWidth, int rendered
     }
 
     auto& shaderProgram = getOrtho2DShaderProgram();
-    glm::mat4 model = glm::translate(glm::mat4(1.0), glm::vec3(float(x), float(y), 0.0f));
-    model = glm::scale(model, glm::vec3(float(renderedWidth), float(renderedHeight), 1.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0), glm::vec3(static_cast<float>(x), static_cast<float>(y), 0.0f));
+    model = glm::scale(model, glm::vec3(static_cast<float>(renderedWidth), static_cast<float>(renderedHeight), 1.0f));
     shaderProgram[ShaderConstants::modelMatrix()] = model;
     
     _texturedQuad.render();

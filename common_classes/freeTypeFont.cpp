@@ -117,7 +117,7 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
             const auto rowsLeft = CHARACTERS_TEXTURE_SIZE - currentPixelPositionRow;
             const auto colsLeft = CHARACTERS_TEXTURE_SIZE - currentPixelPositionCol;
 
-            rowHeight = std::max(rowHeight, int(bmpHeight));
+            rowHeight = std::max(rowHeight, static_cast<int>(bmpHeight));
 
             if (colsLeft < bmpWidth)
             {
@@ -163,18 +163,18 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
             // You can find it here: https://www.freetype.org/freetype2/docs/glyphs/glyphs-3.html
             glm::vec2 vertices[] =
             {
-                glm::vec2(float(charProps.bearingX), float(charProps.bearingY)),
-                glm::vec2(float(charProps.bearingX), float(charProps.bearingY - charProps.height)),
-                glm::vec2(float(bmpWidth + charProps.bearingX), float(charProps.bearingY)),
-                glm::vec2(float(bmpWidth + charProps.bearingX), float(charProps.bearingY - charProps.height))
+                glm::vec2(static_cast<float>(charProps.bearingX), static_cast<float>(charProps.bearingY)),
+                glm::vec2(static_cast<float>(charProps.bearingX), static_cast<float>(charProps.bearingY - charProps.height)),
+                glm::vec2(static_cast<float>(bmpWidth + charProps.bearingX), static_cast<float>(charProps.bearingY)),
+                glm::vec2(static_cast<float>(bmpWidth + charProps.bearingX), static_cast<float>(charProps.bearingY - charProps.height))
             };
 
             glm::vec2 textureCoordinates[] =
             {
-                glm::vec2(float(currentPixelPositionCol) / float(CHARACTERS_TEXTURE_SIZE), float(currentPixelPositionRow + bmpHeight) / float(CHARACTERS_TEXTURE_SIZE)),
-                glm::vec2(float(currentPixelPositionCol) / float(CHARACTERS_TEXTURE_SIZE), float(currentPixelPositionRow) / float(CHARACTERS_TEXTURE_SIZE)),
-                glm::vec2(float(currentPixelPositionCol + bmpWidth) / float(CHARACTERS_TEXTURE_SIZE), float(currentPixelPositionRow + bmpHeight) / float(CHARACTERS_TEXTURE_SIZE)),
-                glm::vec2(float(currentPixelPositionCol + bmpWidth) / float(CHARACTERS_TEXTURE_SIZE), float(currentPixelPositionRow) / float(CHARACTERS_TEXTURE_SIZE))
+                glm::vec2(static_cast<float>(currentPixelPositionCol) / static_cast<float>(CHARACTERS_TEXTURE_SIZE), static_cast<float>(currentPixelPositionRow + bmpHeight) / static_cast<float>(CHARACTERS_TEXTURE_SIZE)),
+                glm::vec2(static_cast<float>(currentPixelPositionCol) / static_cast<float>(CHARACTERS_TEXTURE_SIZE), static_cast<float>(currentPixelPositionRow) / static_cast<float>(CHARACTERS_TEXTURE_SIZE)),
+                glm::vec2(static_cast<float>(currentPixelPositionCol + bmpWidth) / static_cast<float>(CHARACTERS_TEXTURE_SIZE), static_cast<float>(currentPixelPositionRow + bmpHeight) / static_cast<float>(CHARACTERS_TEXTURE_SIZE)),
+                glm::vec2(static_cast<float>(currentPixelPositionCol + bmpWidth) / static_cast<float>(CHARACTERS_TEXTURE_SIZE), static_cast<float>(currentPixelPositionRow) / static_cast<float>(CHARACTERS_TEXTURE_SIZE))
             };
 
             for (int i = 0; i < 4; i++)
@@ -184,7 +184,7 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
             }
 
             charProps.renderIndex = currentRenderIndex;
-            charProps.textureIndex = int(_textures.size());
+            charProps.textureIndex = static_cast<int>(_textures.size());
             currentPixelPositionCol += bmpWidth + 1;
             currentRenderIndex += 4;
             c++;
@@ -236,15 +236,15 @@ void FreeTypeFont::printInternal(int x, int y, const std::string& text, int pixe
     glm::vec2 currentPos(x, y);
     const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
     auto lastBoundTextureIndex = -1;
-    const auto scale = float(usedPixelSize) / float(_pixelSize);
+    const auto scale = static_cast<float>(usedPixelSize) / static_cast<float>(_pixelSize);
 
     glBindVertexArray(_vao);
     for(const auto& c : text)
     {
         if (c == '\n' || c == '\r')
         {
-            currentPos.x = float(x);
-            currentPos.y -= float(usedPixelSize);
+            currentPos.x = static_cast<float>(x);
+            currentPos.y -= static_cast<float>(usedPixelSize);
             continue;
         }
 
@@ -281,10 +281,10 @@ int FreeTypeFont::getTextWidth(const std::string& text, int pixelSize) const
     float result = 0.0f;
     float rowWidth = 0.0f;
     const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
-    const auto scale = float(usedPixelSize) / float(_pixelSize);
+    const auto scale = static_cast<float>(usedPixelSize) / static_cast<float>(_pixelSize);
 
     // TODO: would be nice to handle invalid characters here as well
-    for (int i = 0; i < int(text.length()); i++)
+    for (int i = 0; i < static_cast<int>(text.length()); i++)
     {
         if (text[i] == '\n' || text[i] == '\r') {
             continue;
@@ -305,15 +305,15 @@ int FreeTypeFont::getTextWidth(const std::string& text, int pixelSize) const
     }
 
     // Return ceiling of result
-    return int(ceil(result));
+    return static_cast<int>(ceil(result));
 }
 
 int FreeTypeFont::getTextHeight(int pixelSize) const
 {
     const auto usedPixelSize = pixelSize == -1 ? _pixelSize : pixelSize;
-    const auto scale = float(usedPixelSize) / float(_pixelSize);
+    const auto scale = static_cast<float>(usedPixelSize) / static_cast<float>(_pixelSize);
 
-    return int(ceil(usedPixelSize*scale));
+    return static_cast<int>(ceil(usedPixelSize * scale));
 }
 
 void FreeTypeFont::setTextColor(const glm::vec4& color)

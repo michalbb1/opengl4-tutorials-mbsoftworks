@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{92E1C92B-9303-4908-9B04-C8C992139E5D}</ProjectGuid>
+    <RootNamespace>My026camerapt3orbitcamera</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\common_properties_debug.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2019\glfw_properties.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2019\freetype2_properties.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\common_properties_release.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2019\glfw_properties.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2019\freetype2_properties.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\common_properties_debug64.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2019\glfw_properties64.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2019\freetype2_properties64.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\common_properties_release64.props" />
+    <Import Project="..\dependencies\glfw-prebuilt\vs2019\glfw_properties64.props" />
+    <Import Project="..\dependencies\freetype2-prebuilt\vs2019\freetype2_properties64.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common_classes\freeTypeFont.h" />
+    <ClInclude Include="..\common_classes\freeTypeFontManager.h" />
+    <ClInclude Include="..\common_classes\HUD.h" />
+    <ClInclude Include="..\common_classes\matrixManager.h" />
+    <ClInclude Include="..\common_classes\OpenGLWindow.h" />
+    <ClInclude Include="..\common_classes\orbitCamera.h" />
+    <ClInclude Include="..\common_classes\ostreamUtils.h" />
+    <ClInclude Include="..\common_classes\sampler.h" />
+    <ClInclude Include="..\common_classes\samplerManager.h" />
+    <ClInclude Include="..\common_classes\shader.h" />
+    <ClInclude Include="..\common_classes\shaderManager.h" />
+    <ClInclude Include="..\common_classes\shaderProgram.h" />
+    <ClInclude Include="..\common_classes\shaderProgramManager.h" />
+    <ClInclude Include="..\common_classes\shader_structs\ambientLight.h" />
+    <ClInclude Include="..\common_classes\shader_structs\diffuseLight.h" />
+    <ClInclude Include="..\common_classes\shader_structs\material.h" />
+    <ClInclude Include="..\common_classes\shader_structs\shaderStruct.h" />
+    <ClInclude Include="..\common_classes\static_meshes_2D\primitives\quad.h" />
+    <ClInclude Include="..\common_classes\static_meshes_2D\staticMesh2D.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cube.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\cylinder.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\sphere.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\primitives\torus.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\skybox.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMesh3D.h" />
+    <ClInclude Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.h" />
+    <ClInclude Include="..\common_classes\stringUtils.h" />
+    <ClInclude Include="..\common_classes\texture.h" />
+    <ClInclude Include="..\common_classes\textureManager.h" />
+    <ClInclude Include="..\common_classes\uniform.h" />
+    <ClInclude Include="..\common_classes\vertexBufferObject.h" />
+    <ClInclude Include="..\dependencies\glad\include\glad\glad.h" />
+    <ClInclude Include="..\dependencies\stb\stb_image.h" />
+    <ClInclude Include="026-camera-pt3-orbit-camera.h" />
+    <ClInclude Include="HUD026.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common_classes\freeTypeFont.cpp" />
+    <ClCompile Include="..\common_classes\freeTypeFontManager.cpp" />
+    <ClCompile Include="..\common_classes\HUD.cpp" />
+    <ClCompile Include="..\common_classes\matrixManager.cpp" />
+    <ClCompile Include="..\common_classes\OpenGLWindow.cpp" />
+    <ClCompile Include="..\common_classes\orbitCamera.cpp" />
+    <ClCompile Include="..\common_classes\sampler.cpp" />
+    <ClCompile Include="..\common_classes\samplerManager.cpp" />
+    <ClCompile Include="..\common_classes\shader.cpp" />
+    <ClCompile Include="..\common_classes\shaderManager.cpp" />
+    <ClCompile Include="..\common_classes\shaderProgram.cpp" />
+    <ClCompile Include="..\common_classes\shaderProgramManager.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\ambientLight.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\diffuseLight.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\material.cpp" />
+    <ClCompile Include="..\common_classes\shader_structs\shaderStruct.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_2D\primitives\quad.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_2D\staticMesh2D.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cube.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\cylinder.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\sphere.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\primitives\torus.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\skybox.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMesh3D.cpp" />
+    <ClCompile Include="..\common_classes\static_meshes_3D\staticMeshIndexed3D.cpp" />
+    <ClCompile Include="..\common_classes\texture.cpp" />
+    <ClCompile Include="..\common_classes\textureManager.cpp" />
+    <ClCompile Include="..\common_classes\uniform.cpp" />
+    <ClCompile Include="..\common_classes\vertexBufferObject.cpp" />
+    <ClCompile Include="..\dependencies\glad\src\glad.c" />
+    <ClCompile Include="026-camera-pt3-orbit-camera.cpp" />
+    <ClCompile Include="HUD026.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

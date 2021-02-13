@@ -1,9 +1,13 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "021-specular-highlight.h"
+#include "HUD021.h"
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -23,11 +27,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
-#include "HUD021.h"
-
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 25.0f);
 
-std::unique_ptr<static_meshes_3D::Heightmap> heightmapWithFog;
+std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
 std::unique_ptr<static_meshes_3D::Torus> torus;
 std::unique_ptr<HUD021> hud;
@@ -45,7 +47,11 @@ std::vector<glm::vec3> tripleToriPositions
 	glm::vec3(82.0f, 0.0f, 75.0f)
 };
 
-void OpenGLWindow::initializeScene()
+const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
+bool isDirectionLocked = true;
+float rotationAngle;
+
+void OpenGLWindow021::initializeScene()
 {
 	try
 	{
@@ -58,7 +64,6 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader(ShaderKeys::ambientLight(), "data/shaders/lighting/ambientLight.frag");
 		sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
 		sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
-		sm.loadFragmentShader(ShaderKeys::utility(), "data/shaders/common/utility.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
 		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut021_main"));
@@ -79,7 +84,7 @@ void OpenGLWindow::initializeScene()
 		torus = std::make_unique<static_meshes_3D::Torus>(20, 20, 8.0f, 2.0f, true, true, true);
 
 		static_meshes_3D::Heightmap::prepareMultiLayerShaderProgram();
-		heightmapWithFog = std::make_unique<static_meshes_3D::Heightmap>("data/heightmaps/tut019.png", true, true, true);
+		heightmap = std::make_unique<static_meshes_3D::Heightmap>("data/heightmaps/tut019.png", true, true, true);
 
 		spm.linkAllPrograms();
 	}
@@ -95,20 +100,7 @@ void OpenGLWindow::initializeScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-const glm::vec3 heightMapSize(200.0f, 40.0f, 200.0f);
-bool isDirectionLocked = true;
-float rotationAngle;
-
-void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
-{
-	const auto halfWidth = heightMapSize.x / 2.0f;
-	const auto halfDepth = heightMapSize.z / 2.0f;
-
-	row = int(heightmapWithFog->getRows() * (position.z + halfDepth) / heightMapSize.z);
-	column = int(heightmapWithFog->getColumns() * (position.x + halfWidth) / heightMapSize.x);
-}
-
-void OpenGLWindow::renderScene()
+void OpenGLWindow021::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -153,9 +145,8 @@ void OpenGLWindow::renderScene()
 	int i = 0;
 	for (const auto& position : tripleToriPositions)
 	{
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		const auto translateY = heightmapWithFog->getHeight(row, column)*heightMapSize.y + 11.0f;
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		const auto translateY = renderedHeight + 11.0f;
 
 		auto basicModelMatrix = glm::translate(glm::mat4(1.0f), position);
 		basicModelMatrix = glm::translate(basicModelMatrix, glm::vec3(0.0f, translateY, 0.0f));
@@ -196,16 +187,61 @@ void OpenGLWindow::renderScene()
 
 	const auto heightmapModelMatrix = glm::scale(glm::mat4(1.0f), heightMapSize);
 	heightmapShaderProgram.setModelAndNormalMatrix(heightmapModelMatrix);
-	heightmapWithFog->renderMultilayered({"snow", "rocky_terrain", "snow"}, {0.2f, 0.3f, 0.55f, 0.7f});
+	heightmap->renderMultilayered({"snow", "rocky_terrain", "snow"}, {0.2f, 0.3f, 0.55f, 0.7f});
 
 	// Render HUD
 	hud->renderHUD(material, diffuseLight.direction);
-	
-	// Update variables
-	rotationAngle += sof(glm::radians(30.0f));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow021::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    if (keyPressedOnce(GLFW_KEY_X)) {
+        material.isEnabled = !material.isEnabled;
+    }
+
+    if (keyPressed(GLFW_KEY_1)) {
+        material.specularIntensity -= sof(0.5f);
+    }
+
+    if (keyPressed(GLFW_KEY_2)) {
+        material.specularIntensity += sof(0.5f);
+    }
+
+    if (keyPressed(GLFW_KEY_3)) {
+        material.specularPower -= sof(10.0f);
+    }
+
+    if (keyPressed(GLFW_KEY_4)) {
+        material.specularPower += sof(10.0f);
+    }
+
+    if (keyPressedOnce(GLFW_KEY_L)) {
+        isDirectionLocked = !isDirectionLocked;
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update variables
+    rotationAngle += sof(glm::radians(30.0f));
+}
+
+void OpenGLWindow021::releaseScene()
 {
 	torus.reset();
 	skybox.reset();
@@ -217,55 +253,5 @@ void OpenGLWindow::releaseScene()
 	FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 
 	hud.reset();
-	heightmapWithFog.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_X)) {
-		material.isEnabled = !material.isEnabled;
-	}
-
-	if (keyPressed(GLFW_KEY_1)) {
-		material.specularIntensity -= sof(0.5f);
-	}
-
-	if (keyPressed(GLFW_KEY_2)) {
-		material.specularIntensity += sof(0.5f);
-	}
-
-	if (keyPressed(GLFW_KEY_3)) {
-		material.specularPower -= sof(10.0f);
-	}
-
-	if (keyPressed(GLFW_KEY_4)) {
-		material.specularPower += sof(10.0f);
-	}
-
-	if (keyPressedOnce(GLFW_KEY_L)) {
-		isDirectionLocked = !isDirectionLocked;
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
+	heightmap.reset();
 }

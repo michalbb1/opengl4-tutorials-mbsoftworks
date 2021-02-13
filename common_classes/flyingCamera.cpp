@@ -82,15 +82,15 @@ void FlyingCamera::update(const std::function<bool(int)>& keyInputFunc,
         strafeBy(speedCorrectionFunc(_moveSpeed));
     }
 
-    auto curMousePosition = getCursorPosFunc();
-    auto delta = _windowCenterPosition - curMousePosition;
+    const auto curMousePosition = getCursorPosFunc();
+    const auto delta = _windowCenterPosition - curMousePosition;
 
     if (delta.x != 0) {
-        rotateLeftRight(float(delta.x) * _mouseSensitivity);
+        rotateLeftRight(static_cast<float>(delta.x) * _mouseSensitivity);
     }
 
     if (delta.y != 0) {
-        rotateUpDown(float(delta.y) * _mouseSensitivity);
+        rotateUpDown(static_cast<float>(delta.y) * _mouseSensitivity);
     }
 
     setCursorPosFunc(_windowCenterPosition);
@@ -123,8 +123,8 @@ void FlyingCamera::rotateLeftRight(float angleInDegrees)
 
 void FlyingCamera::rotateUpDown(float angleInDegrees)
 {
-    glm::vec3 viewVector = getNormalizedViewVector();
-    glm::vec3 viewVectorNoY = glm::normalize(glm::vec3(viewVector.x, 0.0f, viewVector.z));
+    const glm::vec3 viewVector = getNormalizedViewVector();
+    const glm::vec3 viewVectorNoY = glm::normalize(glm::vec3(viewVector.x, 0.0f, viewVector.z));
 
     float currentAngleDegrees = glm::degrees(acos(glm::dot(viewVectorNoY, viewVector)));
     if (viewVector.y < 0.0f) {

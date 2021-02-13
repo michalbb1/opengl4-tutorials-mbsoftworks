@@ -4,8 +4,6 @@
 // Project
 #include "HUD015.h"
 
-#include "../common_classes/textureManager.h"
-#include "../common_classes/matrixManager.h"
 #include "../common_classes/ostreamUtils.h"
 
 using namespace ostream_utils;

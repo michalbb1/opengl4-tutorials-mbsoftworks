@@ -61,7 +61,7 @@ void UniformBufferObject::setBufferData(const size_t offset, const void* ptrData
     glBufferSubData(GL_UNIFORM_BUFFER, offset, dataSize, ptrData);
 }
 
-void UniformBufferObject::bindBufferBaseToBindingPoint(const GLuint bindingPoint)
+void UniformBufferObject::bindBufferBaseToBindingPoint(const GLuint bindingPoint) const
 {
     if (!_isBufferCreated)
     {

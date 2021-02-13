@@ -3,9 +3,6 @@
 // GLAD
 #include <glad/glad.h>
 
-// GLM
-#include <glm/glm.hpp>
-
 // Project
 #include "../staticMeshIndexed3D.h"
 

@@ -34,8 +34,8 @@ void Torus::initializeData()
     _indicesVBO.createVBO(sizeof(GLuint)*_numIndices);
 
     // Precalculate steps in radians for main segment and tube segment
-    auto mainSegmentAngleStep = glm::radians(360.0f / float(_mainSegments));
-    auto tubeSegmentAngleStep = glm::radians(360.0f / float(_tubeSegments));
+    const auto mainSegmentAngleStep = glm::radians(360.0f / static_cast<float>(_mainSegments));
+    const auto tubeSegmentAngleStep = glm::radians(360.0f / static_cast<float>(_tubeSegments));
 
     if (hasPositions())
     {
@@ -43,14 +43,14 @@ void Torus::initializeData()
         for (auto i = 0; i <= _mainSegments; i++)
         {
             // Calculate sine and cosine of main segment angle
-            auto sinMainSegment = sin(currentMainSegmentAngle);
-            auto cosMainSegment = cos(currentMainSegmentAngle);
+            const auto sinMainSegment = sin(currentMainSegmentAngle);
+            const auto cosMainSegment = cos(currentMainSegmentAngle);
             auto currentTubeSegmentAngle = 0.0f;
             for (auto j = 0; j <= _tubeSegments; j++)
             {
                 // Calculate sine and cosine of tube segment angle
-                auto sinTubeSegment = sin(currentTubeSegmentAngle);
-                auto cosTubeSegment = cos(currentTubeSegmentAngle);
+                const auto sinTubeSegment = sin(currentTubeSegmentAngle);
+                const auto cosTubeSegment = cos(currentTubeSegmentAngle);
 
                 // Calculate vertex position on the surface of torus
                 auto surfacePosition = glm::vec3(
@@ -73,8 +73,8 @@ void Torus::initializeData()
     {
         // Precalculate steps in texture coordinates for main segment and tube segment
         // I have decided to map the texture twice around main segments and once around tube segmens
-        auto mainSegmentTextureStep = 2.0f  / float(_mainSegments);
-        auto tubeSegmentTextureStep = 1.0f / float(_tubeSegments);
+        const auto mainSegmentTextureStep = 2.0f  / static_cast<float>(_mainSegments);
+        const auto tubeSegmentTextureStep = 1.0f / static_cast<float>(_tubeSegments);
 
         auto currentMainSegmentTexCoordV = 0.0f;
         for (auto i = 0; i <= _mainSegments; i++)
@@ -100,14 +100,14 @@ void Torus::initializeData()
         for (auto i = 0; i <= _mainSegments; i++)
         {
             // Calculate sine and cosine of main segment angle
-            auto sinMainSegment = sin(currentMainSegmentAngle);
-            auto cosMainSegment = cos(currentMainSegmentAngle);
+            const auto sinMainSegment = sin(currentMainSegmentAngle);
+            const auto cosMainSegment = cos(currentMainSegmentAngle);
             auto currentTubeSegmentAngle = 0.0f;
             for (auto j = 0; j <= _tubeSegments; j++)
             {
                 // Calculate sine and cosine of tube segment angle
-                auto sinTubeSegment = sin(currentTubeSegmentAngle);
-                auto cosTubeSegment = cos(currentTubeSegmentAngle);
+                const auto sinTubeSegment = sin(currentTubeSegmentAngle);
+                const auto cosTubeSegment = cos(currentTubeSegmentAngle);
 
                 auto normal = glm::vec3(
                     cosMainSegment*cosTubeSegment,

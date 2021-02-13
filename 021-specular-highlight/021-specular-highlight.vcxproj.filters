@@ -171,6 +171,9 @@
     <ClInclude Include="..\common_classes\shader_structs\material.h">
       <Filter>Header Files\common_classes\shader_structs</Filter>
     </ClInclude>
+    <ClInclude Include="021-specular-highlight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\glad\src\glad.c">

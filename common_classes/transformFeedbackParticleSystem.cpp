@@ -189,7 +189,7 @@ GLsizei TransformFeedbackParticleSystem::RecordedVariable::getByteSize() const
     throw std::runtime_error("Unsupported GL data type for transform feedback particle system!");
 }
 
-void TransformFeedbackParticleSystem::RecordedVariable::enableAndSetupVertexAttribPointer(GLuint index, GLsizei stride, GLsizei byteOffset) const
+void TransformFeedbackParticleSystem::RecordedVariable::enableAndSetupVertexAttribPointer(GLuint index, GLsizei stride, GLsizeiptr byteOffset) const
 {
     glEnableVertexAttribArray(index);
     if (glType == GL_INT)
@@ -237,8 +237,8 @@ void TransformFeedbackParticleSystem::generateOpenGLObjects()
         glBindVertexArray(updateVAOs_[i]);
         glBindBuffer(GL_ARRAY_BUFFER, particlesVBOs_[i]);
 
-        GLsizei byteOffset = 0;
-        for (auto j = 0; j < int(recordedVariables_.size()); j++)
+        GLsizeiptr byteOffset = 0;
+        for (size_t j = 0; j < recordedVariables_.size(); j++)
         {
             recordedVariables_[j].enableAndSetupVertexAttribPointer(j, particleByteSize, byteOffset);
             byteOffset += recordedVariables_[j].getByteSize();
@@ -252,8 +252,8 @@ void TransformFeedbackParticleSystem::generateOpenGLObjects()
         glBindVertexArray(renderVAOs_[i]);
         glBindBuffer(GL_ARRAY_BUFFER, particlesVBOs_[i]);
 
-        GLsizei byteOffset = 0;
-        for (auto j = 0; j < int(recordedVariables_.size()); j++)
+        GLsizeiptr byteOffset = 0;
+        for (size_t j = 0; j < recordedVariables_.size(); j++)
         {
             // Enable vertex attribute only if it's needed for rendering
             // Some properties (like type of particle or velocity might not be needed)

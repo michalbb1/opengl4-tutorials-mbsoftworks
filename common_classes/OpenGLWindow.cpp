@@ -8,7 +8,7 @@ std::map<GLFWwindow*, OpenGLWindow*> OpenGLWindow::_windows;
 
 OpenGLWindow::OpenGLWindow()
 {
-    for (bool& kwp : _keyWasPressed)
+    for (auto& kwp : _keyWasPressed)
     {
         kwp = false;
     }
@@ -43,10 +43,11 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
         // Therefore I call it manually
         int width, height;
         glfwGetWindowSize(_window, &width, &height);
-        onWindowSizeChanged(_window, width, height);
+        onWindowSizeChanged(width, height);
     }
-    _windows[_window] = this;
 
+    glfwSetScrollCallback(_window, onMouseWheelScrollStatic);
+    _windows[_window] = this;
     return true;
 }
 
@@ -91,7 +92,7 @@ void OpenGLWindow::runApp()
 
         glfwSwapBuffers(_window);
         glfwPollEvents();
-        handleInput();
+        updateScene();
     }
 
     releaseScene();
@@ -133,7 +134,7 @@ glm::mat4 OpenGLWindow::getOrthoProjectionMatrix() const
 
 float OpenGLWindow::sof(float value) const
 {
-    return value * float(_timeDelta);
+    return value * static_cast<float>(_timeDelta);
 }
 
 double OpenGLWindow::sof(double value) const
@@ -167,12 +168,18 @@ OpenGLWindow* OpenGLWindow::getDefaultWindow()
     return _windows.size() == 0 ? nullptr : (*_windows.begin()).second;
 }
 
+void OpenGLWindow::onWindowSizeChanged(int width, int height)
+{
+    recalculateProjectionMatrix();
+    glViewport(0, 0, width, height);
+}
+
 void OpenGLWindow::recalculateProjectionMatrix()
 {
     int width, height;
     glfwGetWindowSize(getWindow(), &width, &height);
-    _projectionMatrix = glm::perspective(45.0f, float(width) / float(height), 0.5f, 1500.0f);
-    _orthoMatrix = glm::ortho(0.0f, float(width), 0.0f, float(height));
+    _projectionMatrix = glm::perspective(45.0f, static_cast<float>(width) / static_cast<float>(height), 0.5f, 1500.0f);
+    _orthoMatrix = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
 }
 
 void OpenGLWindow::updateDeltaTimeAndFPS()
@@ -194,7 +201,14 @@ void OpenGLWindow::onWindowSizeChangedStatic(GLFWwindow* window, int width, int 
 {
     if (_windows.count(window) != 0)
     {
-        _windows[window]->recalculateProjectionMatrix();
-        _windows[window]->onWindowSizeChanged(window, width, height);
+        _windows[window]->onWindowSizeChanged(width, height);
+    }
+}
+
+void OpenGLWindow::onMouseWheelScrollStatic(GLFWwindow* window, double scrollOffsetX, double scrollOffsetY)
+{
+    if (_windows.count(window) != 0)
+    {
+        _windows[window]->onMouseWheelScroll(scrollOffsetX, scrollOffsetY);
     }
 }

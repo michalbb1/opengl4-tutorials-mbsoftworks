@@ -4,9 +4,6 @@
 // Project
 #include "HUD012.h"
 
-#include "../common_classes/textureManager.h"
-#include "../common_classes/matrixManager.h"
-
 HUD012::HUD012(const OpenGLWindow& window)
     : HUD(window)
 {

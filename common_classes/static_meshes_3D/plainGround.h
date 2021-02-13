@@ -1,16 +1,9 @@
 #pragma once
 
-// STL
-#include <string>
-
 // GLM
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 // Project
-#include "../vertexBufferObject.h"
-#include "../texture.h"
-
 #include "staticMesh3D.h"
 
 namespace static_meshes_3D {
@@ -29,7 +22,7 @@ public:
     void render() const override;
 
 protected:
-    virtual void initializeData() override;
+    void initializeData() override;
 };
 
 } // namespace static_meshes_3D

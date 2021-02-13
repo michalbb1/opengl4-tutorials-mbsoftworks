@@ -1,9 +1,14 @@
+// STL
 #include <iostream>
 #include <memory>
 
+// GLM
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../common_classes/OpenGLWindow.h"
+// Project
+#include "016-heightmap-pt1-random-terrain.h"
+#include "HUD016.h"
+
 #include "../common_classes/flyingCamera.h"
 
 #include "../common_classes/freeTypeFont.h"
@@ -21,8 +26,6 @@
 
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
-
-#include "HUD016.h"
 
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
@@ -64,7 +67,9 @@ std::vector<glm::vec3> toriPositions
 	glm::vec3(30.0f, 0.0f, 80.0f)
 };
 
-void OpenGLWindow::initializeScene()
+const glm::vec3 heightMapSize(200.0f, 10.0f, 200.0f);
+
+void OpenGLWindow016::initializeScene()
 {
 	try
 	{
@@ -76,7 +81,6 @@ void OpenGLWindow::initializeScene()
 		sm.loadFragmentShader("tut014_main", "data/shaders/tut014-diffuse-lighting/shader.frag");
 		sm.loadFragmentShader("ambientLight", "data/shaders/lighting/ambientLight.frag");
 		sm.loadFragmentShader("diffuseLight", "data/shaders/lighting/diffuseLight.frag");
-		sm.loadFragmentShader("utility", "data/shaders/common/utility.frag");
 
 		sm.loadVertexShader("normals", "data/shaders/normals/normals.vert");
 		sm.loadGeometryShader("normals", "data/shaders/normals/normals.geom");
@@ -87,7 +91,6 @@ void OpenGLWindow::initializeScene()
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut014_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("ambientLight"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("diffuseLight"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("utility"));
 
 		auto& normalsShaderProgram = spm.createShaderProgram("normals");
 		normalsShaderProgram.addShaderToProgram(sm.getVertexShader("normals"));
@@ -120,18 +123,7 @@ void OpenGLWindow::initializeScene()
 	glClearDepth(1.0);
 }
 
-const glm::vec3 heightMapSize(200.0f, 10.0f, 200.0f);
-
-void getHeightmapRowAndColumn(const glm::vec3& position, int& row, int& column)
-{
-	const auto halfWidth = heightMapSize.x / 2.0f;
-	const auto halfDepth = heightMapSize.z / 2.0f;
-
-	row = int(heightmap->getRows() * (position.z + halfDepth) / heightMapSize.z);
-	column = int(heightmap->getColumns() * (position.x + halfWidth) / heightMapSize.x);
-}
-
-void OpenGLWindow::renderScene()
+void OpenGLWindow016::renderScene()
 {
 	const auto& spm = ShaderProgramManager::getInstance();
 	const auto& tm = TextureManager::getInstance();
@@ -173,9 +165,8 @@ void OpenGLWindow::renderScene()
 	{
 		const auto crateSize = 8.0f;
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, 1.5f + crateSize / 2.0f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+		const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f + crateSize / 2.0f + renderedHeight, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotationAngleRad, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -192,9 +183,8 @@ void OpenGLWindow::renderScene()
 	for (const auto& position : toriPositions)
 	{
 		auto model = glm::translate(glm::mat4(1.0f), position);
-		int row = 0, column = 0;
-		getHeightmapRowAndColumn(position, row, column);
-		model = glm::translate(model, glm::vec3(0.0f, 4.5f + heightmap->getHeight(row, column)*heightMapSize.y, 0.0f));
+        const auto renderedHeight = heightmap->getRenderedHeightAtPosition(heightMapSize, position);
+		model = glm::translate(model, glm::vec3(0.0f, 4.5f + renderedHeight, 0.0f));
 		model = glm::rotate(model, rotationAngleRad + 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		torusModelMatrices.push_back(model);
 		mainProgram.setModelAndNormalMatrix(model);
@@ -234,12 +224,41 @@ void OpenGLWindow::renderScene()
 
 	// Render HUD
 	hud->renderHUD(displayNormals);
-
-	// Update rotation angle
-	rotationAngleRad += sof(glm::radians(45.0f));
 }
 
-void OpenGLWindow::releaseScene()
+void OpenGLWindow016::updateScene()
+{
+    if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
+        closeWindow();
+    }
+
+    if (keyPressedOnce(GLFW_KEY_F3)) {
+        setVerticalSynchronization(!isVerticalSynchronizationEnabled());
+    }
+
+    if (keyPressedOnce(GLFW_KEY_N)) {
+        displayNormals = !displayNormals;
+    }
+
+    if (keyPressedOnce(GLFW_KEY_R)) {
+        heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
+    }
+
+    int posX, posY, width, height;
+    glfwGetWindowPos(getWindow(), &posX, &posY);
+    glfwGetWindowSize(getWindow(), &width, &height);
+    camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
+
+    camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
+
+    // Update rotation angle
+    rotationAngleRad += sof(glm::radians(45.0f));
+}
+
+void OpenGLWindow016::releaseScene()
 {
 	ShaderManager::getInstance().clearShaderCache();
 	ShaderProgramManager::getInstance().clearShaderProgramCache();
@@ -252,38 +271,4 @@ void OpenGLWindow::releaseScene()
 	cube.reset();
 	torus.reset();
 	heightmap.reset();
-}
-
-void OpenGLWindow::handleInput()
-{
-	if (keyPressedOnce(GLFW_KEY_ESCAPE)) {
-		closeWindow();
-	}
-
-	if (keyPressedOnce(GLFW_KEY_F3)) {
-		setVerticalSynchronization(!isVerticalSynchronizationEnabled());
-	}
-
-	if (keyPressedOnce(GLFW_KEY_N)) {
-		displayNormals = !displayNormals;
-	}
-
-	if (keyPressedOnce(GLFW_KEY_R)) {
-		heightmap = std::make_unique<static_meshes_3D::Heightmap>(hillAlgorithmParams, true, true, true);
-	}
-
-	int posX, posY, width, height;
-	glfwGetWindowPos(getWindow(), &posX, &posY);
-	glfwGetWindowSize(getWindow(), &width, &height);
-	camera.setWindowCenterPosition(glm::i32vec2(posX + width / 2, posY + height / 2));
-	
-	camera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-		[this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-		[this](float f) {return this->sof(f); });
-}
-
-void OpenGLWindow::onWindowSizeChanged(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }

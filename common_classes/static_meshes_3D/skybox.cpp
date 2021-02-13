@@ -49,7 +49,6 @@ Skybox::~Skybox()
 
 void Skybox::render(const glm::vec3& renderPosition, ShaderProgram& shaderProgram) const
 {
-	
     // Get all texture keys
     const auto frontKey = getTextureKey(CUBE_FRONT_FACE);
     const auto backKey = getTextureKey(CUBE_BACK_FACE);
@@ -115,7 +114,7 @@ void Skybox::render(const glm::vec3& renderPosition, ShaderProgram& shaderProgra
     glDepthMask(GL_TRUE);
 }
 
-std::string Skybox::getSideFileName(const int sideBit) const
+std::string Skybox::getSideFileName(const int sideBit)
 {
     if (sideBit & CUBE_FRONT_FACE) {
         return "front";

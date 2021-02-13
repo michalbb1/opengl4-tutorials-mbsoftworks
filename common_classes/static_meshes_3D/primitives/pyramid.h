@@ -1,13 +1,9 @@
 #pragma once
 
-// GLAD
-#include <glad/glad.h>
-
 // GLM
 #include <glm/glm.hpp>
 
 // Project
-#include "../../vertexBufferObject.h"
 #include "../staticMesh3D.h"
 
 namespace static_meshes_3D {

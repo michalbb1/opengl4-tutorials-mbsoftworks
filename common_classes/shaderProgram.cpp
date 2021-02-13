@@ -97,7 +97,7 @@ GLuint ShaderProgram::getUniformBlockIndex(const std::string& uniformBlockName) 
         return GL_INVALID_INDEX;
     }
 
-    GLuint result = glGetUniformBlockIndex(_shaderProgramID, uniformBlockName.c_str());
+    const auto result = glGetUniformBlockIndex(_shaderProgramID, uniformBlockName.c_str());
     if (result == GL_INVALID_INDEX) {
         std::cerr << "Could not get index of uniform block " << uniformBlockName << ", check if such uniform block really exists!" << std::endl;
     }
@@ -120,5 +120,5 @@ void ShaderProgram::setTransformFeedbackRecordedVariables(const std::vector<std:
 		recordedVariablesNamesPtrs.push_back(recordedVariableName.c_str());
 	}
 
-	glTransformFeedbackVaryings(_shaderProgramID, recordedVariablesNamesPtrs.size(), recordedVariablesNamesPtrs.data(), bufferMode);
+	glTransformFeedbackVaryings(_shaderProgramID, static_cast<GLsizei>(recordedVariablesNamesPtrs.size()), recordedVariablesNamesPtrs.data(), bufferMode);
 }
