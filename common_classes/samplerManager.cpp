@@ -1,3 +1,6 @@
+// STL
+#include <stdexcept>
+
 // Project
 #include "samplerManager.h"
 
