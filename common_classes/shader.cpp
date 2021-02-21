@@ -15,8 +15,9 @@ Shader::~Shader()
 bool Shader::loadShaderFromFile(const std::string& fileName, GLenum shaderType)
 {
     std::vector<std::string> fileLines;
+    std::set<std::string> filesIncludedAlready;
 
-    if(!getLinesFromFile(fileName, fileLines))
+    if(!getLinesFromFile(fileName, fileLines, filesIncludedAlready))
         return false;
 
     const char** programSource = new const char*[fileLines.size()];
@@ -71,7 +72,7 @@ GLenum Shader::getShaderType() const
     return _shaderType;
 }
 
-bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile) const
+bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, std::set<std::string>& filesIncludedAlready, bool isReadingIncludedFile) const
 {
     std::ifstream file(fileName);
 
@@ -131,7 +132,13 @@ bool Shader::getLinesFromFile(const std::string& fileName, std::vector<std::stri
                         sFinalFileName += subPath;
                     }
                 }
-                getLinesFromFile(directory + sFinalFileName, result, true);
+
+                const auto combinedIncludeFilePath = directory + sFinalFileName;
+                if (filesIncludedAlready.find(combinedIncludeFilePath) == filesIncludedAlready.end())
+                {
+                    filesIncludedAlready.insert(combinedIncludeFilePath);
+                    getLinesFromFile(directory + sFinalFileName, result, filesIncludedAlready, true);
+                }
             }
         }
         else if (firstToken == "#include_part")

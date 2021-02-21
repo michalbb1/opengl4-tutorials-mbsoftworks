@@ -3,6 +3,7 @@
 // STL
 #include <vector>
 #include <string>
+#include <set>
 
 // GLAD
 #include <glad/glad.h>
@@ -114,7 +115,7 @@ private:
      *
      * @return True, if the loading has been successful, or false otherwise.
      */
-    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false) const;
+    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, std::set<std::string>& filesIncludedAlready, bool isReadingIncludedFile = false) const;
 
     GLuint _shaderID; // OpenGL-assigned shader ID
     GLenum _shaderType; // Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...)
