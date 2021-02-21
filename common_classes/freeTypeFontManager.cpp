@@ -30,7 +30,11 @@ void FreeTypeFontManager::loadFreeTypeFontFromFile(const std::string& key, const
 
 void FreeTypeFontManager::loadSystemFreeTypeFont(const std::string& key, const std::string& fontName, const int pixelSize)
 {
+    #ifdef _WIN32
 	loadFreeTypeFontFromFile(key, getSystemFontDirectory()+fontName, pixelSize);
+    #else
+	loadFreeTypeFontFromFile(key, "/usr/share/fonts/truetype/FreeMono.ttf");
+    #endif
 }
 
 FreeTypeFont& FreeTypeFontManager::getFreeTypeFont(const std::string& key) const
