@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Project
-#include "OrbitCamera.h"
+#include "orbitCamera.h"
 
 OrbitCamera::OrbitCamera(const glm::vec3& center, const glm::vec3& upVector, float radius, float minRadius, float polarAngle, float azimuthAngle)
 	: center_(center)
