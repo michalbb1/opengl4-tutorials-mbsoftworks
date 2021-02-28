@@ -9,29 +9,29 @@
 class OrbitCamera
 {
 public:
-	OrbitCamera(const glm::vec3& center, const glm::vec3& upVector, float radius, float minRadius, float polarAngle, float azimuthAngle);
+	OrbitCamera(const glm::vec3& center, const glm::vec3& upVector, float radius, float minRadius, float azimuthAngle, float polarAngle);
 
     /**
-     * Rotates camera around Y axis. This is done by changing polar angle of orbit camera sphere.
-     *
-     * @param radians Amount to rotate by in radians
-     */
-    void rotatePolar(const float radians);
-
-    /**
-     * Rotates camera around horizontal axis. This is done by changing azimuth angle of orbit camera sphere.
+     * Rotates camera around Y axis. This is done by changing the azimuth angle of orbit camera sphere.
      *
      * @param radians Amount to rotate by in radians
      */
     void rotateAzimuth(const float radians);
 
     /**
+     * Rotates camera around horizontal axis. This is done by changing the polar angle of orbit camera sphere.
+     *
+     * @param radians Amount to rotate by in radians
+     */
+    void rotatePolar(const float radians);
+
+    /**
      * Zooms camera by a certain amount. This is done by changing radius of orbit camera sphere.
      * However, radius cannot go below the minRadius threshold, not to "zoom through".
      *
-     * @param by Amount to zoom by
+     * @param distance Amount to zoom by
      */
-	void zoom(const float by);
+	void zoom(const float distance);
 
     /**
      * Moves camera horizontally by a given distance.
@@ -73,14 +73,14 @@ public:
     glm::vec3 getNormalizedViewVector() const;
 
     /**
-     * Gets polar angle of the camera (angle around Y axis).
-     */
-    float getPolarAngle() const;
-
-    /**
-     * Gets azimuth angle of the camera (angle around horizontal axis).
+     * Gets azimuth angle of the camera (angle around Y axis).
      */
     float getAzimuthAngle() const;
+
+    /**
+     * Gets polar angle of the camera (angle around horizontal axis).
+     */
+    float getPolarAngle() const;
 
     /**
      * Gets current radius of orbit camera sphere, in other words, controls the zoom of the camera.
@@ -92,6 +92,6 @@ private:
     glm::vec3 upVector_; // Up vector of the camera
     float radius_; // Radius of the orbit camera sphere
     float _minRadius; // Minimal radius of the orbit camera sphere (cannot fall below this value)
-    float polarAngle_; // Polar angle on the orbit camera sphere
     float azimuthAngle_; // Azimuth angle on the orbit camera sphere
+    float polarAngle_; // Polar angle on the orbit camera sphere
 };

@@ -26,8 +26,8 @@ void HUD026::renderHUD(const OrbitCamera& orbitCamera, bool isWireframeModeOn) c
 
     // Print information about orbit camera
     printBuilder().print(10, 70, "Orbit Camera (rotate with LMB pressed, move with MMB pressed):");
-    printBuilder().print(10, 100, "  - Polar angle: {} deg", glm::degrees(orbitCamera.getPolarAngle()));
-    printBuilder().print(10, 130, "  - Azimuth angle: {} deg", glm::degrees(orbitCamera.getAzimuthAngle()));
+    printBuilder().print(10, 100, "  - Azimuth angle: {} deg", glm::degrees(orbitCamera.getAzimuthAngle()));
+    printBuilder().print(10, 130, "  - Polar angle: {} deg", glm::degrees(orbitCamera.getPolarAngle()));
     printBuilder().print(10, 160, "  - Zoom (or radius): {} (change by scrolling with mouse wheel)", orbitCamera.getRadius());
     printBuilder().print(10, 190, "Wireframe mode: {} (Press 'X' to toggle)", isWireframeModeOn ? "On" : "Off");
 

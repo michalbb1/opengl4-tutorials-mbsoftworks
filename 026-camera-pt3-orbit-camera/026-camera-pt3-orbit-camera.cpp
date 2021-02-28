@@ -250,8 +250,8 @@ void OpenGLWindow026::updateScene()
 
     if (rotatingCamera)
     {
-        orbitCamera.rotatePolar(deltaX * 0.01f);
-        orbitCamera.rotateAzimuth(deltaY * 0.01f);
+        orbitCamera.rotateAzimuth(deltaX * 0.01f);
+        orbitCamera.rotatePolar(deltaY * 0.01f);
         prevMousePosX = curMousePosX;
         prevMousePosY = curMousePosY;
     }
@@ -266,5 +266,5 @@ void OpenGLWindow026::updateScene()
 
 void OpenGLWindow026::onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY)
 {
-    orbitCamera.zoom(static_cast<float>(scrollOffsetY) * 0.5f);
+    orbitCamera.zoom(static_cast<float>(-scrollOffsetY) * 0.5f);
 }
