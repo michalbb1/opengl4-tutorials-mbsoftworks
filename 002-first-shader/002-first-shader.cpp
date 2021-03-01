@@ -42,8 +42,8 @@ void OpenGLWindow002::initializeScene()
 
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle, sizeof(vTriangle));
-	shapesVBO.addData(vQuad, sizeof(vQuad));
+	shapesVBO.addData(vTriangle);
+	shapesVBO.addData(vQuad);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
