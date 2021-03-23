@@ -184,6 +184,7 @@ add_subdirectory(023-point-lights)
 add_subdirectory(024-uniform-buffer-object)
 add_subdirectory(025-transform-feedback-particle-system)
 add_subdirectory(026-camera-pt3-orbit-camera)
+add_subdirectory(027-occlusion-query)
 
 # Output compilation flags
 message(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
