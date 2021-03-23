@@ -48,8 +48,8 @@ void OpenGLWindow027::initializeScene()
 		auto& spm = ShaderProgramManager::getInstance();
 		auto& tm = TextureManager::getInstance();
 
-        sm.loadVertexShader("tut026_main", "data/shaders/tut021-specular-highlight/shader.vert");
-        sm.loadFragmentShader("tut026_main", "data/shaders/tut021-specular-highlight/shader.frag");
+        sm.loadVertexShader("tut027_main", "data/shaders/tut021-specular-highlight/shader.vert");
+        sm.loadFragmentShader("tut027_main", "data/shaders/tut021-specular-highlight/shader.frag");
 		sm.loadFragmentShader(ShaderKeys::ambientLight(), "data/shaders/lighting/ambientLight.frag");
         sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
         sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
@@ -57,8 +57,8 @@ void OpenGLWindow027::initializeScene()
         sm.loadFragmentShader("single-color", "data/shaders/single-color/shader.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
-		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut026_main"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut026_main"));
+		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut027_main"));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut027_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::specularHighlight()));
@@ -72,7 +72,6 @@ void OpenGLWindow027::initializeScene()
 		
 		SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
         tm.loadTexture2D("grass", "data/textures/grass.jpg");
-        tm.loadTexture2D("cobblestone_mossy", "data/textures/cobblestone_mossy.png");
         tm.loadTexture2D("crate", "data/textures/crate.png");
         tm.loadTexture2D("white_marble", "data/textures/white_marble.jpg");
         tm.loadTexture2D("scifi_metal", "data/textures/scifi_metal.jpg");
