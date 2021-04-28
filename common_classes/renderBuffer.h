@@ -62,14 +62,12 @@ public:
     GLsizei getHeight() const;
 
     /**
-     * Queries and caches how many bits are used to represent depth in this renderbuffer.
-     * Returns number of bits used to represent depth.
+     * Queries, caches and returns how many bits are used to represent depth in this renderbuffer.
      */
     GLint getDepthBits();
 
     /**
-     * Queries and caches how many bits are used to represent stencil in this renderbuffer.
-     * Returns number of bits used to represent stencil.
+     * Queries, caches and returns how many bits are used to represent stencil in this renderbuffer.
      */
     GLint getStencilBits();
 
