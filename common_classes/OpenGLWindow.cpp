@@ -26,7 +26,6 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
     const auto videoMode = glfwGetVideoMode(primaryMonitor);
 
     _window = glfwCreateWindow(videoMode->width, videoMode->height, windowTitle.c_str(), showFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-
     if (_window == nullptr)
     {
         return false;
@@ -39,8 +38,7 @@ bool OpenGLWindow::createOpenGLWindow(const std::string& windowTitle, int majorV
     if (!showFullscreen)
     {
         glfwMaximizeWindow(_window);
-        // After calling glfwMaximizeWindow, the onWindowSizeChanged somehow does not get called
-        // Therefore I call it manually
+        // After calling glfwMaximizeWindow, the onWindowSizeChanged somehow does not get called. Therefore I call it manually.
         int width, height;
         glfwGetWindowSize(_window, &width, &height);
         onWindowSizeChangedInternal(width, height);

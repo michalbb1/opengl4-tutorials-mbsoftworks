@@ -129,6 +129,19 @@ bool FrameBuffer::resize(GLsizei newWidth, GLsizei newHeight)
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer_->getID());
     }
 
+    if(texture_)
+    {
+        if(!texture_->resize(newWidth, newHeight))
+        {
+            std::cerr << "Unable to resize depth attachment for the framebuffer #" << frameBufferID_ << "!" << std::endl;
+            deleteFrameBuffer();
+            return false;
+        }
+
+        texture_->bind();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_->getID(), 0);
+    }
+
     // Check FBO status when all attachments have been attached
     const auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (fboStatus != GL_FRAMEBUFFER_COMPLETE) {
@@ -230,6 +243,11 @@ void FrameBuffer::deleteFrameBuffer()
     deleteOnlyFrameBuffer();
 }
 
+Texture* FrameBuffer::getTexture() const
+{
+    return texture_.get();
+}
+
 void FrameBuffer::Default::bindAsBothReadAndDraw()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -267,6 +285,101 @@ void FrameBuffer::Default::setFullViewport()
     const auto screenHeight = OpenGLWindow::getDefaultWindow()->getScreenHeight();
 
     glViewport(0, 0, screenWidth, screenHeight);
+}
+
+FrameBuffer::Builder& FrameBuffer::Builder::createAndBind(GLsizei width, GLsizei height)
+{
+    frameBuffer_ = std::make_unique<FrameBuffer>();
+    frameBuffer_->createAndBind(width, height);
+    return *this;
+}
+
+FrameBuffer::Builder& FrameBuffer::Builder::withDepthAttachment(GLenum internalFormat)
+{
+    if (frameBuffer_) {
+        frameBuffer_->withDepthAttachment(internalFormat);
+    }
+
+    return *this;
+}
+
+FrameBuffer::Builder& FrameBuffer::Builder::withTextureColorAttachment()
+{
+    if(frameBuffer_) {
+        frameBuffer_->withTextureColorAttachment();
+    }
+
+    return *this;
+}
+
+std::unique_ptr<FrameBuffer> FrameBuffer::Builder::finishAndGetUnique()
+{
+    if(frameBuffer_ == nullptr) {
+        return nullptr;
+    }
+
+    return frameBuffer_->finishInitialization() ? std::move(frameBuffer_) : nullptr;
+}
+
+bool FrameBuffer::createAndBind(GLsizei width, GLsizei height)
+{
+    glGenFramebuffers(1, &frameBufferID_);
+    if (frameBufferID_ == 0)
+    {
+        std::cerr << "Unable to create framebuffer!" << std::endl;
+        return false;
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
+    std::cout << "Created framebuffer with ID #" << frameBufferID_ << ", its dimensions will be [" << width << ", " << height << "]" << std::endl;
+    width_ = width;
+    height_ = height;
+
+    return true;
+}
+
+bool FrameBuffer::withDepthAttachment(GLenum internalFormat)
+{
+    // Create depth buffer and attach it to FBO
+    auto depthRenderBuffer = std::make_unique<RenderBuffer>();
+    if (!depthRenderBuffer->create(internalFormat, width_, height_))
+    {
+        std::cerr << "Unable to create depth attachment for the framebuffer #" << frameBufferID_ << "!" << std::endl;
+        deleteFrameBuffer();
+        return false;
+    }
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer->getID());
+    depthRenderBuffer_ = std::move(depthRenderBuffer);
+    return true;
+}
+
+bool FrameBuffer::withTextureColorAttachment()
+{
+    if (frameBufferID_ == 0) {
+        return false;
+    }
+
+    texture_ = std::make_unique<Texture>();
+    texture_->createFromData(nullptr, width_, height_, 3, false);
+    texture_->bind();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_->getID(), 0);
+    return true;
+}
+
+bool FrameBuffer::finishInitialization() const
+{
+    if (frameBufferID_ == 0) {
+        return false;
+    }
+
+    // Check FBO status when all attachments have been attached
+    const auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (fboStatus != GL_FRAMEBUFFER_COMPLETE) {
+        return false;
+    }
+
+    return true;
 }
 
 void FrameBuffer::deleteOnlyFrameBuffer()

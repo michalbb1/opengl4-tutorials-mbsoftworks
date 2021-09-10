@@ -50,6 +50,11 @@ public:
     void deleteTexture();
 
     /**
+     * Gets OpenGL-assigned texture ID
+     */
+    GLuint getID() const;
+
+    /**
      * Gets file path of the texture if the texture has been loaded from file.
      *
      * @return File path of the texture or empty string otherwise.
@@ -71,18 +76,20 @@ public:
      */
     int getBytesPerPixel() const;
 
+    bool resize(GLsizei newWidth, GLsizei newHeight);
+
     /**
      * Gets number of available OpenGL texture image units of current hardware.
      */
     static int getNumTextureImageUnits();
     
 private:
-    GLuint _textureID = 0; // OpenGL-assigned texture ID
-    int _width = 0; // Width of texture in pixels
-    int _height = 0; // Height of texture in pixels
-    int _bytesPerPixel = 0; // Amount of bytes every pixel is represented with
-    bool _isLoaded = false; // Flag holding, if texture has been loaded correctly
-    std::string _filePath; // Path of file from which the texture has been loaded (might be empty, if texture was simply created from data)
+    GLuint textureID_ = 0; // OpenGL-assigned texture ID
+    int width_ = 0; // Width of texture in pixels
+    int height_ = 0; // Height of texture in pixels
+    int bytesPerPixel_ = 0; // Amount of bytes every pixel is represented with
+    bool isLoaded_ = false; // Flag holding, if texture has been loaded correctly
+    std::string filePath_; // Path of file from which the texture has been loaded (might be empty, if texture was simply created from data)
 
     /**
      * Checks, if the texture has been loaded correctly and if not, logs it into console.
