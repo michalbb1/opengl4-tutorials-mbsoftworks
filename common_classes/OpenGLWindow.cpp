@@ -188,7 +188,7 @@ void OpenGLWindow::recalculateProjectionMatrix()
 {
     int width, height;
     glfwGetWindowSize(getWindow(), &width, &height);
-    _projectionMatrix = glm::perspective(45.0f, static_cast<float>(width) / static_cast<float>(height), 0.5f, 1500.0f);
+    _projectionMatrix = glm::perspective(glm::radians(57.0f), static_cast<float>(width) / static_cast<float>(height), 0.5f, 1500.0f);
     _orthoMatrix = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height));
 }
 

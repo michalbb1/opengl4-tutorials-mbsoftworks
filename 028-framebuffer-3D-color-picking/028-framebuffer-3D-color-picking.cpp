@@ -48,8 +48,8 @@ void OpenGLWindow028::initializeScene()
 		auto& spm = ShaderProgramManager::getInstance();
 		auto& tm = TextureManager::getInstance();
 
-        sm.loadVertexShader("tut027_main", "data/shaders/tut021-specular-highlight/shader.vert");
-        sm.loadFragmentShader("tut027_main", "data/shaders/tut021-specular-highlight/shader.frag");
+        sm.loadVertexShader("tut028_main", "data/shaders/tut021-specular-highlight/shader.vert");
+        sm.loadFragmentShader("tut028_main", "data/shaders/tut021-specular-highlight/shader.frag");
 		sm.loadFragmentShader(ShaderKeys::ambientLight(), "data/shaders/lighting/ambientLight.frag");
         sm.loadFragmentShader(ShaderKeys::diffuseLight(), "data/shaders/lighting/diffuseLight.frag");
         sm.loadFragmentShader(ShaderKeys::specularHighlight(), "data/shaders/lighting/specularHighlight.frag");
@@ -57,8 +57,8 @@ void OpenGLWindow028::initializeScene()
         sm.loadFragmentShader("single-color", "data/shaders/single-color/shader.frag");
 
 		auto& mainShaderProgram = spm.createShaderProgram("main");
-		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut027_main"));
-		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut027_main"));
+		mainShaderProgram.addShaderToProgram(sm.getVertexShader("tut028_main"));
+		mainShaderProgram.addShaderToProgram(sm.getFragmentShader("tut028_main"));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::ambientLight()));
 		mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::diffuseLight()));
         mainShaderProgram.addShaderToProgram(sm.getFragmentShader(ShaderKeys::specularHighlight()));

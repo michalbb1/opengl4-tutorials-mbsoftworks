@@ -139,7 +139,7 @@ void OpenGLWindow026::renderScene()
     // If wireframe mode is on, we need to set polygon mode to GL_LINE
     if (isWireframeModeOn) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }   
+    }
 
     // Render torus in the top-left corner
 	TextureManager::getInstance().getTexture("scifi_metal").bind();
