@@ -3,15 +3,15 @@
 #include "uniform.h"
 #include "shaderProgram.h"
 
-// Family of functions setting vec2 uniforms
-
-Uniform::Uniform() : _shaderProgram(nullptr), _location(-1)
+Uniform::Uniform()
+    : _shaderProgram(nullptr),
+    _location(-1)
 {
 }
 
-Uniform::Uniform(const std::string& name, ShaderProgram* shaderProgram) :
-    _name(name),
-    _shaderProgram(shaderProgram)
+Uniform::Uniform(const std::string& name, ShaderProgram* shaderProgram)
+    : _name(name)
+    , _shaderProgram(shaderProgram)
 {
     _location = glGetUniformLocation(_shaderProgram->getShaderProgramID(), _name.c_str());
     if (_location == -1)
@@ -25,6 +25,8 @@ Uniform& Uniform::operator=(const glm::vec2& vector2D)
     set(vector2D);
     return *this;
 }
+
+// Family of functions setting vec2 uniforms
 
 void Uniform::set(const glm::vec2& vector2D)
 {

@@ -95,7 +95,7 @@ bool FreeTypeFont::loadFont(const std::string& fontFilePath, int pixelSize)
 
     auto finalizeTexture = [this, &texture, &textureData](bool createNext)
     {
-        texture->createFromData(textureData.data(), CHARACTERS_TEXTURE_SIZE, CHARACTERS_TEXTURE_SIZE, 1, true);
+        texture->createFromData(textureData.data(), CHARACTERS_TEXTURE_SIZE, CHARACTERS_TEXTURE_SIZE, GL_DEPTH_COMPONENT, true);
         _textures.push_back(std::move(texture));
         if (createNext)
         {

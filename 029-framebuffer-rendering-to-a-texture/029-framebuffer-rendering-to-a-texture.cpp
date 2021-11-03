@@ -98,7 +98,7 @@ void OpenGLWindow029::initializeScene()
 	glClearDepth(1.0);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
-#include "../common_classes/gldebug.h"
+
 void OpenGLWindow029::renderScene()
 {
     const auto& spm = ShaderProgramManager::getInstance();
@@ -142,6 +142,9 @@ void OpenGLWindow029::renderScene()
     // Render all screens with primitives rendered on them
     world.renderScreensWithPrimitives(mainProgram);
 
+    // Reset to our main sampler
+    SamplerManager::getInstance().getSampler("main").bind();
+
 	// Render HUD
     hud->renderHUD(world.getCurrentTextureSize());
 }
@@ -174,11 +177,11 @@ void OpenGLWindow029::updateScene()
     }
 
     if (keyPressedOnce(GLFW_KEY_KP_ADD)) {
-        world.nextTextureSize();
+        world.increaseTextureSize();
     }
 
     if (keyPressedOnce(GLFW_KEY_KP_SUBTRACT)) {
-        world.previousTextureSize();
+        world.decreaseTextureSize();
     }
 
     if (keyPressedOnce(GLFW_KEY_X)) {

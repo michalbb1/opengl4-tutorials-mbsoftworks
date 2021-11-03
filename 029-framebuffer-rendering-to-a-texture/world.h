@@ -38,8 +38,8 @@ public:
 
     void renderScreensWithPrimitives(ShaderProgram& shaderProgram) const;
 
-    void nextTextureSize();
-    void previousTextureSize();
+    void decreaseTextureSize();
+    void increaseTextureSize();
 
     GLsizei getCurrentTextureSize() const;
 

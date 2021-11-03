@@ -20,13 +20,12 @@ public:
      * @param data             Pointer to raw data of the texture
      * @param width            Width of the texture
      * @param height           Height of the texture
-     * @param bytesPerPixel    Bytes per pixel of the texture
+     * @param format           Format of the texture data (e.g. GL_RGB)
      * @param generateMipmaps  True, if mipmaps should be generated automatically
      *
      * @return True, if texture has been loaded correctly or false otherwise.
      */
-    bool createFromData(const unsigned char* data, int width, int height, int bytesPerPixel, bool generateMipmaps = false);
-
+    bool createFromData(const unsigned char* data, GLsizei width, GLsizei height, GLenum format, bool generateMipmaps = false);
     /**
      * Loads image file as 2D OpenGL texture.
      *   
@@ -64,17 +63,14 @@ public:
     /**
      * Gets width of the texture (in pixels).
      */
-    int getWidth() const;
+    GLsizei getWidth() const;
 
     /** 
      * Gets height of the texture (in pixels).
      */
-    int getHeight() const;
+    GLsizei getHeight() const;
 
-    /**
-     * Gets number of bytes each pixel is represented with.
-     */
-    int getBytesPerPixel() const;
+    bool isLoaded() const;
 
     bool resize(GLsizei newWidth, GLsizei newHeight);
 
@@ -85,10 +81,9 @@ public:
     
 private:
     GLuint textureID_ = 0; // OpenGL-assigned texture ID
-    int width_ = 0; // Width of texture in pixels
-    int height_ = 0; // Height of texture in pixels
-    int bytesPerPixel_ = 0; // Amount of bytes every pixel is represented with
-    bool isLoaded_ = false; // Flag holding, if texture has been loaded correctly
+    GLsizei width_ = 0; // Width of texture in pixels
+    GLsizei height_ = 0; // Height of texture in pixels
+    GLenum format_ {0}; // Format this texture is represented with
     std::string filePath_; // Path of file from which the texture has been loaded (might be empty, if texture was simply created from data)
 
     /**
