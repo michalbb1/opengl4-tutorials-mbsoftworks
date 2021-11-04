@@ -15,7 +15,7 @@ public:
     /**
      * Creates a new VBO, with optional reserved buffer size.
      *
-     * @param reserveSizeBytes  Buffer size reservation, in bytes (so that no memory allocations don't happen while adding data)
+     * @param reserveSizeBytes  Buffer size reservation, in bytes (so that no memory allocations happen while preparing buffer data)
      */
     void createVBO(size_t reserveSizeBytes = 0);
 
@@ -33,7 +33,7 @@ public:
      * @param dataSizeBytes  Size of the added data (in bytes)
      * @param repeat         How many times to repeat same data in the buffer (default is 1)
      */
-    void addRawData(const void* ptrData, size_t dataSizeBytes, int repeat = 1);
+    void addRawData(const void* ptrData, size_t dataSizeBytes, size_t repeat = 1);
 
     /**
      * Adds arbitrary data to the in-memory buffer, before they get uploaded.
@@ -42,9 +42,9 @@ public:
      * @param repeat  How many times to repeat same data in the buffer (default is 1)
      */
     template<typename T>
-    void addData(const T& ptrObj, int repeat = 1)
+    void addData(const T& ptrObj, size_t repeat = 1)
     {
-        addRawData(&ptrObj, sizeof(T), repeat);
+        addRawData(&ptrObj, static_cast<size_t>(sizeof(T)), repeat);
     }
 
     /**
@@ -105,8 +105,15 @@ private:
 
     std::vector<unsigned char> rawData_; // In-memory raw data buffer, used to gather the data for VBO
     size_t bytesAdded_{ 0 }; // Number of bytes added to the buffer so far
-    size_t uploadedDataSize_{ 0 }; // Holds buffer data size after uploading to GPU
+    size_t uploadedDataSize_{ 0 }; // Holds buffer data size after uploading to GPU (if it's not null, then data have been uploaded)
 
-    bool isBufferCreated_{ false }; // Flag telling if the buffer has been created
-    bool isDataUploaded_{ false }; // Flag telling, if data has been uploaded to GPU already
+    /**
+     * Checks if the buffer has been created and has OpenGL-assigned ID.
+     */
+    bool isBufferCreated() const;
+
+    /**
+     * Checks if the the data has been uploaded to the buffer already.
+     */
+    bool isDataUploaded() const;
 };
