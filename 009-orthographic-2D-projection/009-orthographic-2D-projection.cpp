@@ -85,7 +85,7 @@ void OpenGLWindow009::initializeScene()
 	ortho2DVertexShader.loadShaderFromFile("data/shaders/tut009/ortho2D.vert", GL_VERTEX_SHADER);
 	ortho2DFragmentShader.loadShaderFromFile("data/shaders/tut009/ortho2D.frag", GL_FRAGMENT_SHADER);
 
-	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
+	if (!vertexShader.isCompiled() || !fragmentShader.isCompiled())
 	{
 		closeWindow(true);
 		return;

@@ -32,7 +32,7 @@ public:
      *
      * @return True, if the shader has been added or false otherwise.
      */
-    bool addShaderToProgram(const Shader& shader);
+    bool addShaderToProgram(const Shader& shader) const;
 
     /**
      * Links the program. If the function succeeds, shader program is ready to use.
@@ -79,6 +79,8 @@ public:
      * @param uniformBlockName  uniform block name
      *
      * @return Index of uniform block or GL_INVALID_INDEX if such block doesn't exist / some other error occurs.
+     *
+     * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetUniformBlockIndex.xhtml
      */
     GLuint getUniformBlockIndex(const std::string& uniformBlockName) const;
 
@@ -87,8 +89,10 @@ public:
 	 *
 	 * @param uniformBlockName  uniform block name
 	 * @param bindingPoint      uniform binding point to bind the uniform block to
+	 *
+	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glUniformBlockBinding.xhtml
 	 */
-	void bindUniformBlockToBindingPoint(const std::string& uniformBlockName, const GLuint bindingPoint) const;
+	void bindUniformBlockToBindingPoint(const std::string& uniformBlockName, GLuint bindingPoint) const;
 
 	/**
 	 * Tells OpenGL, which output variables should be recorded during transform feedback.
@@ -97,14 +101,14 @@ public:
      * still use the term varying.
 	 *
 	 * @param recordedVariablesNames  names of the output variables to be recorded
-	 * @param bindingPoint            mode to capture variables, default is GL_INTERLEAVED_ATTRIBS
+	 * @param bufferMode              buffer mode to be used (usually GL_INTERLEAVED_ATTRIBS)
 	 *
 	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTransformFeedbackVaryings.xhtml
 	 */
-	void setTransformFeedbackRecordedVariables(const std::vector<std::string>& recordedVariablesNames, const GLenum bufferMode = GL_INTERLEAVED_ATTRIBS) const;
+	void setTransformFeedbackRecordedVariables(const std::vector<std::string>& recordedVariablesNames, GLenum bufferMode = GL_INTERLEAVED_ATTRIBS) const;
 
 private:
-    GLuint _shaderProgramID; // OpenGL-assigned shader program ID
-    bool _isLinked = false; // Flag teling, whether shader program has been linked successfully
+    GLuint shaderProgramID_{ 0 }; // OpenGL-assigned shader program ID
+    bool _isLinked{ false }; // Flag teling, whether shader program has been linked successfully
     std::map<std::string, Uniform> _uniforms; // Cache of uniform locations (reduces OpenGL calls)
 };

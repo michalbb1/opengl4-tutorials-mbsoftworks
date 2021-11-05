@@ -18,7 +18,7 @@ void OpenGLWindow002::initializeScene()
 	vertexShader.loadShaderFromFile("data/shaders/tut002/shader.vert", GL_VERTEX_SHADER);
 	fragmentShader.loadShaderFromFile("data/shaders/tut002/shader.frag", GL_FRAGMENT_SHADER);
 
-	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
+	if (!vertexShader.isCompiled() || !fragmentShader.isCompiled())
 	{
 		closeWindow(true);
 		return;
