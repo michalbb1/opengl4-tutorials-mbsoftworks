@@ -11,16 +11,15 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::createProgram()
 {
-    _shaderProgramID = glCreateProgram();
+    shaderProgramID_ = glCreateProgram();
 }
 
-bool ShaderProgram::addShaderToProgram(const Shader& shader)
+bool ShaderProgram::addShaderToProgram(const Shader& shader) const
 {
-    if (!shader.isLoaded())
+    if (!shader.isCompiled())
         return false;
 
-    glAttachShader(_shaderProgramID, shader.getShaderID());
-
+    glAttachShader(shaderProgramID_, shader.getShaderID());
     return true;
 }
 
@@ -30,19 +29,30 @@ bool ShaderProgram::linkProgram()
 		return true;
 	}
 
-    glLinkProgram(_shaderProgramID);
-    int linkStatus;
-    glGetProgramiv(_shaderProgramID, GL_LINK_STATUS, &linkStatus);
+    // Try to link program and get the link status
+    glLinkProgram(shaderProgramID_);
+    GLint linkStatus;
+    glGetProgramiv(shaderProgramID_, GL_LINK_STATUS, &linkStatus);
     _isLinked = linkStatus == GL_TRUE;
 
     if (!_isLinked)
     {
-        char infoLogBuffer[2048];
-        int logLength;
-        glGetProgramInfoLog(_shaderProgramID, 2048, &logLength, infoLogBuffer);
+        std::cerr << "Error! Shader program wasn't linked!";
 
-        std::cout << "Error! Shader program wasn't linked! The linker returned: " << std::endl << std::endl << infoLogBuffer << std::endl;
+        // Get length of the error log first
+        GLint logLength;
+        glGetProgramiv(shaderProgramID_, GL_INFO_LOG_LENGTH, &logLength);
 
+        // If there is some log, then retrieve it and output extra information
+        if (logLength > 0)
+        {
+            GLchar* logMessage = new GLchar[logLength];
+            glGetProgramInfoLog(shaderProgramID_, logLength, nullptr, logMessage);
+            std::cerr << " The linker returned: " << std::endl << std::endl << logMessage;
+            delete[] logMessage;
+        }
+
+        std::cerr << std::endl;
         return false;
     }
 
@@ -52,23 +62,24 @@ bool ShaderProgram::linkProgram()
 void ShaderProgram::useProgram() const
 {
     if (_isLinked) {
-        glUseProgram(_shaderProgramID);
+        glUseProgram(shaderProgramID_);
     }
 }
 
 void ShaderProgram::deleteProgram()
 {
-    if (!_isLinked) {
+    if (shaderProgramID_ == 0) {
         return;
     }
 
-    glDeleteProgram(_shaderProgramID);
+    std::cout << "Deleting shader program with ID " << shaderProgramID_ << std::endl;
+    glDeleteProgram(shaderProgramID_);
     _isLinked = false;
 }
 
 GLuint ShaderProgram::getShaderProgramID() const
 {
-    return _shaderProgramID;
+    return shaderProgramID_;
 }
 
 Uniform& ShaderProgram::operator[](const std::string& varName)
@@ -97,7 +108,7 @@ GLuint ShaderProgram::getUniformBlockIndex(const std::string& uniformBlockName) 
         return GL_INVALID_INDEX;
     }
 
-    const auto result = glGetUniformBlockIndex(_shaderProgramID, uniformBlockName.c_str());
+    const auto result = glGetUniformBlockIndex(shaderProgramID_, uniformBlockName.c_str());
     if (result == GL_INVALID_INDEX) {
         std::cerr << "Could not get index of uniform block " << uniformBlockName << ", check if such uniform block really exists!" << std::endl;
     }
@@ -109,7 +120,7 @@ void ShaderProgram::bindUniformBlockToBindingPoint(const std::string& uniformBlo
 {
     const auto blockIndex = getUniformBlockIndex(uniformBlockName);
     if (blockIndex != GL_INVALID_INDEX) {
-        glUniformBlockBinding(_shaderProgramID, blockIndex, bindingPoint);
+        glUniformBlockBinding(shaderProgramID_, blockIndex, bindingPoint);
     }
 }
 
@@ -120,5 +131,5 @@ void ShaderProgram::setTransformFeedbackRecordedVariables(const std::vector<std:
 		recordedVariablesNamesPtrs.push_back(recordedVariableName.c_str());
 	}
 
-	glTransformFeedbackVaryings(_shaderProgramID, static_cast<GLsizei>(recordedVariablesNamesPtrs.size()), recordedVariablesNamesPtrs.data(), bufferMode);
+	glTransformFeedbackVaryings(shaderProgramID_, static_cast<GLsizei>(recordedVariablesNamesPtrs.size()), recordedVariablesNamesPtrs.data(), bufferMode);
 }

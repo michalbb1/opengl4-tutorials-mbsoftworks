@@ -7,115 +7,128 @@
 
 void VertexBufferObject::createVBO(size_t reserveSizeBytes)
 {
-    if (_isBufferCreated)
+    if (isBufferCreated())
     {
         std::cerr << "This buffer is already created! You need to delete it before re-creating it!" << std::endl;
         return;
     }
 
-    glGenBuffers(1, &_bufferID);
-    _rawData.reserve(reserveSizeBytes > 0 ? reserveSizeBytes : 1024);
-
-    std::cout << "Created vertex buffer object with ID " << _bufferID << " and initial reserved size " << _rawData.capacity() << " bytes" << std::endl;
-    _isBufferCreated = true;
+    glGenBuffers(1, &bufferID_);
+    rawData_.reserve(reserveSizeBytes > 0 ? reserveSizeBytes : 1024);
+    std::cout << "Created vertex buffer object with ID " << bufferID_ << " and initial reserved size " << rawData_.capacity() << " bytes" << std::endl;
 }
 
 void VertexBufferObject::bindVBO(GLenum bufferType)
 {
-    if (!_isBufferCreated)
+    if (!isBufferCreated())
     {
         std::cerr << "This buffer is not created yet! You cannot bind it before you create it!" << std::endl;
         return;
     }
 
-    _bufferType = bufferType;
-    glBindBuffer(_bufferType, _bufferID);
+    bufferType_ = bufferType;
+    glBindBuffer(bufferType_, bufferID_);
 }
 
-void VertexBufferObject::addRawData(const void* ptrData, size_t dataSize, int repeat)
+void VertexBufferObject::addRawData(const void* ptrData, size_t dataSizeBytes, size_t repeat)
 {
-    const auto bytesToAdd = dataSize * repeat;
-    const auto requiredCapacity = _bytesAdded + bytesToAdd;
-    if (requiredCapacity > _rawData.capacity())
+    const auto bytesToAdd = dataSizeBytes * repeat;
+    const auto requiredCapacity = bytesAdded_ + bytesToAdd;
+
+    // If the current capacity isn't sufficient, let's resize the internal vector of raw data
+    if (requiredCapacity > rawData_.capacity())
     {
-        auto newCapacity = _rawData.capacity() * 2;
+        // Determine new raw data buffer capacity - enlarge by a factor of two until it becomes big enough
+        auto newCapacity = rawData_.capacity() * 2;
         while (newCapacity < requiredCapacity) {
             newCapacity *= 2;
         }
 
+        // Reserve new vector with higher capacity (which will replace member rawData_) and copy existing data over
         std::vector<unsigned char> newRawData;
         newRawData.reserve(newCapacity);
-        memcpy(newRawData.data(), _rawData.data(), _bytesAdded);
-        _rawData = std::move(newRawData);
+        memcpy(newRawData.data(), rawData_.data(), bytesAdded_);
+        rawData_ = std::move(newRawData);
     }
 
-    for (int i = 0; i < repeat; i++)
+    // Add the data now that we are sure that capacity is sufficient
+    for (size_t i = 0; i < repeat; i++)
     {
-        memcpy(_rawData.data() + _bytesAdded, ptrData, dataSize);
-        _bytesAdded += dataSize;
+        memcpy(rawData_.data() + bytesAdded_, ptrData, dataSizeBytes);
+        bytesAdded_ += dataSizeBytes;
     }
 }
 
 void* VertexBufferObject::getRawDataPointer()
 {
-    return _rawData.data();
+    return rawData_.data();
 }
 
 void VertexBufferObject::uploadDataToGPU(GLenum usageHint)
 {
-    if (!_isBufferCreated)
+    if (!isBufferCreated())
     {
         std::cerr << "This buffer is not created yet! Call createVBO before uploading data to GPU!" << std::endl;
         return;
     }
 
-    glBufferData(_bufferType, _bytesAdded, _rawData.data(), usageHint);
-    _isDataUploaded = true;
-    _uploadedDataSize = _bytesAdded;
-    _bytesAdded = 0;
+    glBufferData(bufferType_, bytesAdded_, rawData_.data(), usageHint);
+    uploadedDataSize_ = bytesAdded_;
+    bytesAdded_ = 0;
 }
 
 void* VertexBufferObject::mapBufferToMemory(GLenum usageHint) const
 {
-    if (!_isDataUploaded) {
+    if (!isDataUploaded()) {
         return nullptr;
     }
 
-    return glMapBuffer(_bufferType, usageHint);
+    return glMapBuffer(bufferType_, usageHint);
 }
 
 void* VertexBufferObject::mapSubBufferToMemory(GLenum usageHint, size_t offset, size_t length) const
 {
-    if (!_isDataUploaded) {
+    if (!isDataUploaded()) {
         return nullptr;
     }
 
-    return glMapBufferRange(_bufferType, offset, length, usageHint);
+    return glMapBufferRange(bufferType_, offset, length, usageHint);
 }
 
 void VertexBufferObject::unmapBuffer() const
 {
-    glUnmapBuffer(_bufferType);
+    glUnmapBuffer(bufferType_);
 }
 
 GLuint VertexBufferObject::getBufferID() const
 {
-    return _bufferID;
+    return bufferID_;
 }
 
 size_t VertexBufferObject::getBufferSize()
 {
-    return _isDataUploaded ? _uploadedDataSize : _bytesAdded;
+    return isDataUploaded() ? uploadedDataSize_ : bytesAdded_;
 }
 
 void VertexBufferObject::deleteVBO()
 {
-    if (!_isBufferCreated) {
+    if (!isBufferCreated()) {
         return;
     }
 
-    std::cout << "Deleting vertex buffer object with ID " << _bufferID << "..." << std::endl;
-    glDeleteBuffers(1, &_bufferID);
-    _isDataUploaded = false;
-    _isBufferCreated = false;
+    std::cout << "Deleting vertex buffer object with ID " << bufferID_ << "..." << std::endl;
+    glDeleteBuffers(1, &bufferID_);
+    bufferID_ = 0;
+    bytesAdded_ = 0;
+    uploadedDataSize_ = 0;
+}
+
+bool VertexBufferObject::isBufferCreated() const
+{
+    return bufferID_ != 0;
+}
+
+bool VertexBufferObject::isDataUploaded() const
+{
+    return uploadedDataSize_ > 0;
 }

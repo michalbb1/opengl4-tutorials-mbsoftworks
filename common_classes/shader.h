@@ -3,6 +3,7 @@
 // STL
 #include <vector>
 #include <string>
+#include <set>
 
 // GLAD
 #include <glad/glad.h>
@@ -83,11 +84,11 @@ public:
     bool loadShaderFromFile(const std::string& fileName, GLenum shaderType);
 
     /**
-     * Checks, if shader is loaded successfully.
+     * Checks, if shader is loaded and compiled successfully.
      *
      * @return True, if the shader has been successfully loaded and compiled, false otherwise.
      */
-    bool isLoaded() const;
+    bool isCompiled() const;
 
     /**
      * Deletes shader object from OpenGL.
@@ -114,9 +115,9 @@ private:
      *
      * @return True, if the loading has been successful, or false otherwise.
      */
-    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, bool isReadingIncludedFile = false) const;
+    bool getLinesFromFile(const std::string& fileName, std::vector<std::string>& result, std::set<std::string>& filesIncludedAlready, bool isReadingIncludedFile = false) const;
 
-    GLuint _shaderID; // OpenGL-assigned shader ID
-    GLenum _shaderType; // Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...)
-    bool _isLoaded = false; // Flag teling, whether shader has been loaded and compiled sucessfully
+    GLuint shaderID_{ 0 }; // OpenGL-assigned shader ID
+    GLenum shaderType_{ 0 }; // Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER...)
+    bool isCompiled_{ false }; // Flag telling, whether shader has been loaded and compiled successfully
 };

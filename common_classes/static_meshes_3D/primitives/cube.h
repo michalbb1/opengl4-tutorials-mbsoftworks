@@ -14,6 +14,7 @@ const int CUBE_LEFT_FACE = 1 << 2; // Bitmask to render cube left face
 const int CUBE_RIGHT_FACE = 1 << 3; // Bitmask to render cube right face
 const int CUBE_TOP_FACE = 1 << 4; // Bitmask to render cube top face
 const int CUBE_BOTTOM_FACE = 1 << 5; // Bitmask to render cube bottom face
+const int CUBE_ALLFACES = (1 << 6) - 1; // Bitmask to render cube bottom face
 
 /**
  * Cube static mesh of unit size.

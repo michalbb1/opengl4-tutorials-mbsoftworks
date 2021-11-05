@@ -14,54 +14,52 @@ Texture::~Texture()
     deleteTexture();
 }
 
-bool Texture::createFromData(const unsigned char* data, int width, int height, int bytesPerPixel, bool generateMipmaps)
+bool Texture::createFromData(const unsigned char* data, GLsizei width, GLsizei height, GLenum format, bool generateMipmaps)
 {
-    if (_isLoaded) {
+    if (isLoaded()) {
         return false;
     }
 
-    _width = width;
-    _height = height;
-    _bytesPerPixel = bytesPerPixel;
+    width_ = width;
+    height_ = height;
+    format_ = format;
 
-    glGenTextures(1, &_textureID);
-    glBindTexture(GL_TEXTURE_2D, _textureID);
-
-    GLenum internalFormat = 0;
-    GLenum format = 0;
-    if (_bytesPerPixel == 4) {
-        internalFormat = format = GL_RGBA;
-    }
-    else if (_bytesPerPixel == 3) {
-        internalFormat = format = GL_RGB;
-    }
-    else if (_bytesPerPixel == 1) {
-        internalFormat = format = GL_DEPTH_COMPONENT;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, _width, _height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenTextures(1, &textureID_);
+    glBindTexture(GL_TEXTURE_2D, textureID_);
+    glTexImage2D(GL_TEXTURE_2D, 0, format_, width_, height_, 0, format_, GL_UNSIGNED_BYTE, data);
 
     if (generateMipmaps) {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 
-    _isLoaded = true;
     return true;
 }
 
 bool Texture::loadTexture2D(const std::string& filePath, bool generateMipmaps)
 {
     stbi_set_flip_vertically_on_load(1);
-    const auto imageData = stbi_load(filePath.c_str(), &_width, &_height, &_bytesPerPixel, 0);
+    int bytesPerPixel;
+    const auto imageData = stbi_load(filePath.c_str(), &width_, &height_, &bytesPerPixel, 0);
     if (imageData == nullptr)
     {
         std::cout << "Failed to load image " << filePath << "!" << std::endl;
         return false;
     }
 
-    auto result = createFromData(imageData, _width, _height, _bytesPerPixel, generateMipmaps);
+    GLenum format = 0;
+    if (bytesPerPixel == 4) {
+        format = GL_RGBA;
+    }
+    else if (bytesPerPixel == 3) {
+        format = GL_RGB;
+    }
+    else if (bytesPerPixel == 1) {
+        format = GL_DEPTH_COMPONENT;
+    }
+
+    const auto result = createFromData(imageData, width_, height_, format, generateMipmaps);
     stbi_image_free(imageData);
-    _filePath = filePath;
+    filePath_ = filePath;
     return result;
 }
 
@@ -72,7 +70,7 @@ void Texture::bind(const int textureUnit) const
     }
 
     glActiveTexture(GL_TEXTURE0 + textureUnit);
-    glBindTexture(GL_TEXTURE_2D, _textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID_);
 }
 
 void Texture::deleteTexture()
@@ -81,28 +79,47 @@ void Texture::deleteTexture()
         return;
     }
 
-    glDeleteTextures(1, &_textureID);
-    _isLoaded = false;
+    glDeleteTextures(1, &textureID_);
+    textureID_ = 0;
+    width_ = height_ = 0;
+    format_ = 0;
+}
+
+GLuint Texture::getID() const
+{
+    return textureID_;
 }
 
 std::string Texture::getFilePath() const
 {
-    return _filePath;
+    return filePath_;
 }
 
 int Texture::getWidth() const
 {
-    return _width;
+    return width_;
 }
 
 int Texture::getHeight() const
 {
-    return _height;
+    return height_;
 }
 
-int Texture::getBytesPerPixel() const
+bool Texture::isLoaded() const
 {
-    return _bytesPerPixel;
+    return textureID_ != 0;
+}
+
+bool Texture::resize(GLsizei newWidth, GLsizei newHeight)
+{
+    if (!isLoadedCheck()) {
+        return false;
+    }
+
+    const auto oldFormat = format_;
+    deleteTexture();
+   
+    return createFromData(nullptr, newWidth, newHeight, oldFormat, false);
 }
 
 int Texture::getNumTextureImageUnits()
@@ -116,7 +133,7 @@ int Texture::getNumTextureImageUnits()
 
 bool Texture::isLoadedCheck() const
 {
-    if (!_isLoaded)
+    if (!isLoaded())
     {
         std::cout << "Attempting to access non loaded texture!" << std::endl;
         return false;

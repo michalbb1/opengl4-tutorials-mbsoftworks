@@ -251,6 +251,7 @@ void OpenGLWindow025::updateScene()
         isFireDragged = !isFireDragged;
     }
 
+    // Update camera
     int posX, posY, width, height;
     glfwGetWindowPos(getWindow(), &posX, &posY);
     glfwGetWindowSize(getWindow(), &width, &height);

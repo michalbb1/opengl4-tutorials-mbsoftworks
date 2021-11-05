@@ -160,27 +160,50 @@ public:
     bool isVerticalSynchronizationEnabled() const;
 
     /**
+     * Gets current screen width in pixels.
+     */
+    int getScreenWidth() const;
+
+    /**
+     * Gets current screen height in pixels.
+     */
+    int getScreenHeight() const;
+
+    /**
+     * Gets cursor position in OpenGL coordinates.
+     */
+    glm::ivec2 getOpenGLCursorPosition() const;
+
+    /**
      * Gets OpenGL default window.
      */
     static OpenGLWindow* getDefaultWindow();
 
 protected:
     /**
-     * Callback function that gets called, when the size of the window changes. This function is also
-     * left un-implemented and user should implement it.
+     * Callback function that gets called, when the size of the window changes. This function is
+     * left unimplemented and user can implement it (but doesn't have to).
      *
      * @param width   New window width (in pixels)
      * @param height  New window height (in pixels)
      */
-    virtual void onWindowSizeChanged(int width, int height);
+    virtual void onWindowSizeChanged(int width, int height) {}
 
     /**
-     * Callback function that gets called, when the size of the window changes. This function is also
-     * left un-implemented and user should implement it.
+     * Callback function that gets called, when user does any action with mouse buttons. This function is
+     * left unimplemented and user can implement it (but doesn't have to).
      *
-     * @param window  Pointer to GLFWwindow, size of which has changed
-     * @param width   New window width (in pixels)
-     * @param height  New window height (in pixels)
+     * @param button  Mouse button that is involved
+     * @param action  Action that has happened (e.g. GLFW_PRESS, GLFW_RELEASE...)
+     */
+    virtual void onMouseButtonPressed(int button, int action) {}
+
+    /**
+     * Callback function that gets called, when user scrolls with mouse wheel. This function is
+     * left unimplemented and user can implement it (but doesn't have to).
+     *
+     * @param scrollOffsetX  How much has user scrolled in X direction (if mouse supports it)
+     * @param scrollOffsetY  How much has user scrolled in Y direction (standard scrolling)
      */
     virtual void onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY) {}
 
@@ -204,16 +227,33 @@ private:
     double _scrollOffsetX = 0.0;
     double _scrollOffsetY = 0.0;
 
+    int screenWidth_{ 0 }; // Cached screen width
+    int screenHeight_{ 0 }; // Cached screen height
+
     /**
      * Updates frame times and FPS counters.
      */
     void updateDeltaTimeAndFPS();
 
     /**
+     * Gets called when window size is changed. Does some internal stuff
+     * (like recalculating matrices, setting viewport) and calls user's handler as well.
+     */
+    void onWindowSizeChangedInternal(int width, int height);
+
+    /**
      * Static method that is set as callback to GLFW framework about window size changed.
      */
     static void onWindowSizeChangedStatic(GLFWwindow* window, int width, int height);
 
+    /**
+     * Static method that is set as callback to GLFW framework when mouse buttons are used.
+     */
+    static void onMouseButtonPressedStatic(GLFWwindow* window, int button, int action, int mods);
+
+    /**
+     * Static method that is set as callback to GLFW framework when mouse is scrolled.
+     */
     static void onMouseWheelScrollStatic(GLFWwindow* window, double scrollOffsetX, double scrollOffsetY);
 
     static std::map<GLFWwindow*, OpenGLWindow*> _windows; // std::map used to map GLFWwindow pointers to OpenGLWindow (our class)

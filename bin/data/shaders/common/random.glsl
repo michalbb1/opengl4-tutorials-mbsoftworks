@@ -47,6 +47,8 @@ void initializeRandomNumberGeneratorSeed();
 
 #definition_part
 
+layout(max_vertices = 64) out; // TODO: this must be present here, otherwise this doesn't compile on some Graphic cards
+
 uniform vec3 initialRandomGeneratorSeed; // Initial RNG seed
 vec3 currentRandomGeneratorSeed; // Current RNG seed
 

@@ -18,7 +18,7 @@ void OpenGLWindow002::initializeScene()
 	vertexShader.loadShaderFromFile("data/shaders/tut002/shader.vert", GL_VERTEX_SHADER);
 	fragmentShader.loadShaderFromFile("data/shaders/tut002/shader.frag", GL_FRAGMENT_SHADER);
 
-	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
+	if (!vertexShader.isCompiled() || !fragmentShader.isCompiled())
 	{
 		closeWindow(true);
 		return;
@@ -42,8 +42,8 @@ void OpenGLWindow002::initializeScene()
 
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle, sizeof(vTriangle));
-	shapesVBO.addData(vQuad, sizeof(vQuad));
+	shapesVBO.addData(vTriangle);
+	shapesVBO.addData(vQuad);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);

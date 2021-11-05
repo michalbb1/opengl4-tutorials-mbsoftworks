@@ -72,7 +72,7 @@ void OpenGLWindow008::initializeScene()
 	groundVertexShader.loadShaderFromFile("data/shaders/tut008/ground_shader.vert", GL_VERTEX_SHADER);
 	groundFragmentShader.loadShaderFromFile("data/shaders/tut008/ground_shader.frag", GL_FRAGMENT_SHADER);
 
-	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
+	if (!vertexShader.isCompiled() || !fragmentShader.isCompiled())
 	{
 		closeWindow(true);
 		return;
