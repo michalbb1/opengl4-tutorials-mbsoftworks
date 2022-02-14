@@ -176,6 +176,37 @@ const glm::vec3 MD2Model::ANORMS_TABLE[ANORMS_TABLE_SIZE] =
     { -0.688191f, -0.587785f, -0.425325f }
 };
 
+void MD2Model::AnimationState::updateAnimation(float deltaTime)
+{
+    if(startFrame == endFrame) {
+        return;
+    }
+
+    totalRunningTime += deltaTime;
+    const float oneFrameDuration = 1.0f / static_cast<float>(fps);
+    while(totalRunningTime - previousNextFrameTime > oneFrameDuration)
+    {
+        previousNextFrameTime += oneFrameDuration;
+        currentFrame = nextFrame;
+        nextFrame++;
+        if (nextFrame > endFrame) {
+            nextFrame = loop ? startFrame : endFrame;
+        }
+    }
+
+    interpolationFactor = static_cast<float>(fps) * (totalRunningTime - previousNextFrameTime);
+}
+
+MD2Model::MD2Model(const std::string& filePath, const glm::mat4& modelTransformMatrix)
+{
+    loadModel(filePath, modelTransformMatrix);
+}
+
+MD2Model::~MD2Model()
+{
+    deleteModel();
+}
+
 void MD2Model::loadModel(const std::string& filePath, const glm::mat4& modelTransformMatrix)
 {
     std::ifstream in(filePath, std::ios::binary);
@@ -215,13 +246,13 @@ void MD2Model::loadModel(const std::string& filePath, const glm::mat4& modelTran
 
     // Now try to determine all different animations in the file based on frame names
     Animation* activeAnimation = nullptr;
-    for (size_t frameIndex = 0; frameIndex < static_cast<size_t>(header_.numFrames); frameIndex++)
+    for(size_t frameIndex = 0; frameIndex < static_cast<size_t>(header_.numFrames); frameIndex++)
     {
         const auto& frame = *reinterpret_cast<MD2Frame*>(allFramesData.data() + frameIndex * header_.frameSize);
         const auto animationBaseName = getAnimationBaseName(frame.name);
-        if (animations_.count(animationBaseName) == 0)
+        if(animations_.count(animationBaseName) == 0)
         {
-            if (activeAnimation) {
+            if(activeAnimation) {
                 activeAnimation->lastFrame = frameIndex - 1;
             }
 
@@ -229,8 +260,8 @@ void MD2Model::loadModel(const std::string& filePath, const glm::mat4& modelTran
             activeAnimation = &animations_[animationBaseName];
         }
 
-        const auto isLastFrame = frameIndex == static_cast<size_t>(header_.numFrames);
-        if (isLastFrame && activeAnimation) {
+        const auto isLastFrame = frameIndex == static_cast<size_t>(header_.numFrames) - 1;
+        if(isLastFrame && activeAnimation) {
             activeAnimation->lastFrame = frameIndex;
         }
     }
@@ -320,6 +351,7 @@ void MD2Model::loadModel(const std::string& filePath, const glm::mat4& modelTran
         }
     }
 
+    filePath_ = filePath;
     in.close();
 }
 
@@ -409,7 +441,7 @@ const std::vector<std::string>& MD2Model::getAnimationNames()
     return animationNamesCached_;
 }
 
-MD2Model::AnimationState MD2Model::startAnimation(const std::string& animationName, const int fps) const
+MD2Model::AnimationState MD2Model::startAnimation(const std::string& animationName, const bool loop, const size_t fps) const
 {
     if (animations_.count(animationName) == 0) {
         return AnimationState{};
@@ -423,27 +455,26 @@ MD2Model::AnimationState MD2Model::startAnimation(const std::string& animationNa
     animationState.currentFrame = animation.firstFrame;
     animationState.nextFrame = animation.firstFrame + 1;
     animationState.fps = fps > 0 ? fps : animation.fps;
+    animationState.loop = loop;
     return animationState;
 }
 
-void MD2Model::updateAnimation(AnimationState& animationState, float deltaTime)
+void MD2Model::deleteModel()
 {
-    if(animationState.startFrame == animationState.endFrame) {
+    if (!isLoaded()) {
         return;
     }
 
-    animationState.currentTime += deltaTime;
-    if (animationState.currentTime - animationState.oldTime > 1.0f / static_cast<float>(animationState.fps))
-    {
-        animationState.oldTime = animationState.currentTime;
-        animationState.currentFrame = animationState.nextFrame;
-        animationState.nextFrame++;
-        if (animationState.nextFrame > animationState.endFrame) {
-            animationState.nextFrame = animationState.startFrame;
-        }
-    }
+    std::cout << "Deleting MD2 model '" << filePath_ << "':" << std::endl;
+    std::cout << "Deleting VAO #" << vao_ << std::endl;
+    glDeleteVertexArrays(1, &vao_);
+    vao_ = 0;
 
-    animationState.interpolationFactor = static_cast<float>(animationState.fps) * (animationState.currentTime - animationState.oldTime);
+    vboFrameVertices_.deleteVBO();
+    vboTextureCoordinates_.deleteVBO();
+    vboNormals_.deleteVBO();
+
+    skinTexture_.deleteTexture();
 }
 
 MD2Model::Animation& MD2Model::addNewAnimation(const std::string& animationName, size_t firstFrame, size_t lastFrame, size_t fps)
@@ -498,6 +529,6 @@ void MD2Model::setupVAO(size_t currentFrame, size_t nextFrame)
     glVertexAttribPointer(NEXT_NORMAL_ATTRIBUTE_INDEX, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), reinterpret_cast<void*>(nextFrameByteOffset));
 }
 
-} // namespace opengl4_mbsoftworks
-} // namespace common_classes
 } // namespace animated_meshes_3D
+} // namespace common_classes
+} // namespace opengl4_mbsoftworks

@@ -63,6 +63,9 @@ public:
     
     // Fog constants
     DEFINE_SHADER_CONSTANT(fogParams, "fogParams");
+
+    // MD2 Animation
+    DEFINE_SHADER_CONSTANT(interpolationFactor, "interpolationFactor")
 };
 
 /**

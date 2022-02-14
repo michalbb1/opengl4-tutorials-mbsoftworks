@@ -29,18 +29,31 @@ public:
         size_t endFrame{ 0 }; // Last frame of the animation
         size_t fps{ 0 }; // Frames per second for this animation (defines animation speed basically)
 
-        float currentTime{ 0.0f }; // Current time
-        float oldTime{ 0.0f }; // old time
+        float totalRunningTime{ 0.0f }; // Current time
+        float previousNextFrameTime{ 0.0f }; // old time
         float interpolationFactor { 0.0f }; // percent of interpolation
 
         size_t currentFrame{ 0 }; // current frame
         size_t nextFrame { 0 }; // next frame
+        bool loop{ true }; // True if you want to run animation in loop
 
         bool isRunning() const
         {
             return !animationName.empty();
         }
+
+        void updateAnimation(float deltaTime);
     };
+
+    MD2Model() = default;
+    explicit MD2Model(const std::string& filePath, const glm::mat4& modelTransformMatrix = glm::mat4(1.0f));
+
+    MD2Model& operator=(const MD2Model& other) = delete; // Don't allow copy constructor
+    MD2Model& operator=(const MD2Model&& other) = delete; // Don't allow move constructor
+    MD2Model(const MD2Model& other) = delete; // Don't allow copy assignment
+    MD2Model(MD2Model&& other) = delete; // Don't allow move assignment
+    
+    ~MD2Model();
 
     void loadModel(const std::string& filePath, const glm::mat4& modelTransformMatrix = glm::mat4(1.0f));
     bool isLoaded() const;
@@ -51,8 +64,9 @@ public:
 
     const std::vector<std::string>& getAnimationNames();
     
-    AnimationState startAnimation(const std::string& animationName, int fps = 0) const;
-    static void updateAnimation(AnimationState& animationState, float deltaTime);
+    AnimationState startAnimation(const std::string& animationName, bool loop = true, size_t fps = 0) const;
+
+    void deleteModel();
 
 private:
     static constexpr int MD2_IDENT = ('2' << 24) + ('P' << 16) + ('D' << 8) + 'I'; // magic number "IDP2" or 844121161
@@ -124,6 +138,7 @@ private:
         size_t fps{ 0 };
     };
 
+    std::string filePath_;
     MD2Header header_;
 
     GLuint vao_{ 0 };
