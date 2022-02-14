@@ -63,7 +63,7 @@ bool Texture::loadTexture2D(const std::string& filePath, bool generateMipmaps)
     return result;
 }
 
-void Texture::bind(const int textureUnit) const
+void Texture::bind(const GLenum textureUnit) const
 {
     if (!isLoadedCheck()) {
         return;
@@ -75,7 +75,7 @@ void Texture::bind(const int textureUnit) const
 
 void Texture::deleteTexture()
 {
-    if (!isLoadedCheck()) {
+    if (!isLoaded()) {
         return;
     }
 

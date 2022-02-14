@@ -41,7 +41,7 @@ public:
      * 
      * @param textureUnit  Texture unit index (default is 0)
      */
-    void bind(int textureUnit = 0) const;
+    void bind(GLenum textureUnit = 0) const;
 
     /**
      * Deletes loaded texture from OpenGL. Does nothing if the texture has not been loaded correctly.
