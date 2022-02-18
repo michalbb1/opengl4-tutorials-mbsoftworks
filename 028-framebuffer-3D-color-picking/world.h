@@ -8,6 +8,9 @@
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/plainGround.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 class World
 {
 public:
@@ -46,4 +49,5 @@ private:
     std::unique_ptr<static_meshes_3D::Cube> cube_; // Cube used to render crates maze
 };
 
-
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

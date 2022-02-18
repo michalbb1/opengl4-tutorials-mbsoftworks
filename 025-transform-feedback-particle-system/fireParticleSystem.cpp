@@ -6,6 +6,9 @@
 #include "../common_classes/textureManager.h"
 #include "../common_classes/uniformBufferObject.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 FireParticleSystem::FireParticleSystem(const int numMaxParticlesInBuffer, const FlyingCamera& flyingCamera, const shader_structs::FogParameters& fogParameters)
     : TransformFeedbackParticleSystem(numMaxParticlesInBuffer)
     , flyingCamera_(flyingCamera)
@@ -175,3 +178,6 @@ glm::vec3 FireParticleSystem::getCenterOfGeneratedFire() const
     result.y += 3.0f;
     return result;
 }
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

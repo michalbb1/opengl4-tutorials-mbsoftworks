@@ -9,6 +9,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial026 {
+
 HUD026::HUD026(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -36,3 +39,6 @@ void HUD026::renderHUD(const OrbitCamera& orbitCamera, bool isWireframeModeOn) c
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial026
+} // namespace opengl4_mbsoftworks

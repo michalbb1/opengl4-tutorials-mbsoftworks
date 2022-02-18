@@ -8,6 +8,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial020 {
+
 HUD020::HUD020(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -42,3 +45,6 @@ void HUD020::renderHUD(const shader_structs::FogParameters& fogParameters) const
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial020
+} // namespace opengl4_mbsoftworks

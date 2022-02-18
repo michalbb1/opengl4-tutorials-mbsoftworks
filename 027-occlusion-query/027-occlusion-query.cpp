@@ -27,6 +27,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial027 {
+
 FlyingCamera flyingCamera(glm::vec3(0.0f, 15.0f, 150.0f), glm::vec3(0.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
@@ -203,3 +206,6 @@ void OpenGLWindow027::updateScene()
         [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
         [this](float f) {return this->sof(f); });
 }
+
+} // namespace tutorial027
+} // namespace opengl4_mbsoftworks

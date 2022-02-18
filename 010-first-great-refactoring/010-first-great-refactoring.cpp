@@ -25,6 +25,9 @@
 #include "../common_classes/static_meshes_3D/house.h"
 #include "../common_classes/static_meshes_3D/snowCoveredPlainGround.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial010 {
+
 FlyingCamera camera(glm::vec3(-120.0f, 8.0f, 120.0f), glm::vec3(-120.0f, 8.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 std::unique_ptr<static_meshes_3D::House> house;
 std::unique_ptr<static_meshes_3D::SnowCoveredPlainGround> snowCoveredPlainGround;
@@ -169,3 +172,6 @@ void OpenGLWindow010::releaseScene()
 	snowCoveredPlainGround.reset();
 	hud.reset();
 }
+
+} // namespace tutorial010
+} // namespace opengl4_mbsoftworks

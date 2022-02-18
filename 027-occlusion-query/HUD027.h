@@ -4,6 +4,9 @@
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/HUD.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial027 {
+
 /**
  * HUD for tutorial 027 (occlusion query).
  */
@@ -18,3 +21,6 @@ public:
     void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
     void renderHUD(size_t numObjects, size_t numVisibleObjects, bool isWireframeModeOn, bool visualizeOccluders) const;
 };
+
+} // namespace tutorial027
+} // namespace opengl4_mbsoftworks

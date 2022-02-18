@@ -9,6 +9,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 HUD022::HUD022(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -44,3 +47,6 @@ void HUD022::renderHUD(const glm::vec3& diffuseLightDirection, bool displayNorma
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

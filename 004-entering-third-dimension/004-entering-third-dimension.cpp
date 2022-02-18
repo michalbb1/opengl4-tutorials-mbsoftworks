@@ -9,6 +9,9 @@
 #include "../common_classes/vertexBufferObject.h"
 #include "../common_classes/staticGeometry.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial004 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -98,7 +101,7 @@ void OpenGLWindow004::renderScene()
 		glm::vec3(-12.0f, -7.0f, 0.0f)
 	};
 
-	for (auto pyramidTranslation : pyramidTranslationVectors)
+	for (const auto& pyramidTranslation : pyramidTranslationVectors)
 	{
 		glm::mat4 modelMatrixPyramid = glm::mat4(1.0);
 		modelMatrixPyramid = glm::translate(modelMatrixPyramid, pyramidTranslation);
@@ -118,7 +121,7 @@ void OpenGLWindow004::updateScene()
 
     rotationAngleRad += glm::radians(sof(90.0f));
 
-    std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
+    const std::string windowTitleWithFPS = "004.) Entering Third Dimension - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: " + std::to_string(getFPS());
     glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
 }
 
@@ -134,3 +137,6 @@ void OpenGLWindow004::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
+
+} // namespace tutorial004
+} // namespace opengl4_mbsoftworks

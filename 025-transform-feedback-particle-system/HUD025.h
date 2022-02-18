@@ -6,6 +6,9 @@
 
 #include "../common_classes/shader_structs/ambientLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 /**
  * HUD for tutorial 025 (transform feedback particle system).
  */
@@ -23,3 +26,6 @@ public:
 private:
     const shader_structs::AmbientLight& ambientLight_;
 };
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

@@ -8,6 +8,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial016 {
+
 HUD016::HUD016(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -32,3 +35,6 @@ void HUD016::renderHUD(const bool displayNormals) const
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial016
+} // namespace opengl4_mbsoftworks

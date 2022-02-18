@@ -28,6 +28,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 bool updateCamera = true;
 FlyingCamera flyingCamera(glm::vec3(0.0f, 15.0f, 150.0f), glm::vec3(0.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
@@ -233,3 +236,6 @@ void OpenGLWindow028::updateScene()
             [this](float f) {return this->sof(f); });
     }
 }
+
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

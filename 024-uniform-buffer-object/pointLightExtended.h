@@ -6,6 +6,9 @@
 // Project
 #include "../common_classes/shader_structs/pointLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial024 {
+
 /**
   Class that extends point light shader structure by moving it around
   the world and reversing the direction at the world edges.
@@ -30,7 +33,7 @@ public:
      * @param moveBy  By how much should the light move
      * @param y       Y position to set light to (so that it follows heightmap nicely)
      */
-    void update(const float moveBy, const float y);
+    void update(float moveBy, const float y);
 
     /**
      * Creates point light at given position with given direction.
@@ -42,3 +45,6 @@ public:
      */
     static PointLightExtended createRandomPointLight(glm::vec3 position, glm::vec3 direction);
 };
+
+} // namespace tutorial024
+} // namespace opengl4_mbsoftworks

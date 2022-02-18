@@ -5,6 +5,9 @@
 // Project
 #include "world.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 World& World::getInstance()
 {
     static World world;
@@ -55,3 +58,6 @@ void World::renderCratesMaze(ShaderProgram& shaderProgram) const
         currentPosition += direction * (crateSize + crateOffset);
     }
 }
+
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

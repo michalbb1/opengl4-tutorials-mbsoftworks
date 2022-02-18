@@ -8,6 +8,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 HUD028::HUD028(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -34,3 +37,6 @@ void HUD028::renderHUD(bool isPixelPerfectSelectionMode, bool visualizeColorFram
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

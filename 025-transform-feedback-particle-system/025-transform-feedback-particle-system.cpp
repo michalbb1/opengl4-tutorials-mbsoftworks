@@ -32,6 +32,9 @@
 #include "fireParticleSystem.h"
 #include "snowParticleSystem.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 FlyingCamera flyingCamera(glm::vec3(-160.0f, 15.0f, 150.0f), glm::vec3(-160.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::SnowCoveredPlainGround> snowCoveredPlainGround;
@@ -288,3 +291,6 @@ void OpenGLWindow025::releaseScene()
     SamplerManager::getInstance().clearSamplerCache();
     FreeTypeFontManager::getInstance().clearFreeTypeFontCache();
 }
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

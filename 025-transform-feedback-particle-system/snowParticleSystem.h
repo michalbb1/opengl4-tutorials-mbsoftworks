@@ -6,6 +6,9 @@
 
 #include "../common_classes/shader_structs/fogParameters.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 class SnowParticleSystem : public TransformFeedbackParticleSystem
 {
 public:
@@ -75,3 +78,6 @@ private:
     float generatedAlphaMin_{ 0.65f }; // Minimal alpha of generated particles
     float generatedAlphaRange_{ 0.28f }; // Maximal alpha of generated particles
 };
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

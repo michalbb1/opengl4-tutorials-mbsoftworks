@@ -12,6 +12,9 @@
 #include "../common_classes/texture.h"
 #include "../common_classes/sampler.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial007 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -285,3 +288,6 @@ void OpenGLWindow007::updateScene()
 		[this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
 		[this](float f) {return this->sof(f); });
 }
+
+} // namespace tutorial007
+} // namespace opengl4_mbsoftworks

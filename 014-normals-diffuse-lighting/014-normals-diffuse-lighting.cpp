@@ -27,6 +27,9 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial014 {
+
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
 std::unique_ptr<static_meshes_3D::Cube> cube;
@@ -272,3 +275,6 @@ void OpenGLWindow014::releaseScene()
 	torus.reset();
 	plainGround.reset();
 }
+
+} // namespace tutorial014
+} // namespace opengl4_mbsoftworks

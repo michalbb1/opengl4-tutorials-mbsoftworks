@@ -3,6 +3,9 @@
 // Project
 #include "../common_classes/OpenGLWindow.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial018 {
+
 class OpenGLWindow018 : public OpenGLWindow
 {
 public:
@@ -11,3 +14,6 @@ public:
     void updateScene() override;
     void releaseScene() override;
 };
+
+} // namespace tutorial018
+} // namespace opengl4_mbsoftworks

@@ -7,6 +7,9 @@
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 std::unique_ptr<static_meshes_3D::Sphere> Planet::sphereMesh;
 
 Planet::Planet(const std::string& textureKey, const shader_structs::Material& material, float radius, float distanceFromCenter, float orbitalPeriodDays, float rotationAngleSpeed, float initialOrbitAngle)
@@ -67,3 +70,6 @@ glm::mat4 Planet::getModelMatrix() const
     modelMatrix = glm::scale(modelMatrix, glm::vec3(_radius, _radius, _radius));
     return modelMatrix;
 }
+
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

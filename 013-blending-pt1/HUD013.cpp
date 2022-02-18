@@ -4,6 +4,9 @@
 // Project
 #include "HUD013.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial013 {
+
 HUD013::HUD013(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -25,3 +28,6 @@ void HUD013::renderHUD(bool turnDepthMaskOff) const
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial013
+} // namespace opengl4_mbsoftworks

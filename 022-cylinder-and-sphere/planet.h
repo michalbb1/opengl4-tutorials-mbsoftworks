@@ -10,9 +10,12 @@
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/static_meshes_3D/primitives/sphere.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 /**
-    Simple class representing planet (sun is also a planet in this tutorial :D)
-*/
+ * Simple class representing planet (sun is also a planet in this tutorial :D)
+ */
 class Planet
 {
 public:
@@ -57,4 +60,6 @@ private:
      */
     glm::mat4 getModelMatrix() const;
 };
- 
+
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

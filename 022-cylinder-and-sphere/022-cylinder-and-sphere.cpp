@@ -27,6 +27,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 FlyingCamera camera(glm::vec3(-100.0f, 25.0f, 120.0f), glm::vec3(-100.0f, 25.0f, 119.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
@@ -282,3 +285,5 @@ void OpenGLWindow022::releaseScene()
 	hud.reset();
 }
 
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

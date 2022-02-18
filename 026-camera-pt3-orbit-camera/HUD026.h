@@ -6,6 +6,9 @@
 
 #include "../common_classes/orbitCamera.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial026 {
+
 /**
  * HUD for tutorial 026 (orbit camera).
  */
@@ -20,3 +23,6 @@ public:
     void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
     void renderHUD(const OrbitCamera& orbitCamera, bool isWireframeModeOn) const;
 };
+
+} // namespace tutorial026
+} // namespace opengl4_mbsoftworks

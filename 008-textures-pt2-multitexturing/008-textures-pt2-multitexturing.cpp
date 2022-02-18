@@ -12,6 +12,9 @@
 #include "../common_classes/texture.h"
 #include "../common_classes/sampler.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial008 {
+
 Shader groundVertexShader, groundFragmentShader;
 Shader vertexShader, fragmentShader;
 
@@ -266,3 +269,6 @@ void OpenGLWindow008::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
+
+} // namespace tutorial008
+} // namespace opengl4_mbsoftworks

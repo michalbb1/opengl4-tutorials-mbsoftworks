@@ -4,6 +4,9 @@
 // Project
 #include "HUD012.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial012 {
+
 HUD012::HUD012(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -24,3 +27,6 @@ void HUD012::renderHUD() const
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial012
+} // namespace opengl4_mbsoftworks

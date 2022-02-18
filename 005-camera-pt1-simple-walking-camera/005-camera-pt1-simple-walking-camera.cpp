@@ -10,6 +10,9 @@
 #include "../common_classes/staticGeometry.h"
 #include "../common_classes/simpleWalkingCamera.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial005 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -91,8 +94,8 @@ void OpenGLWindow005::renderScene()
 	for (auto i = 0; i < 10; i++)
 	{
 		// Lets' predefine some sizes
-		auto houseBottomSize = 10.0f;
-		auto roofTopSize = 12.0f;
+		const auto houseBottomSize = 10.0f;
+		const auto roofTopSize = 12.0f;
 
 		// First, calculate the basic position of house
 		auto modelMatrixHouse = glm::mat4(1.0);
@@ -106,7 +109,7 @@ void OpenGLWindow005::renderScene()
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render top (roof) of the house
-		auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 1.0f;
+		const auto translateTopY = houseBottomSize + roofTopSize / 2.0f - 1.0f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
 		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(roofTopSize, roofTopSize, roofTopSize));
@@ -117,9 +120,9 @@ void OpenGLWindow005::renderScene()
 	// Render "skyscrapers" on the right
 	for (auto i = 0; i < 10; i++)
 	{
-		auto houseBottomSize = 10.0f;
-		auto houseMiddleSize = 7.0f;
-		auto houseTopSize = 4.0f;
+		const auto houseBottomSize = 10.0f;
+		const auto houseMiddleSize = 7.0f;
+		const auto houseTopSize = 4.0f;
 
 		// First, calculate the basic position of skyscraper
 		auto modelMatrixHouse = glm::mat4(1.0);
@@ -133,7 +136,7 @@ void OpenGLWindow005::renderScene()
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render the middle part of skyscraper
-		auto translateMiddleY = houseBottomSize + houseMiddleSize / 2.0f;
+		const auto translateMiddleY = houseBottomSize + houseMiddleSize / 2.0f;
 		glm::mat4 modelMatrixMiddle = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateMiddleY, 0.0f));
 		modelMatrixMiddle = glm::rotate(modelMatrixMiddle, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixMiddle = glm::scale(modelMatrixMiddle, glm::vec3(houseMiddleSize, houseMiddleSize, houseMiddleSize));
@@ -141,7 +144,7 @@ void OpenGLWindow005::renderScene()
 		glDrawArrays(GL_TRIANGLES, 4, 36);
 
 		// Render the top part of skyscraper
-		auto translateTopY = houseMiddleSize + houseBottomSize + houseTopSize / 2.0f;
+		const auto translateTopY = houseMiddleSize + houseBottomSize + houseTopSize / 2.0f;
 		glm::mat4 modelMatrixTop = glm::translate(modelMatrixHouse, glm::vec3(0.0f, translateTopY, 0.0f));
 		modelMatrixTop = glm::rotate(modelMatrixTop, rotationAngleRad, glm::vec3(0.0f, 1.0f, 0.0f));
 		modelMatrixTop = glm::scale(modelMatrixTop, glm::vec3(houseTopSize, houseTopSize, houseTopSize));
@@ -163,7 +166,7 @@ void OpenGLWindow005::updateScene()
     camera.update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return this->sof(f); });
     rotationAngleRad += glm::radians(sof(45.0f));
 
-    std::string windowTitleWithFPS = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
+    const std::string windowTitleWithFPS = "005.) Camera pt. 1 - Simple Walking Camera - Tutorial by Michal Bubnar (www.mbsoftworks.sk) - FPS: "
         + std::to_string(getFPS()) +
         ", VSync: " + (isVerticalSynchronizationEnabled() ? "On" : "Off") + " (Press F3 to toggle)";
     glfwSetWindowTitle(getWindow(), windowTitleWithFPS.c_str());
@@ -182,4 +185,5 @@ void OpenGLWindow005::releaseScene()
 	glDeleteVertexArrays(1, &mainVAO);
 }
 
-
+} // namespace tutorial005
+} // namespace opengl4_mbsoftworks

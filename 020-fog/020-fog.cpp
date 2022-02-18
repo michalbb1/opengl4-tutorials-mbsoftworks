@@ -26,6 +26,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/fogParameters.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial020 {
+
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 25.0f);
 
 std::unique_ptr<static_meshes_3D::HeightmapWithFog> heightmapWithFog;
@@ -257,3 +260,6 @@ void OpenGLWindow020::releaseScene()
 	hud.reset();
 	heightmapWithFog.reset();
 }
+
+} // namespace tutorial020
+} // namespace opengl4_mbsoftworks

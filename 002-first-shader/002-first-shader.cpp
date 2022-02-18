@@ -5,6 +5,9 @@
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/vertexBufferObject.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial002 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -37,17 +40,17 @@ void OpenGLWindow002::initializeScene()
 	glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
 	glBindVertexArray(mainVAO);
 
-	glm::vec3 vTriangle[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
-	glm::vec3 vQuad[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
+	constexpr glm::vec3 triangleVertices[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
+	constexpr glm::vec3 quadVertices[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
 
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle);
-	shapesVBO.addData(vQuad);
+	shapesVBO.addData(triangleVertices);
+	shapesVBO.addData(quadVertices);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 }
 
 void OpenGLWindow002::renderScene()
@@ -79,3 +82,6 @@ void OpenGLWindow002::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
+
+} // namespace tutorial002
+} // namespace opengl4_mbsoftworks

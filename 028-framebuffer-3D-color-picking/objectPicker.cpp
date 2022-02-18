@@ -13,6 +13,9 @@
 #include "../common_classes/static_meshes_3D/primitives/sphere.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 ObjectPicker& ObjectPicker::getInstance()
 {
     static ObjectPicker manager;
@@ -218,3 +221,6 @@ void ObjectPicker::copyColorToDefaultFrameBuffer() const
 {
     pickingFrameBuffer_.copyColorToDefaultFrameBuffer();
 }
+
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

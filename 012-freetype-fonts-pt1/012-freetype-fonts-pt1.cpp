@@ -23,6 +23,9 @@
 #include "../common_classes/static_meshes_3D/primitives/pyramid.h"
 #include "../common_classes/static_meshes_3D/primitives/torus.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial012 {
+
 FlyingCamera camera(glm::vec3(0.0f, 10.0f, -60.0f), glm::vec3(0.0f, 10.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 15.0f);
 
 std::unique_ptr<static_meshes_3D::Pyramid> pyramid;
@@ -174,3 +177,6 @@ void OpenGLWindow012::releaseScene()
 	torus.reset();
 	plainGround.reset();
 }
+
+} // namespace tutorial012
+} // namespace opengl4_mbsoftworks

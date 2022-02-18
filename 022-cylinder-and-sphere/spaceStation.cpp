@@ -7,6 +7,9 @@
 #include "../common_classes/shaderProgramManager.h"
 #include "../common_classes/textureManager.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 SpaceStation::SpaceStation(const glm::vec3& position, float sphereRadius, float cylinderRadius)
     : position_(position)
     , sphereRadius_(sphereRadius)
@@ -156,3 +159,6 @@ std::vector<glm::mat4> SpaceStation::getAllCylinderMatrices() const
         getBottomCylinderMatrix()
     };
 }
+
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

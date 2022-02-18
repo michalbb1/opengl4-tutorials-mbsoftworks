@@ -14,6 +14,13 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 
+#include "../common_classes/static_meshes_3D/primitives/cylinder.h"
+#include "../common_classes/static_meshes_3D/primitives/sphere.h"
+#include "../common_classes/static_meshes_3D/primitives/torus.h"
+
+namespace opengl4_mbsoftworks {
+namespace tutorial029 {
+
 World& World::getInstance()
 {
     static World world;
@@ -195,3 +202,6 @@ void World::updateWorld(float deltaTime)
 {
     meshesRotationAngle_ += deltaTime * 60.0f;
 }
+
+} // namespace tutorial029
+} // namespace opengl4_mbsoftworks

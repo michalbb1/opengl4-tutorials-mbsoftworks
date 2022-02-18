@@ -110,15 +110,15 @@ GLFWwindow* OpenGLWindow::getWindow() const
     return _window;
 }
 
-void OpenGLWindow::closeWindow(bool hasErrorOccured)
+void OpenGLWindow::closeWindow(bool hasErrorOccurred)
 {
     glfwSetWindowShouldClose(_window, true);
-    _hasErrorOccured = hasErrorOccured;
+    hasErrorOccurred_ = hasErrorOccurred;
 }
 
-bool OpenGLWindow::hasErrorOccured() const
+bool OpenGLWindow::hasErrorOccurred() const
 {
-    return _hasErrorOccured;
+    return hasErrorOccurred_;
 }
 
 glm::mat4 OpenGLWindow::getProjectionMatrix() const

@@ -5,6 +5,9 @@
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/vertexBufferObject.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial003 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -38,29 +41,29 @@ void OpenGLWindow003::initializeScene()
 	glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
 	glBindVertexArray(mainVAO);
 
-	glm::vec3 vTriangle[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
-	glm::vec3 vTriangleColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.0f, 0.0f, 1.0f) };
+	constexpr glm::vec3 triangleVertices[] = { glm::vec3(-0.4f, 0.1f, 0.0f), glm::vec3(0.4f, 0.1f, 0.0f), glm::vec3(0.0f, 0.7f, 0.0f) };
+	constexpr glm::vec3 triangleColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),glm::vec3(0.0f, 0.0f, 1.0f) };
 
-	glm::vec3 vQuad[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
-	glm::vec3 vQuadColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 0.0f) };
+	constexpr glm::vec3 quadVertices[] = { glm::vec3(-0.2f, -0.1f, 0.0f), glm::vec3(-0.2f, -0.6f, 0.0f), glm::vec3(0.2f, -0.1f, 0.0f), glm::vec3(0.2f, -0.6f, 0.0f) };
+	constexpr glm::vec3 quadColors[] = { glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 0.0f) };
 	
 	shapesVBO.createVBO();
 	shapesVBO.bindVBO();
-	shapesVBO.addData(vTriangle);
-	shapesVBO.addData(vQuad);
+	shapesVBO.addData(triangleVertices);
+	shapesVBO.addData(quadVertices);
 	shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
 	colorsVBO.createVBO();
 	colorsVBO.bindVBO();
-	colorsVBO.addData(vTriangleColors);
-	colorsVBO.addData(vQuadColors);
+	colorsVBO.addData(triangleColors);
+	colorsVBO.addData(quadColors);
 	colorsVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 }
 
 void OpenGLWindow003::renderScene()
@@ -92,3 +95,6 @@ void OpenGLWindow003::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
+
+} // namespace tutorial003
+} // namespace opengl4_mbsoftworks

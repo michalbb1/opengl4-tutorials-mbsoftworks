@@ -7,6 +7,9 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial014 {
+
 /**
  * HUD for tutorial 014.
  */
@@ -21,3 +24,6 @@ public:
     void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
     void renderHUD(const shader_structs::AmbientLight& ambientLight, const shader_structs::DiffuseLight& diffuseLight) const;
 };
+
+} // namespace tutorial014
+} // namespace opengl4_mbsoftworks

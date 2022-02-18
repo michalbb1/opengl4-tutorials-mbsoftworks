@@ -3,6 +3,9 @@
 // Project
 #include "../common_classes/OpenGLWindow.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial026 {
+
 class OpenGLWindow026 : public OpenGLWindow
 {
 public:
@@ -12,3 +15,6 @@ public:
     void releaseScene() override;
     void onMouseWheelScroll(double scrollOffsetX, double scrollOffsetY) override;
 };
+
+} // namespace tutorial026
+} // namespace opengl4_mbsoftworks

@@ -4,6 +4,9 @@
 #include "../common_classes/OpenGLWindow.h"
 #include "../common_classes/HUD.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial013 {
+
 /**
  * HUD for tutorial 013.
  */
@@ -18,3 +21,6 @@ public:
     void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
     void renderHUD(bool turnDepthMaskOff) const;
 };
+
+} // namespace tutorial013
+} // namespace opengl4_mbsoftworks

@@ -29,6 +29,9 @@
 #include "../common_classes/shader_structs/diffuseLight.h"
 #include "../common_classes/shader_structs/material.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial026 {
+
 OrbitCamera orbitCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0, 1.0f, 0.0f), 15.0f, 3.0f, glm::pi<float>() * 0.5f, 0.0f);
 
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
@@ -268,3 +271,6 @@ void OpenGLWindow026::onMouseWheelScroll(double scrollOffsetX, double scrollOffs
 {
     orbitCamera.zoom(static_cast<float>(-scrollOffsetY) * 0.5f);
 }
+
+} // namespace tutorial026
+} // namespace opengl4_mbsoftworks

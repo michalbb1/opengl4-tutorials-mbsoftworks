@@ -10,6 +10,9 @@
 #include "../common_classes/static_meshes_3D/primitives/sphere.h"
 #include "../common_classes/static_meshes_3D/primitives/cylinder.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial022 {
+
 class SpaceStation
 {
 public:
@@ -64,4 +67,6 @@ private:
      */
     std::vector<glm::mat4> getAllCylinderMatrices() const;
 };
- 
+
+} // namespace tutorial022
+} // namespace opengl4_mbsoftworks

@@ -8,9 +8,9 @@
 #include "../common_classes/shaderProgram.h"
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/plainGround.h"
-#include "../common_classes/static_meshes_3D/primitives/cylinder.h"
-#include "../common_classes/static_meshes_3D/primitives/sphere.h"
-#include "../common_classes/static_meshes_3D/primitives/torus.h"
+
+namespace opengl4_mbsoftworks {
+namespace tutorial029 {
 
 class World
 {
@@ -72,4 +72,5 @@ private:
     std::vector<std::shared_ptr<static_meshes_3D::StaticMesh3D>> meshes_; // Meshes rendered on the screens
 };
 
-
+} // namespace tutorial029
+} // namespace opengl4_mbsoftworks

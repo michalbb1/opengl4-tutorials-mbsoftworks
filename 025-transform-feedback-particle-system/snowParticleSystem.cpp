@@ -6,6 +6,9 @@
 #include "../common_classes/textureManager.h"
 #include "../common_classes/uniformBufferObject.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 SnowParticleSystem::SnowParticleSystem(const int numMaxParticlesInBuffer, const FlyingCamera& flyingCamera, const shader_structs::FogParameters& fogParameters)
     : TransformFeedbackParticleSystem(numMaxParticlesInBuffer)
     , flyingCamera_(flyingCamera)
@@ -146,3 +149,6 @@ void SnowParticleSystem::prepareRenderParticles()
     // Bind snowflakes texture
     tm.getTexture("snowflake_particles").bind();
 }
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

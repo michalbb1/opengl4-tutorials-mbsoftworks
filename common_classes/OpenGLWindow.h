@@ -19,7 +19,8 @@
 class OpenGLWindow
 {
 public:
-    /**
+	virtual ~OpenGLWindow() = default;
+	/**
      * Constructor of the class, initializes internal structures.
      */
     OpenGLWindow();
@@ -102,7 +103,7 @@ public:
     /**
      * Gets the error flag.
      */
-    bool hasErrorOccured() const;
+    bool hasErrorOccurred() const;
 
     /**
      * Gets the projection matrix for the current window size.
@@ -210,7 +211,7 @@ protected:
 private:
     GLFWwindow* _window = nullptr; // Pointer to GLFWwindow, nullptr by default
     bool _keyWasPressed[512]; // Array of bools, used by keyPressedOnce function
-    bool _hasErrorOccured = false; // Error flag, indicates, if any kind of error has occured
+    bool hasErrorOccurred_ = false; // Error flag, indicates, if any kind of error has occured
 
     glm::mat4 _projectionMatrix; // Precalculated projection matrix, when size changes, it's recalculated
     glm::mat4 _orthoMatrix; // Precalculated orthographic projection matrix, when size changes, it's recalculated

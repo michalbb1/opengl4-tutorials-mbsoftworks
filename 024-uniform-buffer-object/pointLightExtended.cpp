@@ -1,6 +1,9 @@
 // Project
 #include "pointLightExtended.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial024 {
+
 const double PointLightExtended::MAX_TRAVEL_DISTANCE{ 200.0 };
 
 void PointLightExtended::update(const float speedMultiplier, const float y)
@@ -66,3 +69,6 @@ PointLightExtended PointLightExtended::createRandomPointLight(glm::vec3 position
 
     return PointLightExtended(position, direction, color, 0.0f, 0.3f, 0.007f, 0.00008f);
 }
+
+} // namespace tutorial024
+} // namespace opengl4_mbsoftworks

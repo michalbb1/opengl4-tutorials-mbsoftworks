@@ -27,6 +27,9 @@
 #include "../common_classes/shader_structs/ambientLight.h"
 #include "../common_classes/shader_structs/diffuseLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial019 {
+
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 25.0f);
 
 std::unique_ptr<static_meshes_3D::Heightmap> heightmap;
@@ -262,3 +265,6 @@ void OpenGLWindow019::releaseScene()
 	hud.reset();
 	heightmap.reset();
 }
+
+} // namespace tutorial019
+} // namespace opengl4_mbsoftworks

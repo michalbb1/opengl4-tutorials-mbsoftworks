@@ -10,6 +10,9 @@
 #include "../common_classes/staticGeometry.h"
 #include "../common_classes/flyingCamera.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial006 {
+
 Shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
 VertexBufferObject shapesVBO;
@@ -191,3 +194,6 @@ void OpenGLWindow006::releaseScene()
 
 	glDeleteVertexArrays(1, &mainVAO);
 }
+
+} // namespace tutorial006
+} // namespace opengl4_mbsoftworks

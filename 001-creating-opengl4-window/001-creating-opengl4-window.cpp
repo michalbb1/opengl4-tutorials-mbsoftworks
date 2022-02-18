@@ -1,6 +1,9 @@
 // Project
 #include "001-creating-opengl4-window.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial001 {
+
 void OpenGLWindow001::initializeScene()
 {
 	glClearColor(0, 0.5f, 1.0f, 1.0f);
@@ -17,3 +20,6 @@ void OpenGLWindow001::updateScene()
         closeWindow();
     }
 }
+
+} // namespace tutorial001
+} // namespace opengl4_mbsoftworks

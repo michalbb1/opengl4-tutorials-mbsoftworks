@@ -7,6 +7,9 @@
 #include "../common_classes/shader_structs/pointLight.h"
 #include "../common_classes/shader_structs/fogParameters.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial025 {
+
 class FireParticleSystem : public TransformFeedbackParticleSystem
 {
 public:
@@ -105,3 +108,6 @@ private:
 
     shader_structs::PointLight pointLight_{getCenterOfGeneratedFire(), particlesColor_, 0.0f, 0.3f, 0.007f, 0.00008f}; // Point light of fire
 };
+
+} // namespace tutorial025
+} // namespace opengl4_mbsoftworks

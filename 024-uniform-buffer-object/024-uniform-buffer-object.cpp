@@ -35,6 +35,9 @@
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/shader_structs/pointLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial024 {
+
 constexpr int MAX_POINT_LIGHTS = 20;
 
 FlyingCamera camera(glm::vec3(160.0f, 50.0f, -150.0f), glm::vec3(160.0f, 50.0f, -149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
@@ -425,3 +428,6 @@ void OpenGLWindow024::releaseScene()
     heightmap.reset();
 	hud.reset();
 }
+
+} // namespace tutorial024
+} // namespace opengl4_mbsoftworks

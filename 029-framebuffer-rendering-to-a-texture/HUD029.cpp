@@ -8,6 +8,9 @@
 
 using namespace ostream_utils;
 
+namespace opengl4_mbsoftworks {
+namespace tutorial029 {
+
 HUD029::HUD029(const OpenGLWindow& window)
     : HUD(window)
 {
@@ -33,3 +36,6 @@ void HUD029::renderHUD(GLsizei currentTextureSize) const
         .fromBottom()
         .print(10, 10, "www.mbsoftworks.sk");
 }
+
+} // namespace tutorial029
+} // namespace opengl4_mbsoftworks

@@ -6,6 +6,9 @@
 
 #include "../common_classes/shader_structs/fogParameters.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial020 {
+
 /**
  * HUD for tutorial 020 (fog).
  */
@@ -18,3 +21,6 @@ public:
     void renderHUD() const override {} // Don't need this, but had to override, so that class is not abstract
     void renderHUD(const shader_structs::FogParameters& fogParameters) const;
 };
+
+} // namespace tutorial020
+} // namespace opengl4_mbsoftworks

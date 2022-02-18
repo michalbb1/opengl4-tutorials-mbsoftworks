@@ -12,6 +12,9 @@
 #include "../common_classes/static_meshes_3D/primitives/cube.h"
 #include "../common_classes/static_meshes_3D/staticMesh3D.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial028 {
+
 /**
  * Manages rendering and picking of all objects on the scene.
  */
@@ -118,3 +121,6 @@ private:
 
     shader_structs::Material shinyMaterial_{ 1.0f, 32.0f }; // Shiny material to render objects with
 };
+
+} // namespace tutorial028
+} // namespace opengl4_mbsoftworks

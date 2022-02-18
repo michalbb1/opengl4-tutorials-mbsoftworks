@@ -31,6 +31,9 @@
 #include "../common_classes/shader_structs/material.h"
 #include "../common_classes/shader_structs/pointLight.h"
 
+namespace opengl4_mbsoftworks {
+namespace tutorial023 {
+
 FlyingCamera camera(glm::vec3(0.0f, 25.0f, -60.0f), glm::vec3(0.0f, 25.0f, -59.0f), glm::vec3(0.0f, 1.0f, 0.0f), 125.0f);
 
 std::unique_ptr<static_meshes_3D::PlainGround> plainGround;
@@ -342,3 +345,6 @@ void OpenGLWindow023::releaseScene()
     plainGround.reset();
 	hud.reset();
 }
+
+} // namespace tutorial023
+} // namespace opengl4_mbsoftworks
