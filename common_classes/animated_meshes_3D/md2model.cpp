@@ -176,7 +176,12 @@ const glm::vec3 MD2Model::ANORMS_TABLE[ANORMS_TABLE_SIZE] =
     { -0.688191f, -0.587785f, -0.425325f }
 };
 
-void MD2Model::AnimationState::updateAnimation(float deltaTime)
+bool MD2Model::AnimationState::isRunning() const
+{
+    return !animationName.empty();
+}
+
+void MD2Model::AnimationState::updateAnimation(const float deltaTime)
 {
     if(startFrame == endFrame) {
         return;
@@ -184,17 +189,17 @@ void MD2Model::AnimationState::updateAnimation(float deltaTime)
 
     totalRunningTime += deltaTime;
     const float oneFrameDuration = 1.0f / static_cast<float>(fps);
-    while(totalRunningTime - previousNextFrameTime > oneFrameDuration)
+    while(totalRunningTime - nextFrameTime > oneFrameDuration)
     {
-        previousNextFrameTime += oneFrameDuration;
-        currentFrame = nextFrame;
-        nextFrame++;
-        if (nextFrame > endFrame) {
-            nextFrame = loop ? startFrame : endFrame;
+        nextFrameTime += oneFrameDuration;
+        currentFrameIndex = nextFrameIndex;
+        nextFrameIndex++;
+        if (nextFrameIndex > endFrame) {
+            nextFrameIndex = loop ? startFrame : endFrame;
         }
     }
 
-    interpolationFactor = static_cast<float>(fps) * (totalRunningTime - previousNextFrameTime);
+    interpolationFactor = static_cast<float>(fps) * (totalRunningTime - nextFrameTime);
 }
 
 MD2Model::MD2Model(const std::string& filePath, const glm::mat4& modelTransformMatrix)
@@ -398,7 +403,7 @@ void MD2Model::renderModelAnimated(const AnimationState& animationState)
     skinTexture_.bind();
 
     // Setup vertex attributes for current and next frame
-    setupVAO(animationState.currentFrame, animationState.nextFrame);
+    setupVAO(animationState.currentFrameIndex, animationState.nextFrameIndex);
 
     shaderProgram[ShaderConstants::interpolationFactor()] = animationState.interpolationFactor;
     GLint totalOffset = 0;
@@ -418,7 +423,7 @@ void MD2Model::renderModelStatic()
     }
 
     skinTexture_.bind();
-    setupVAO(0);
+    setupVAO(0, 0);
 
     ShaderProgramManager::getInstance().getShaderProgram("md2")[ShaderConstants::interpolationFactor()] = 0;
     GLint totalOffset = 0;
@@ -452,8 +457,8 @@ MD2Model::AnimationState MD2Model::startAnimation(const std::string& animationNa
     animationState.animationName = animationName;
     animationState.startFrame = animation.firstFrame;
     animationState.endFrame = animation.lastFrame;
-    animationState.currentFrame = animation.firstFrame;
-    animationState.nextFrame = animation.firstFrame + 1;
+    animationState.currentFrameIndex = animation.firstFrame;
+    animationState.nextFrameIndex = animation.firstFrame + 1;
     animationState.fps = fps > 0 ? fps : animation.fps;
     animationState.loop = loop;
     return animationState;
@@ -499,7 +504,7 @@ std::string MD2Model::getAnimationBaseName(const std::string& frameName)
 
 void MD2Model::setupVAO(size_t currentFrame, size_t nextFrame)
 {
-    if(currentFrame >= static_cast<size_t>(header_.numFrames)) {
+    if(currentFrame >= static_cast<size_t>(header_.numFrames) || nextFrame >= static_cast<size_t>(header_.numFrames)) {
         return;
     }
 

@@ -21,7 +21,6 @@
 #include "../common_classes/samplerManager.h"
 #include "../common_classes/matrixManager.h"
 
-#include "../common_classes/frameBuffer.h"
 #include "../common_classes/static_meshes_3D/plainGround.h"
 #include "../common_classes/static_meshes_3D/skybox.h"
 
@@ -32,7 +31,6 @@
 namespace opengl4_mbsoftworks {
 namespace tutorial030 {
 
-bool updateCamera = true;
 FlyingCamera flyingCamera(glm::vec3(0.0f, 15.0f, 150.0f), glm::vec3(0.0f, 15.0f, 149.0f), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f);
 
 std::unique_ptr<static_meshes_3D::Skybox> skybox;
@@ -81,11 +79,6 @@ void OpenGLWindow030::initializeScene()
         SamplerManager::getInstance().createSampler("main", MAG_FILTER_BILINEAR, MIN_FILTER_TRILINEAR);
         SamplerManager::getInstance().createSampler("framebuffer", MAG_FILTER_BILINEAR, MIN_FILTER_BILINEAR);
         tm.loadTexture2D("snow", "data/textures/snow.png");
-        tm.loadTexture2D("wood", "data/textures/wood.jpg");
-        tm.loadTexture2D("prismarine_dark", "data/textures/prismarine_dark.png");
-        tm.loadTexture2D("diamond", "data/textures/diamond.png");
-        tm.loadTexture2D("white_marble", "data/textures/white_marble.jpg");
-        tm.loadTexture2D("scifi_metal", "data/textures/scifi_metal.jpg");
 
         plainGround = std::make_unique<static_meshes_3D::PlainGround>(true, true, true);
         ModelCollection::getInstance().initialize();
@@ -111,7 +104,6 @@ void OpenGLWindow030::renderScene()
 	auto& mm = MatrixManager::getInstance();
     const auto& modelCollection = ModelCollection::getInstance();
 
-    FrameBuffer::Default::bindAsBothReadAndDraw();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Set matrices in matrix manager
@@ -211,19 +203,16 @@ void OpenGLWindow030::updateScene()
 
     world.updateAnimations(deltaTime);
 
-    if (updateCamera)
-    {
-        // Update camera
-        int width, height;
-        glfwGetWindowSize(getWindow(), &width, &height);
-        flyingCamera.setWindowCenterPosition(glm::i32vec2(width / 2, height / 2));
+    // Update camera
+    int width, height;
+    glfwGetWindowSize(getWindow(), &width, &height);
+    flyingCamera.setWindowCenterPosition(glm::i32vec2(width / 2, height / 2));
 
-        flyingCamera.update([this](int keyCode) {return this->keyPressed(keyCode); },
-            [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
-            [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
-            [this](float f) {return this->sof(f); });
-    }
+    flyingCamera.update([this](int keyCode) {return this->keyPressed(keyCode); },
+        [this]() {double curPosX, curPosY; glfwGetCursorPos(this->getWindow(), &curPosX, &curPosY); return glm::u32vec2(curPosX, curPosY); },
+        [this](const glm::i32vec2& pos) {glfwSetCursorPos(this->getWindow(), pos.x, pos.y); },
+        [this](float f) {return this->sof(f); });
 }
 
-} // namespace tutorial 030
+} // namespace tutorial030
 } // namespace opengl4_mbsoftworks

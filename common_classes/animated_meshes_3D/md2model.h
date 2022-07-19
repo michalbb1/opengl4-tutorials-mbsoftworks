@@ -24,23 +24,20 @@ class MD2Model
 public:
     struct AnimationState
     {
-        std::string animationName;
-        size_t startFrame{ 0 }; // First frame of the animation
-        size_t endFrame{ 0 }; // Last frame of the animation
-        size_t fps{ 0 }; // Frames per second for this animation (defines animation speed basically)
+        std::string animationName; // Name of the animation running
+        size_t startFrame { 0 }; // First frame of the animation
+        size_t endFrame { 0 }; // Last frame of the animation
+        size_t fps { 0 }; // Frames per second for this animation (defines animation speed basically)
 
-        float totalRunningTime{ 0.0f }; // Current time
-        float previousNextFrameTime{ 0.0f }; // old time
+        float totalRunningTime { 0.0f }; // Totaol running time of the animation
+        float nextFrameTime { 0.0f }; // Time when to move on to the next frame
         float interpolationFactor { 0.0f }; // percent of interpolation
 
-        size_t currentFrame{ 0 }; // current frame
-        size_t nextFrame { 0 }; // next frame
+        size_t currentFrameIndex { 0 }; // Current frame index
+        size_t nextFrameIndex { 0 }; // Next frame index
         bool loop{ true }; // True if you want to run animation in loop
 
-        bool isRunning() const
-        {
-            return !animationName.empty();
-        }
+        bool isRunning() const;
 
         void updateAnimation(float deltaTime);
     };
@@ -82,7 +79,7 @@ private:
 
     static const glm::vec3 ANORMS_TABLE[ANORMS_TABLE_SIZE];
 
-    // md2 header
+    // MD2 header
     struct MD2Header
     {
         int32_t ident{ 0 };                    // Magic number, must be equal to "IDP2"
@@ -90,6 +87,7 @@ private:
 
         int32_t skinWidth{ 0 };                // Width of the texture
         int32_t skinHeight{ 0 };               // Height of the texture
+
         int32_t frameSize{ 0 };                // Size of one frame in bytes
 
         int32_t numSkins{ 0 };                 // Number of textures
@@ -107,14 +105,14 @@ private:
         int32_t offsetEnd{ 0 };                // Offset to the end of file
     };
 
-    // md2 compressed vertex
+    // MD2 compressed vertex
     struct MD2Vertex
     {
         unsigned char v[3];         // compressed vertex (x, y, z) coordinates
         unsigned char normal_index; // index to a normal vector for the lighting
     };
 
-    // md2 frame data (vertices are stored here)
+    // MD2 frame data (vertices are stored here)
     struct MD2Frame
     {
         float scale[3];     // scale values
@@ -155,7 +153,7 @@ private:
     std::map<std::string, Animation> animations_;
     std::vector<std::string> animationNamesCached_;
 
-    void setupVAO(size_t currentFrame, size_t nextFrame = -1);
+    void setupVAO(size_t currentFrame, size_t nextFrame);
 
     Animation& addNewAnimation(const std::string& animationName, size_t firstFrame, size_t lastFrame, size_t fps);
     static std::string getAnimationBaseName(const std::string& frameName);
